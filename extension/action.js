@@ -51,7 +51,7 @@ action.idle = function(callback)
     });
 }
 
-action.eat = function(minDist, callback)
+action.eat = function(minDist, callback, isWeak)
 {
     // Return if eat is called before meal is finished
     if (active)
@@ -97,11 +97,12 @@ action.eat = function(minDist, callback)
     var y = item.offset().top + item.height()/2 - $tgd.height()/2 - 30;
 
     // Animate it
+    var eatTime = isWeak ? 2000 : 500;
     setCanvasPosition();
     $tgd.animate({
         left: x,
         top: y
-    }, 500, "swing", function()
+    }, eatTime, "swing", function()
     {
         if (item.get(0).tagName == "A")
         {
@@ -116,6 +117,24 @@ action.eat = function(minDist, callback)
             if (callback != null)
                 callback();
         }
+    });
+}
+
+action.eatWeak = function(minDist, callback)
+{
+    action.eat(minDist, function()
+    {
+        $tgd.unbind();
+        callback();
+    }, true);
+
+    $tgd.bind('mouseover', function()
+    {
+        console.log("Shoo!!");
+        active = false;
+        $tgd.stop();
+        action.idle();
+        $tgd.unbind();
     });
 }
 

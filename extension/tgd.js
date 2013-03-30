@@ -79,6 +79,11 @@ this.tgd = this.tgd || {};
             main.log("Weak Hunger.");
 
             // do weak animation
+            action.eatWeak(activeRadius, function()
+            {
+               action.idle();
+            });
+
 
         }
         else if (this.useageTime >= this.strongMax)
