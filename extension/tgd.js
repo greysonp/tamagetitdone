@@ -29,7 +29,7 @@ this.tgd = this.tgd || {};
 
     main.init = function ()
     {
-        $("body").append('<canvas id="tgd" width="150" height="150" style="position: absolute; bottom: 0px; left: 0px;"></canvas>');
+        $("body").append('<canvas id="tgd" width="150" height="150" style="position: absolute; bottom: 0px; left: 0px; z-index: 55555"></canvas>');
         $("body").append('<div id="bottom-marker" style="position:fixed; bottom:0; background-color:blue"></div>');
 
         // Initialize createjs

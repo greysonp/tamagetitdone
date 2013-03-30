@@ -86,8 +86,10 @@ action.eat = function(minDist, callback)
 
     // Get position (just off to the left)
     var flipped = false;
+    if (Math.random() <= 0.3) flipped = true; // 30% chance he'll flip
+
     var x = item.offset().left - $tgd.width();
-    if (x < 0)
+    if (x < 0 || flipped)
     {
         x = item.offset().left + item.width();
         flipped = true;
@@ -105,7 +107,7 @@ action.eat = function(minDist, callback)
         {
             // Eat it
             anim.eat(flipped);
-            nom(item, callback);
+            nom(item, flipped, Math.max(200, (1000/item.text().length)), callback);
         }
         else
         {
@@ -118,17 +120,21 @@ action.eat = function(minDist, callback)
 }
 
 // NOM NOM NOM
-function nom(target, callback)
+function nom(target, flipped, timePerChomp, callback)
 {
     var newText = target.text().substring(1);
+    if (flipped)
+    {
+        newText = target.text().substring(0, target.text().length - 1);
+        $tgd.css('left', target.offset().left + target.width());
+    }
     target.text(newText);
-    $tgd.css('left', target.offset().left + target.width());
     if (newText.length > 0)
     {
         setTimeout(function()
         {
-            nom(target, callback);
-        }, 200);
+            nom(target, flipped, callback);
+        }, timePerChomp);
     }
     else
     {
@@ -160,7 +166,7 @@ action.eatLinkStrong = function()
 action.goToBed = function()
 {
     // Add our cord
-    $("body").append('<img src="http://www.greysonparrelli.com/tgd/cord.png" id="cord" style="position: absolute; top:-200px; left: 65px;" />');
+    $("body").append('<img src="http://www.greysonparrelli.com/tgd/cord.png" id="cord" style="position: absolute; top:-200px; left: 65px; z-index: 77777" />');
 
     // Animate our pet jumping up to grab the cord
     $("#tgd").animate( { bottom: getTopOffset() - 20 }, 750, "swing", function()
