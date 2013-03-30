@@ -21,10 +21,13 @@ this.tgd = this.tgd || {};
 
     //Hungry Websites
     var sites = ["reddit.com", "youtube.com", "facebook.com", "twitter.com", "techcrunch.com", "stumbleupon.com",
-                 "commitsfromlastnight.com", "tumblr.com", "memebase.com", "pinterest.com"];
+        "commitsfromlastnight.com", "tumblr.com", "memebase.com", "pinterest.com"];
 
     main.init = function ()
     {
+        $("body").append('<canvas id="tgd" width="150" height="150" style="position: absolute; bottom: 0px; left: 0px;"></canvas>');
+        $("body").append('<div id="bottom-marker" style="position:fixed; bottom:0; background-color:blue"></div>');
+
         // Initialize createjs
         this.stage = new createjs.Stage("tgd");
         createjs.Ticker.addListener(main);
@@ -32,25 +35,25 @@ this.tgd = this.tgd || {};
         createjs.Ticker.useRAF = true;
 
         // Initialize our modules
-        main.anim.init(finishInit);
+        anim.init(finishInit);
     }
 
     function finishInit()
     {
-        main.action.init();
+        action.init();
 
         if (checkBedtime())
             return;
 
         // Sample use of eat and idle
-        main.action.eat(function()
+        action.eat(function()
         {
             // Could send a callback to idle, but you don't have to
-            main.action.idle(function()
+            action.idle(function()
             {
-                main.action.eat(function()
+                action.eat(function()
                 {
-                    main.action.idle();
+                    action.idle();
                 });
             });
         });
@@ -65,7 +68,7 @@ this.tgd = this.tgd || {};
     {
         if (true)
         {
-            main.action.goToBed();
+            action.goToBed();
             return true;
         }
     }
@@ -155,3 +158,5 @@ this.tgd = this.tgd || {};
 
     this.tgd = main;
 })();
+
+tgd.init();

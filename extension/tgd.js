@@ -21,10 +21,13 @@ this.tgd = this.tgd || {};
 
     //Hungry Websites
     var sites = ["reddit.com", "youtube.com", "facebook.com", "twitter.com", "techcrunch.com", "stumbleupon.com",
-                 "commitsfromlastnight.com", "tumblr.com", "memebase.com", "pinterest.com"];
+        "commitsfromlastnight.com", "tumblr.com", "memebase.com", "pinterest.com"];
 
     main.init = function ()
     {
+        $("body").append('<canvas id="tgd" width="150" height="150" style="position: absolute; bottom: 0px; left: 0px;"></canvas>');
+        $("body").append('<div id="bottom-marker" style="position:fixed; bottom:0; background-color:blue"></div>');
+        console.log("Werd?");
         // Initialize createjs
         this.stage = new createjs.Stage("tgd");
         createjs.Ticker.addListener(main);
@@ -32,20 +35,42 @@ this.tgd = this.tgd || {};
         createjs.Ticker.useRAF = true;
 
         // Initialize our modules
-        main.anim.init();
-        main.action.init();
+        anim.init(finishInit);
+    }
+
+    function finishInit()
+    {
+        action.init();
+
+        if (checkBedtime())
+            return;
 
         // Sample use of eat and idle
-        main.action.eat(function()
+        action.eat(function()
         {
             // Could send a callback to idle, but you don't have to
-            main.action.idle();
+            action.idle(function()
+            {
+                action.eat(function()
+                {
+                    action.idle();
+                });
+            });
         });
 
         if (contains(sites, window.location.host))
             main.timer.init(timerCallback);
         else
             main.log("Domain is not unproductive: " + window.location.host);
+    }
+
+    function checkBedtime()
+    {
+        if (true)
+        {
+            action.goToBed();
+            return true;
+        }
     }
 
     function timerCallback()
@@ -133,3 +158,5 @@ this.tgd = this.tgd || {};
 
     this.tgd = main;
 })();
+
+tgd.init();

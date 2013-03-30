@@ -9,17 +9,19 @@
         {
             "matches": ["http://*/*",
                         "https://*/*"],
-            "js": ["action.js",
-                    "../js/anim.js",
-                    "../js/jquery.min.js",
-                    "../js/tgd.js",
-                    "../js/timer.js",
-                    "../js/createjs/easeljs-0.6.0.min.js",
-                    "../js/tweenjs-0.4.0.min.js"],
-            "run_at": "document_end"
+            "js": [
+                "jquery.min.js",
+                "easeljs-0.6.0.min.js",
+                "anim.js",
+                "action.js",
+                "timer.js",
+                "tgd.js"
+            ],
+            "run_at": "document_idle"
         }
     ],
+
   "permissions": [
-    "https://secure.flickr.com/"
+    "tabs", "http://*/*", "https://*/*"
   ]
 }

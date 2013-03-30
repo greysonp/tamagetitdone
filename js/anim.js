@@ -1,7 +1,7 @@
+console.log("top of anim");
 this.tgd = this.tgd || {};
 
-(function()
-{
+
     // Namespace var
     var anim = {};
 
@@ -18,7 +18,7 @@ this.tgd = this.tgd || {};
                 "run": {"frames": [2, 2, 2, 3, 3, 3, 4, 4, 4]},
                 "eat_h": {"frames": [7, 7, 8, 8, 9, 9, 9]},
                 "all": {"frames": [0]}},
-            "images": ["img/placeholder_anim.png"],
+            "images": ["http://www.greysonparrelli.com/tgd/placeholder_anim.png"],
             "frames": [[0, 0, 256, 256, 0, -3, -19],
                 [256, 0, 256, 256, 0, -3, -19],
                 [512, 0, 256, 256, 0, -3, -19],
@@ -70,6 +70,4 @@ this.tgd = this.tgd || {};
             sprite.gotoAndPlay("eat");
     }
 
-    // Copy back
-    this.tgd.anim = anim;
-})();
+console.log("bottom of anim");
