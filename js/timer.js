@@ -100,7 +100,7 @@ this.tgd = this.tgd || {};
     timer.saveTime = function ()
     {
         localStorage.setItem(domain, t); //saves to the database, key/value
-        tgd.log("SAVED: " + domain + " : " + t); //dev
+        //tgd.log("SAVED: " + domain + " : " + t); //dev
     }
 
     timer.getTime = function ()

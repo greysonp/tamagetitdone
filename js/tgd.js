@@ -8,9 +8,10 @@ this.tgd = this.tgd || {};
     this.useageTime = 0;
 
     //Timer Maximums
-    this.weakMax = 300; //seconds until weak hunger
-    this.strongMax = 600; //strong hunger
-    this.eatInterval = 10; //interval between munchies
+    this.weakMax = 5; //seconds until weak hunger
+    this.strongMax = 50; //strong hunger
+    this.eatInterval = 5; //interval between munchies
+    var nextEatTime = this.eatInterval; //seconds until next eat
 
     var hungerLevel = 0; //hunger level (0 = not hungry, 1 = weak, 2 = strong)
 
@@ -35,22 +36,15 @@ this.tgd = this.tgd || {};
         main.anim.init();
         main.action.init();
 
-        // Sample use of eat and idle
-        main.action.eat(function()
-        {
-            // Could send a callback to idle, but you don't have to
-            main.action.idle();
-        });
-
-        if (contains(sites, window.location.host))
+        //if (contains(sites, window.location.host))
             main.timer.init(timerCallback);
-        else
-            main.log("Domain is not unproductive: " + window.location.host);
+        //else
+            //main.log("Domain is not unproductive: " + window.location.host);
     }
 
     function timerCallback()
     {
-        main.log("Timer Callback Received.");
+        //main.log("Timer Callback Received.");
         main.timer.saveTime();
         this.useageTime = main.timer.getTime();
         localStorage.setItem("hungerLevel", hungerLevel); // store hunger level
@@ -60,24 +54,47 @@ this.tgd = this.tgd || {};
 
     function checkHunger()
     {
-        if (this.useageTime < this.weakMax)
+        updateEatTime();
+        if (this.useageTime < this.weakMax) //idle
         {
-            hungerLevel = 0;
-            main.log("Idle");
-            //do idle animation
+            main.log("Satisfied.");
+            if (hungerLevel != 0)
+            {
+                //do idle animation
+                main.action.idle();
+                hungerLevel = 0;
+            }
         }
         else if (this.useageTime >= this.weakMax && this.useageTime < this.strongMax)
         {
             hungerLevel = 1;
-            main.log("Weak");
-            //do weak animation
+            main.log("Weak Hunger.");
+
+            //TODO: Check for mouse movement
+            // do weak animation
+            // Sample use of eat and idle
+            main.action.eat(function()
+            {
+                // Could send a callback to idle, but you don't have to
+                main.action.idle();
+            });
         }
         else if (this.useageTime >= this.strongMax)
         {
             hungerLevel = 2;
-            main.log("Strong");
+            main.log("Strong Hunger!");
+
+            //TODO: Check for mouse movement
             //do strong animation
         }
+    }
+
+    function updateEatTime()
+    {
+        if (nextEatTime <= 1 )
+            nextEatTime = this.eatInterval;
+        else
+            nextEatTime = nextEatTime - 1;
     }
 
     function checkSleep()
