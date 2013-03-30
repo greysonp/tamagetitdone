@@ -6,6 +6,7 @@ this.tgd = this.tgd || {};
     this.stage = {};
     var FPS = 30;
     this.useageTime = 0;
+    var domain = window.location.host;
 
     //Action Variables
     this.activeRadius = 240; //radius around mouse that will trigger eat()
@@ -46,19 +47,20 @@ this.tgd = this.tgd || {};
     {
         action.init();
 
-        if (contains(sites, window.location.host))
+        if (contains(sites, domain))
              timer.init(timerCallback);
         else
-            main.log("Domain is not unproductive: " + window.location.host);
+            main.log("Domain is not unproductive: " + domain);
     }
 
     function timerCallback()
     {
-        timer.saveTime();
-        this.useageTime = timer.getTime();
-        localStorage.setItem("hungerLevel", hungerLevel); // store hunger level
-        checkHunger();
-        checkSleep();
+        if (!checkSleep()){
+            timer.saveTime();
+            this.useageTime = timer.getTime();
+            localStorage.setItem("hungerLevel", hungerLevel); // store hunger level
+            checkHunger();
+        }
     }
 
     function checkHunger()
@@ -104,6 +106,7 @@ this.tgd = this.tgd || {};
                 timeSinceMeal += 1;
             if (timeSinceMeal > starveMax)
             {
+                main.log("Starving!!!");
                 action.eat(9999999, function ()
                 {
                     // Could send a callback to idle, but you don't have to
@@ -124,7 +127,12 @@ this.tgd = this.tgd || {};
         {
             if (!asleep)
             {
-                action.goToBed();
+                main.log("Going to bed.");
+                action.idle( function ()
+                {
+                    action.goToBed();
+                });
+                //timer.resetTimer();
                 asleep = true;
             }
         }
@@ -133,9 +141,11 @@ this.tgd = this.tgd || {};
             if (asleep)
             {
                 //do wakeUp
+                //timer.resetTimer();
                 asleep = false;
             }
         }
+        return asleep;
     }
 
     main.isAsleep = function ()

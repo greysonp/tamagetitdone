@@ -16,7 +16,7 @@ timer.init = function (callback)
 
     //Check if timer already exists
     var prevTime = parseInt(timer.getTime());
-    if (prevTime != null)
+    if (prevTime != null && !isNaN(prevTime))
         t = prevTime;
     else
         t = 0;

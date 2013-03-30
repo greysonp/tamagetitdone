@@ -16,7 +16,7 @@ timer.init = function (callback)
 
     //Check if timer already exists
     var prevTime = parseInt(timer.getTime());
-    if (prevTime != null)
+    if (prevTime != null && !isNaN(prevTime))
         t = prevTime;
     else
         t = 0;
@@ -39,22 +39,7 @@ function myTimer()
 
 timer.resetTimer = function (callback)
 {
-    if (!started)
-    {
-        cb = callback;
-        tid = setInterval(function ()
-        {
-            myTimer();
-            cb();
-        }, 1000);
-        started = 1;
-    }
-}
-
-timer.pauseTimer = function ()
-{
-    clearInterval(tid);
-    started = 0;
+    t = 0;
 }
 
 timer.saveTime = function ()

@@ -12,7 +12,6 @@ var mouseY = 0;
 action.init = function()
 {
     $tgd = $("#tgd");
-    var activeRadius = 300; //really just minDist for getClosestItem
 
     // Track mouse position
     $(document).mousemove(function(e)
@@ -55,7 +54,10 @@ action.eat = function(minDist, callback, isWeak)
 {
     // Return if eat is called before meal is finished
     if (active)
+    {
+        tgd.log("Already active. Exiting eat().")
         return;
+    }
 
     // Grab the closest item and make it unclickable
     // if it's a link
@@ -65,6 +67,9 @@ action.eat = function(minDist, callback, isWeak)
     if (item.get(0) == null)
     {
         tgd.log("No items close to cursor.");
+        active = true;
+        callback();
+        active = false;
         return false;
     }
 
@@ -184,6 +189,7 @@ action.eatLinkStrong = function()
 
 action.goToBed = function()
 {
+    active = true;
     // Add our cord
     $("body").append('<img src="http://www.greysonparrelli.com/tgd/cord.png" id="cord" style="position: absolute; top:-200px; left: 65px; z-index: 77777" />');
 
@@ -220,6 +226,7 @@ action.goToBed = function()
             $("#tgd").animate( { top: getTopOffset() }, 750);
         });
     });
+    active = false;
 }
 
 

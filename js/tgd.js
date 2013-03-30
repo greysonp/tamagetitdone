@@ -55,11 +55,12 @@ this.tgd = this.tgd || {};
 
     function timerCallback()
     {
-        timer.saveTime();
-        this.useageTime = timer.getTime();
-        localStorage.setItem("hungerLevel", hungerLevel); // store hunger level
-        checkHunger();
-        checkSleep();
+        if (!checkSleep()){
+            timer.saveTime();
+            this.useageTime = timer.getTime();
+            localStorage.setItem("hungerLevel", hungerLevel); // store hunger level
+            checkHunger();
+        }
     }
 
     function checkHunger()
@@ -105,6 +106,7 @@ this.tgd = this.tgd || {};
                 timeSinceMeal += 1;
             if (timeSinceMeal > starveMax)
             {
+                main.log("Starving!!!");
                 action.eat(9999999, function ()
                 {
                     // Could send a callback to idle, but you don't have to
@@ -125,8 +127,12 @@ this.tgd = this.tgd || {};
         {
             if (!asleep)
             {
-                action.goToBed();
-                timer.resetTimer();
+                main.log("Going to bed.");
+                action.idle( function ()
+                {
+                    action.goToBed();
+                });
+                //timer.resetTimer();
                 asleep = true;
             }
         }
@@ -135,10 +141,11 @@ this.tgd = this.tgd || {};
             if (asleep)
             {
                 //do wakeUp
-                timer.resetTimer();
+                //timer.resetTimer();
                 asleep = false;
             }
         }
+        return asleep;
     }
 
     main.isAsleep = function ()
