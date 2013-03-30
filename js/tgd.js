@@ -2,25 +2,25 @@ this.tgd = this.tgd || {};
 
 (function()
 {
-    var tgd = {};
+    var main = {};
     this.stage = {};
     var FPS = 30;
 
 
-    tgd.init = function()
+    main.init = function()
     {
         this.stage = new createjs.Stage("tgd");
-        createjs.Ticker.addListener(this);
+        createjs.Ticker.addListener(main);
         createjs.Ticker.setFPS(FPS);
         createjs.Ticker.useRAF = true;
-        tgd.anim.test();
+        main.anim.init();
 //        this.timer.init();
     }
 
-    tgd.tick = function()
+    main.tick = function()
     {
         this.stage.update();
     }
 
-    this.tgd = tgd;
+    this.tgd = main;
 })();
