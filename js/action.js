@@ -5,17 +5,22 @@ this.tgd = this.tgd || {};
     // Namespace var
     var action = {};
 
-    action.idle()
+    action.init = function()
+    {
+
+    }
+
+    action.idle = funtion()
     {
         tgd.anim.idle();
     }
 
-    action.eat()
+    action.eat = function()
     {
         tgd.anim.eat();
     }
 
-    action.run()
+    action.run = function()
     {
         tgd.anim.run();
     }
