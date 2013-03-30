@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+    <title>Getting Started Extension's Popup</title>
+    <style>
+        body {
+            min-width: 357px;
+            overflow-x: hidden;
+        }
+
+        img {
+            margin: 5px;
+            border: 2px solid black;
+            vertical-align: middle;
+            width: 75px;
+            height: 75px;
+        }
+    </style>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+     -->
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script src="popup.js"></script>
+</head>
+<body>
+
+<div id="settings_form">
+    <form name="settings" action="">
+        <fieldset>
+            <label for="weakMax" id="weakMax_label">Weak Max</label>
+            <input type="text" name="weakMax" id="weakMax" size="30" value="" class="text-input"/>
+            <br />
+
+            <label for="strongMax" id="strongMax_label">Strong Max</label>
+            <input type="text" name="strongMax" id="strongMax" size="30" value="" class="text-input"/>
+            <br />
+
+            <label for="eatInterval" id="eatInterval_label">Eat Interval</label>
+            <input type="text" name="eatInterval" id="eatInterval" size="30" value="" class="text-input"/>
+            <br />
+
+            <label for="bedtimeHour" id="bedtimeHour_label">Bed Time Hour</label>
+            <input type="text" name="bedtimeHour" id="bedtimeHour" size="30" value="" class="text-input"/>
+            <br />
+
+            <label for="wakeupHour" id="wakeupHour_label">Wake Up Hour</label>
+            <input type="text" name="wakeupHour" id="wakeupHour" size="30" value="" class="text-input"/>
+            <br />
+
+            <br />
+            <input type="submit" name="submit" class="button" id="submit_btn" value="Send"/>
+
+        </fieldset>
+    </form>
+</div>
+
+</body>
+</html>
