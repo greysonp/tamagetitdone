@@ -41,12 +41,18 @@ this.tgd = this.tgd || {};
         "images": ["img/test_anim.png"]
     });
 
+    var sprite = {};
+
+    anim.init = function()
+    {
+        sprite = new createjs.BitmapAnimation(spritesheet);
+        sprite.gotoAndStop(1);
+        tgd.stage.addChild(sprite);
+    }
+
     anim.test = function()
     {
-        var bar = new createjs.BitmapAnimation(spritesheet);
-        bar.gotoAndPlay(1);
-        tgd.stage.addChild(bar);
-        console.log("hello?");
+        sprite.play();
     }
 
     // Copy back
