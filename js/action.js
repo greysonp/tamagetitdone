@@ -52,34 +52,62 @@ this.tgd = this.tgd || {};
         // Play animation
         tgd.anim.run();
 
+        // Grab the closest item and make it unclickable
+        // if it's a link
         var item = getClosestItem();
+        tgd.log(item.get(0).tagName);
+        if (item.get(0).tagName == "A")
+        {
+            // Make link unclickable
+            item.click(function(e) { e.preventDefault(); });
+        }
+
+        // Get position (just off to the left)
+        var flipped = false;
         var x = item.offset().left - $tgd.width();
-        var y = item.offset().top + item.height()/2 - $tgd.height()/2;
+        if (x < 0)
+        {
+            x = item.offset().left + item.width();
+            flipped = true;
+        }
+        var y = item.offset().top + item.height()/2 - $tgd.height()/2 - 30;
 
+        // Animate it
         setCanvasPosition();
-
         $tgd.animate({
             left: x,
             top: y
         }, 500, "swing", function()
         {
-            // Eat it
-            nom(item, callback);
-
+            if (item.get(0).tagName == "A")
+            {
+                // Eat it
+                tgd.anim.eat(flipped);
+                nom(item, callback);
+            }
+            else
+            {
+                item.css('display', 'none');
+                active = false;
+                if (callback != null)
+                    callback();
+            }
         });
 
     }
 
+    // NOM NOM NOM
     function nom(target, callback)
     {
         var newText = target.text().substring(1);
         target.text(newText);
+        $tgd.css('left', target.offset().left + target.width());
         if (newText.length > 0)
         {
             setTimeout(function()
             {
                 nom(target, callback);
-            }, 300);
+            }, 200);
         }
         else
         {

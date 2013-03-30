@@ -37,6 +37,12 @@ this.tgd = this.tgd || {};
         main.action.init();
 
         //if (contains(sites, window.location.host))
+            main.action.idle(function()
+            {
+                main.action.eat(function()
+                {
+                });
+            });
             main.timer.init(timerCallback);
         //else
             //main.log("Domain is not unproductive: " + window.location.host);

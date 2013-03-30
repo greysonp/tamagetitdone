@@ -9,7 +9,13 @@
         {
             "matches": ["http://*/*",
                         "https://*/*"],
-            "js": ["contentscript.js"],
+            "js": ["action.js",
+                    "../js/anim.js",
+                    "../js/jquery.min.js",
+                    "../js/tgd.js",
+                    "../js/timer.js",
+                    "../js/createjs/easeljs-0.6.0.min.js",
+                    "../js/tweenjs-0.4.0.min.js"],
             "run_at": "document_end"
         }
     ],
