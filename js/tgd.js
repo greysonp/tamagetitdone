@@ -33,6 +33,16 @@ this.tgd = this.tgd || {};
 
         // Initialize our modules
         main.anim.init();
+        main.action.init();
+        main.timer.init();
+
+        // Sample use of eat and idle
+        main.action.eat(function()
+        {
+            // Could send a callback to idle, but you don't have to
+            main.action.idle();
+        });
+
         if (contains(sites, window.location.host))
             main.timer.init(timerCallback);
         else
