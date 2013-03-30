@@ -105,7 +105,7 @@ action.eat = function(minDist, callback)
         {
             // Eat it
             anim.eat(flipped);
-            nom(item, callback);
+            nom(item, flipped, callback);
         }
         else
         {
@@ -118,16 +118,19 @@ action.eat = function(minDist, callback)
 }
 
 // NOM NOM NOM
-function nom(target, callback)
+function nom(target, flipped, callback)
 {
     var newText = target.text().substring(1);
     target.text(newText);
-    $tgd.css('left', target.offset().left + target.width());
+    if (flipped)
+    {
+        $tgd.css('left', target.offset().left + target.width());
+    }
     if (newText.length > 0)
     {
         setTimeout(function()
         {
-            nom(target, callback);
+            nom(target, flipped, callback);
         }, 200);
     }
     else
