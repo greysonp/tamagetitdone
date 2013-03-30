@@ -9,7 +9,7 @@ this.tgd = this.tgd || {};
 
     var sprite = {};
 
-    anim.init = function()
+    anim.init = function(callback)
     {
         spritesheet = new createjs.SpriteSheet({
             "animations": {
@@ -30,10 +30,26 @@ this.tgd = this.tgd || {};
                 [0, 256, 256, 256, 0, -3, -19],
                 [256, 256, 256, 256, 0, -3, -19]]
         });
+        if (!spritesheet.complete)
+        {
+            spritesheet.addEventListener("complete", function()
+            {
+                finishInit(callback);
+            });
+        }
+        else
+        {
+            finishInit(callback);
+        }
+    }
 
+    function finishInit(callback)
+    {
         sprite = new createjs.BitmapAnimation(spritesheet);
         anim.idle();
         tgd.stage.addChild(sprite);
+        if (callback != null)
+            callback();
     }
 
     anim.idle = function(flipped)

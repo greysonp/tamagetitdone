@@ -24,7 +24,13 @@ this.tgd = this.tgd || {};
         $(document).scroll(function()
         {
             if (!active)
-                $tgd.css('top', getTopOffset());
+                $tgd.css('top', action.getTopOffset());
+        });
+
+        $(window).resize(function()
+        {
+            if (!active)
+                $tgd.css('top', action.getTopOffset());
         });
     }
 
@@ -34,7 +40,7 @@ this.tgd = this.tgd || {};
         active = true;
         setCanvasPosition();
         $tgd.stop().animate({
-            top: getTopOffset(),
+            top: action.getTopOffset(),
             left: 0
         }, 500, "swing", function()
         {
@@ -93,7 +99,6 @@ this.tgd = this.tgd || {};
                     callback();
             }
         });
-
     }
 
     // NOM NOM NOM
@@ -126,7 +131,7 @@ this.tgd = this.tgd || {};
         $tgd.css("left", x).css("top", y);
     }
 
-    function getTopOffset()
+    action.getTopOffset = function()
     {
         return $("#bottom-marker").offset().top - $tgd.height();
     }
