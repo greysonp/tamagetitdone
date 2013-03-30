@@ -5,6 +5,7 @@ this.tgd = this.tgd || {};
     var main = {};
     this.stage = {};
     var FPS = 30;
+    this.useageTime = 0;
 
     //Timer Maximums
     this.weakMax = 300; //seconds until weak hunger
@@ -14,6 +15,11 @@ this.tgd = this.tgd || {};
     //Clock Maximums (for sleeping)
     this.bedtimeHour = 23; //11PM
     this.wakeupHour = 8; //8AM
+    var asleep = false;
+
+    //Hungry Websites
+    var sites = ["reddit.com", "youtube.com", "facebook.com", "twitter.com", "techcrunch.com", "stumbleupon.com",
+                 "commitsfromlastnight.com", "tumblr.com", "memebase.com", "pinterest.com"];
 
     main.init = function ()
     {
@@ -25,33 +31,70 @@ this.tgd = this.tgd || {};
 
         // Initialize our modules
         main.anim.init();
-        main.timer.init(timerCallback);
-
-        // Initialize
+        if (contains(sites, window.location.host))
+            main.timer.init(timerCallback);
+        else
+            main.log("Domain is not unproductive: " + window.location.host);
     }
 
     function timerCallback()
     {
         main.log("Timer Callback Received.");
         main.timer.saveTime();
-        var curTime = main.timer.getTime();
+        this.useageTime = main.timer.getTime();
         localStorage.setItem("hungerLevel", hungerLevel); // store hunger level
+        checkHunger();
+        checkSleep();
+    }
 
-        if (curTime < this.weakMax)
+    function checkHunger()
+    {
+        if (this.useageTime < this.weakMax)
         {
             hungerLevel = 0;
+            main.log("Idle");
             //do idle animation
         }
-        else if (curTime >= this.weakMax && curTime < this.strongMax)
+        else if (this.useageTime >= this.weakMax && this.useageTime < this.strongMax)
         {
             hungerLevel = 1;
+            main.log("Weak");
             //do weak animation
         }
-        else if (curTime >= this.strongMax)
+        else if (this.useageTime >= this.strongMax)
         {
             hungerLevel = 2;
+            main.log("Strong");
             //do strong animation
         }
+    }
+
+    function checkSleep()
+    {
+        var curTime = new Date();
+        var curHour = curTime.getHours();
+
+        //Between the hours of sleep and wake
+        if ((curHour >= bedtimeHour && curHour <= 24) || (curHour >= 0 && curHour < wakeupHour))
+        {
+            if (!asleep){
+                //do sleep
+                this.asleep = true;
+            }
+        }
+        else
+        {
+            if (asleep)
+            {
+                //do wakeUp
+                asleep = false;
+            }
+        }
+    }
+
+    main.isAsleep = function ()
+    {
+        return asleep;
     }
 
     main.tick = function ()
@@ -65,6 +108,16 @@ this.tgd = this.tgd || {};
             console.info(msg);
         else
             console.error(msg);
+    }
+
+    function contains(a, obj)
+    {
+        for (var i = 0; i < a.length; i++) {
+            if (a[i] === obj) {
+                return true;
+            }
+        }
+        return false;
     }
 
     this.tgd = main;
