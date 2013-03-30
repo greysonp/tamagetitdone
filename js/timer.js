@@ -2,7 +2,7 @@ this.tgd = this.tgd || {};
 
 timer = {};
 var tid = {};
-var t = {};
+var t = 0;
 var domain = "";
 var started = false;
 var isActive = true;
@@ -12,6 +12,16 @@ var cb = {};
 timer.init = function (callback)
 {
     cb = callback;
+    domain = window.location.host;
+
+    //Check if timer already exists
+    var prevTime = parseInt(timer.getTime());
+    if (prevTime != null)
+        t = prevTime;
+    else
+        t = 0;
+
+    //Start timer
     tid = setInterval(function ()
     {
         myTimer();
@@ -19,8 +29,6 @@ timer.init = function (callback)
             cb();
     }, 1000); //initialize timer
     started = 1; //timer flag
-    t = 0; //set start time
-    domain = window.location.host;
 }
 
 function myTimer()
@@ -29,24 +37,9 @@ function myTimer()
         t = t + 1;
 }
 
-timer.restartTimer = function (callback)
+timer.resetTimer = function (callback)
 {
-    if (!started)
-    {
-        cb = callback;
-        tid = setInterval(function ()
-        {
-            myTimer();
-            cb();
-        }, 1000);
-        started = 1;
-    }
-}
-
-timer.pauseTimer = function ()
-{
-    clearInterval(tid);
-    started = 0;
+    t = 0;
 }
 
 timer.saveTime = function ()
@@ -57,7 +50,7 @@ timer.saveTime = function ()
 
 timer.getTime = function ()
 {
-    var curTime = localStorage.getItem(domain);
+    var curTime = parseInt(localStorage.getItem(domain));
     tgd.log("RETRIEVED: " + domain + " : " + curTime); //dev
     return curTime;
 }
