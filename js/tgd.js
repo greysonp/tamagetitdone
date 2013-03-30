@@ -25,7 +25,7 @@ this.tgd = this.tgd || {};
 
     //Hungry Websites
     var sites = ["reddit.com", "youtube.com", "facebook.com", "twitter.com", "techcrunch.com", "stumbleupon.com",
-                 "commitsfromlastnight.com", "tumblr.com", "memebase.com", "pinterest.com"];
+        "commitsfromlastnight.com", "tumblr.com", "memebase.com", "pinterest.com"];
 
     main.init = function ()
     {
@@ -44,9 +44,9 @@ this.tgd = this.tgd || {};
         main.action.init();
 
         //if (contains(sites, window.location.host))
-            main.timer.init(timerCallback);
+        main.timer.init(timerCallback);
         //else
-            //main.log("Domain is not unproductive: " + window.location.host);
+        //main.log("Domain is not unproductive: " + window.location.host);
     }
 
     function timerCallback()
@@ -84,7 +84,7 @@ this.tgd = this.tgd || {};
             main.log("Strong Hunger!");
 
             //do strong animation
-            var hasEaten = main.action.eat(activeRadius, function()
+            var hasEaten = main.action.eat(activeRadius, function ()
             {
                 // Could send a callback to idle, but you don't have to
                 main.action.idle();
@@ -94,8 +94,9 @@ this.tgd = this.tgd || {};
             //outside the active radius of the cursor
             if (!hasEaten)
                 timeSinceMeal += 1;
-            if (timeSinceMeal > starveMax){
-                main.action.eat(9999999, function()
+            if (timeSinceMeal > starveMax)
+            {
+                main.action.eat(9999999, function ()
                 {
                     // Could send a callback to idle, but you don't have to
                     main.action.idle();
@@ -113,7 +114,8 @@ this.tgd = this.tgd || {};
         //Between the hours of sleep and wake
         if ((curHour >= bedtimeHour && curHour <= 24) || (curHour >= 0 && curHour < wakeupHour))
         {
-            if (!asleep){
+            if (!asleep)
+            {
                 main.action.goToBed();
                 asleep = true;
             }
@@ -148,8 +150,10 @@ this.tgd = this.tgd || {};
 
     function contains(a, obj)
     {
-        for (var i = 0; i < a.length; i++) {
-            if (a[i] === obj) {
+        for (var i = 0; i < a.length; i++)
+        {
+            if (a[i] === obj)
+            {
                 return true;
             }
         }
