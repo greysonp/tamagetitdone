@@ -6,7 +6,7 @@ this.tgd = this.tgd || {};
     var t = {};
     var domain = "";
     var started = false;
-    var isActive = false;
+    var isActive = true;
     var timer = {};
     var cb = {};
 

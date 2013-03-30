@@ -10,7 +10,7 @@ this.tgd = this.tgd || {};
 
     }
 
-    action.idle = funtion()
+    action.idle = function()
     {
         tgd.anim.idle();
     }
