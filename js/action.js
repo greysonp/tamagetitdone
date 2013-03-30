@@ -63,7 +63,13 @@ this.tgd = this.tgd || {};
         }
 
         // Get position (just off to the left)
+        var flipped = false;
         var x = item.offset().left - $tgd.width();
+        if (x < 0)
+        {
+            x = item.offset().left + item.width();
+            flipped = true;
+        }
         var y = item.offset().top + item.height()/2 - $tgd.height()/2 - 30;
 
         // Animate it
@@ -76,7 +82,7 @@ this.tgd = this.tgd || {};
             if (item.get(0).tagName == "A")
             {
                 // Eat it
-                tgd.anim.eat();
+                tgd.anim.eat(flipped);
                 nom(item, callback);
             }
             else
@@ -95,6 +101,7 @@ this.tgd = this.tgd || {};
     {
         var newText = target.text().substring(1);
         target.text(newText);
+        $tgd.css('left', target.offset().left + target.width());
         if (newText.length > 0)
         {
             setTimeout(function()

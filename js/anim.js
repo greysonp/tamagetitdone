@@ -26,18 +26,32 @@ this.tgd = this.tgd || {};
         tgd.stage.addChild(sprite);
     }
 
-    anim.idle = function()
+    anim.idle = function(flipped)
     {
+        if (flipped)
+            sprite.scaleX = -1;
+        else
+            sprite.scaleX = 1;
         sprite.gotoAndPlay("idle");
     }
 
-    anim.run = function()
+    anim.run = function(flipped)
     {
+        if (flipped)
+            sprite.scaleX = -1;
+        else
+            sprite.scaleX = 1;
+
         sprite.gotoAndPlay("run");
     }
 
-    anim.eat = function()
+    anim.eat = function(flipped)
     {
+        if (flipped)
+            sprite.scaleX = 1;
+        else
+            sprite.scaleX = 1;
+
         sprite.gotoAndPlay("eat");
     }
 
