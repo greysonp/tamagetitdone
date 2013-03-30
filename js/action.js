@@ -5,9 +5,19 @@ this.tgd = this.tgd || {};
     // Namespace var
     var action = {};
 
-    action.test = function()
+    action.idle()
     {
-        
+        tgd.anim.idle();
+    }
+
+    action.eat()
+    {
+        tgd.anim.eat();
+    }
+
+    action.run()
+    {
+        tgd.anim.run();
     }
 
     // Copy back
