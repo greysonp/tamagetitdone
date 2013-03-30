@@ -2,7 +2,7 @@ this.tgd = this.tgd || {};
 
 (function ()
 {
-    this.tgd.timer = timer;
+    timer = {};
     var tid = {};
     var t = {};
     var domain = "";

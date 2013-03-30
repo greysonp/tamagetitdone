@@ -25,10 +25,13 @@ this.tgd = this.tgd || {};
 
     //Hungry Websites
     var sites = ["reddit.com", "youtube.com", "facebook.com", "twitter.com", "techcrunch.com", "stumbleupon.com",
-        "commitsfromlastnight.com", "tumblr.com", "memebase.com", "pinterest.com"];
+        "commitsfromlastnight.com", "tumblr.com", "memebase.com", "pinterest.com", "localhost"];
 
     main.init = function ()
     {
+        $("body").append('<canvas id="tgd" width="150" height="150" style="position: absolute; bottom: 0px; left: 0px;"></canvas>');
+        $("body").append('<div id="bottom-marker" style="position:fixed; bottom:0; background-color:blue"></div>');
+
         // Initialize createjs
         this.stage = new createjs.Stage("tgd");
         createjs.Ticker.addListener(main);
@@ -36,17 +39,17 @@ this.tgd = this.tgd || {};
         createjs.Ticker.useRAF = true;
 
         // Initialize our modules
-        main.anim.init(finishInit);
+        anim.init(finishInit);
     }
 
     function finishInit()
     {
-        main.action.init();
+        action.init();
 
-        //if (contains(sites, window.location.host))
-        main.timer.init(timerCallback);
-        //else
-        //main.log("Domain is not unproductive: " + window.location.host);
+        if (contains(sites, window.location.host))
+            main.timer.init(timerCallback);
+        else
+            main.log("Domain is not unproductive: " + window.location.host);
     }
 
     function timerCallback()
@@ -162,3 +165,5 @@ this.tgd = this.tgd || {};
 
     this.tgd = main;
 })();
+
+tgd.init();
