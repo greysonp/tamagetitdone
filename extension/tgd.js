@@ -12,8 +12,8 @@ this.tgd = this.tgd || {};
     this.activeRadius = 240; //radius around mouse that will trigger eat()
 
     //Timer Maximums
-    this.weakMax = 4; //seconds until weak hunger
-    this.strongMax = 8; //strong hunger
+    this.weakMax = 8; //seconds until weak hunger
+    this.strongMax = 16; //strong hunger
     this.starveMax = 5; //seconds until tamagotchi will start eating things beyond the activeRadius
     var timeSinceMeal = 0; //seconds since the tamagotchi last ate
 
@@ -104,7 +104,7 @@ this.tgd = this.tgd || {};
             //outside the active radius of the cursor
             if (!hasEaten)
                 timeSinceMeal += 1;
-            if (timeSinceMeal > starveMax)
+            if (timeSinceMeal >= starveMax)
             {
                 main.log("Starving!!!");
                 action.eat(9999999, function ()
@@ -132,7 +132,7 @@ this.tgd = this.tgd || {};
                 {
                     action.goToBed();
                 });
-                //timer.resetTimer();
+                timer.resetTimer();
                 asleep = true;
             }
         }
@@ -141,7 +141,7 @@ this.tgd = this.tgd || {};
             if (asleep)
             {
                 //do wakeUp
-                //timer.resetTimer();
+                timer.resetTimer();
                 asleep = false;
             }
         }
