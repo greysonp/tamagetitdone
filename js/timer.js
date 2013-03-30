@@ -2,7 +2,7 @@ this.tgd = this.tgd || {};
 
 (function()
 {
-  var myVar = {};
+  var tid = {};
   var started = false;
   var t = {};
   var domain = "";
@@ -11,7 +11,7 @@ this.tgd = this.tgd || {};
 
   timer.init = function()
   {
-	  myVar = setInterval(function(){myTimer()},1000); //initialize timer
+      tid = setInterval(function(){myTimer()},1000); //initialize timer
 	  started = 1; //timer flag
 	  t = 0; //set start time
 	  domain = window.location.host;
@@ -19,34 +19,34 @@ this.tgd = this.tgd || {};
   
   function myTimer()
   {
-    t = t + 1;
-    document.getElementById("timer").innerHTML=t;
+      t = t + 1;
+      document.getElementById("timer").innerHTML=t;
   }
   
   timer.restartTimer = function()
   {
       if (!started)
       {
-          myVar = setInterval(function(){myTimer()},1000);
+          tid = setInterval(function(){myTimer()},1000);
           started = 1;
       }
   }
   
   timer.pauseTimer = function()
   {
-    clearInterval(myVar);
-    started = 0;
+      clearInterval(tid);
+      started = 0;
   }
   
   timer.saveTime = function()
   {
-    localStorage.setItem(domain, t); //saves to the database, key/value
-    window.alert(domain + " : " + t); //dev
+      localStorage.setItem(domain, t); //saves to the database, key/value
+      tgd.log(domain + " : " + t); //dev
   }
   
   timer.getTime = function()
   {
-    window.alert(domain + " : " + localStorage.getItem(domain)); //dev
+      tgd.log(domain + " : " + localStorage.getItem(domain)); //dev
   }
   
   this.tgd.timer = timer;
