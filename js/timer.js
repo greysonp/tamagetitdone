@@ -2,13 +2,15 @@ this.tgd = this.tgd || {};
 
 (function()
 {
-  this.myVar = {};
-  this.started;
-  this.t;
-  this.domain;
+  var myVar = {};
+  var started = false;
+  var t = {};
+  var domain = "";
   
   var timer = {};
-  timer.init = function() {  
+
+  timer.init = function()
+  {
 	  myVar = setInterval(function(){myTimer()},1000); //initialize timer
 	  started = 1; //timer flag
 	  t = 0; //set start time
@@ -23,11 +25,11 @@ this.tgd = this.tgd || {};
   
   timer.restartTimer = function()
   {
-    if (!started)
-    {
-      myVar=setInterval(function(){myTimer()},1000);
-      started = 1;
-    }
+      if (!started)
+      {
+          myVar = setInterval(function(){myTimer()},1000);
+          started = 1;
+      }
   }
   
   timer.pauseTimer = function()
