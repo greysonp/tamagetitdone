@@ -20,7 +20,6 @@ this.tgd = this.tgd || {};
   function myTimer()
   {
       t = t + 1;
-      document.getElementById("timer").innerHTML=t;
   }
   
   timer.restartTimer = function()

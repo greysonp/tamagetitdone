@@ -16,8 +16,14 @@ this.tgd = this.tgd || {};
 
         // Initialize our modules
         main.anim.init();
+        main.action.init();
+        main.timer.init();
 
-//        this.timer.init();
+        main.action.eat(function()
+        {
+            main.action.idle();
+        });
+
     }
 
     main.tick = function()
@@ -27,7 +33,7 @@ this.tgd = this.tgd || {};
 
     main.log = function(msg, isError)
     {
-        if(args.length == 1 || !isError)
+        if(arguments.length == 1 || !isError)
             console.info(msg);
         else
             console.error(msg);
