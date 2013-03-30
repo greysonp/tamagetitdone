@@ -1,10 +1,8 @@
-console.log("top of timer");
-
 this.tgd = this.tgd || {};
 
 (function ()
 {
-    this.tgd.timer = timer;
+    timer = {};
     var tid = {};
     var t = {};
     var domain = "";
@@ -56,7 +54,7 @@ this.tgd = this.tgd || {};
     timer.saveTime = function ()
     {
         localStorage.setItem(domain, t); //saves to the database, key/value
-        tgd.log("SAVED: " + domain + " : " + t); //dev
+        //tgd.log("SAVED: " + domain + " : " + t); //dev
     }
 
     timer.getTime = function ()
@@ -78,4 +76,3 @@ this.tgd = this.tgd || {};
 
     this.tgd.timer = timer;
 })();
-console.log("bottom of timer");

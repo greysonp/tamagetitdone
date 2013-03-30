@@ -59,7 +59,7 @@ this.tgd = this.tgd || {};
         });
 
         if (contains(sites, window.location.host))
-            main.timer.init(timerCallback);
+            timer.init(timerCallback);
         else
             main.log("Domain is not unproductive: " + window.location.host);
     }
@@ -76,8 +76,8 @@ this.tgd = this.tgd || {};
     function timerCallback()
     {
         main.log("Timer Callback Received.");
-        main.timer.saveTime();
-        this.useageTime = main.timer.getTime();
+        timer.saveTime();
+        this.useageTime = timer.getTime();
         localStorage.setItem("hungerLevel", hungerLevel); // store hunger level
         checkHunger();
         checkSleep();
