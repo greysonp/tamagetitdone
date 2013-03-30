@@ -39,7 +39,13 @@ this.tgd = this.tgd || {};
         main.action.eat(function()
         {
             // Could send a callback to idle, but you don't have to
-            main.action.idle();
+            main.action.idle(function()
+            {
+                main.action.eat(function()
+                {
+                    main.action.idle();
+                });
+            });
         });
 
         if (contains(sites, window.location.host))

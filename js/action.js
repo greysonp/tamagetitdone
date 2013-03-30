@@ -64,7 +64,7 @@ this.tgd = this.tgd || {};
 
         // Get position (just off to the left)
         var x = item.offset().left - $tgd.width();
-        var y = item.offset().top + item.height()/2 - $tgd.height()/2;
+        var y = item.offset().top + item.height()/2 - $tgd.height()/2 - 30;
 
         // Animate it
         setCanvasPosition();
@@ -76,11 +76,12 @@ this.tgd = this.tgd || {};
             if (item.get(0).tagName == "A")
             {
                 // Eat it
+                tgd.anim.eat();
                 nom(item, callback);
             }
             else
             {
-                target.css('display', 'none');
+                item.css('display', 'none');
                 active = false;
                 if (callback != null)
                     callback();
@@ -99,7 +100,7 @@ this.tgd = this.tgd || {};
             setTimeout(function()
             {
                 nom(target, callback);
-            }, 300);
+            }, 200);
         }
         else
         {
