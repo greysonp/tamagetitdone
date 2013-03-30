@@ -10,6 +10,8 @@ this.tgd = this.tgd || {};
     var mouseX = 0;
     var mouseY = 0;
 
+    var activeRadius = 300; //really just minDist for getClosestItem
+
     action.init = function()
     {
         $tgd = $("#tgd");
@@ -50,17 +52,29 @@ this.tgd = this.tgd || {};
         });
     }
 
-    action.eat = function(callback)
+    action.eat = function(minDist, callback)
     {
+        // Return if eat is called before meal is finished
+        if (active)
+            return;
+
+        // Grab the closest item and make it unclickable
+        // if it's a link
+        var item = getClosestItem(minDist);
+
+        // If no item is close to the cursor, simply return
+        if (item.get(0) == null)
+        {
+            tgd.log("No items close to cursor.");
+            return false;
+        }
+
         // Set state
         active = true;
 
         // Play animation
         tgd.anim.run();
 
-        // Grab the closest item and make it unclickable
-        // if it's a link
-        var item = getClosestItem();
         tgd.log(item.get(0).tagName);
         if (item.get(0).tagName == "A")
         {
@@ -181,24 +195,26 @@ this.tgd = this.tgd || {};
         });
     }
 
-    function getClosestItem()
+    function getClosestItem(minDist)
     {
-        var minDist = 9999999;
+        //var minDist = 300;
         var minIndex = 9999999;
         $("a, img, iframe, embed").each(function(i)
         {
-
-            var x = $(this).offset().left + $(this).width()/2;
-            var y = $(this).offset().top + $(this).height()/2;
-
-            var dx = x - mouseX;
-            var dy = y - mouseY;
-            var dist = Math.sqrt((dx * dx) + (dy * dy));
-
-            if (dist < minDist)
+            if ($(this).is(":visible"))
             {
-                minDist = dist;
-                minIndex = i;
+                var x = $(this).offset().left + $(this).width()/2;
+                var y = $(this).offset().top + $(this).height()/2;
+
+                var dx = x - mouseX;
+                var dy = y - mouseY;
+                var dist = Math.sqrt((dx * dx) + (dy * dy));
+
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    minIndex = i;
+                }
             }
         });
 

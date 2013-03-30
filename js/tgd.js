@@ -7,17 +7,20 @@ this.tgd = this.tgd || {};
     var FPS = 30;
     this.useageTime = 0;
 
+    //Action Variables
+    this.activeRadius = 240; //radius around mouse that will trigger eat()
+
     //Timer Maximums
-    this.weakMax = 5; //seconds until weak hunger
-    this.strongMax = 50; //strong hunger
-    this.eatInterval = 5; //interval between munchies
-    var nextEatTime = this.eatInterval; //seconds until next eat
+    this.weakMax = 4; //seconds until weak hunger
+    this.strongMax = 8; //strong hunger
+    this.starveMax = 5; //seconds until tamagotchi will start eating things beyond the activeRadius
+    var timeSinceMeal = 0; //seconds since the tamagotchi last ate
 
     var hungerLevel = 0; //hunger level (0 = not hungry, 1 = weak, 2 = strong)
 
     //Clock Maximums (for sleeping)
     this.bedtimeHour = 23; //11PM
-    this.wakeupHour = 8; //8AM
+    this.wakeupHour = 8 //8AM
     var asleep = false;
 
     //Hungry Websites
@@ -41,31 +44,13 @@ this.tgd = this.tgd || {};
         main.action.init();
 
         //if (contains(sites, window.location.host))
-            return;
-
-            main.action.idle(function()
-            {
-                main.action.eat(function()
-                {
-                });
-            });
             main.timer.init(timerCallback);
         //else
             //main.log("Domain is not unproductive: " + window.location.host);
     }
 
-    function checkBedtime()
-    {
-        if (true)
-        {
-            main.action.goToBed();
-            return true;
-        }
-    }
-
     function timerCallback()
     {
-        //main.log("Timer Callback Received.");
         main.timer.saveTime();
         this.useageTime = main.timer.getTime();
         localStorage.setItem("hungerLevel", hungerLevel); // store hunger level
@@ -75,7 +60,6 @@ this.tgd = this.tgd || {};
 
     function checkHunger()
     {
-        updateEatTime();
         if (this.useageTime < this.weakMax) //idle
         {
             main.log("Satisfied.");
@@ -91,31 +75,34 @@ this.tgd = this.tgd || {};
             hungerLevel = 1;
             main.log("Weak Hunger.");
 
-            //TODO: Check for mouse movement
             // do weak animation
-            // Sample use of eat and idle
-            main.action.eat(function()
-            {
-                // Could send a callback to idle, but you don't have to
-                main.action.idle();
-            });
+
         }
         else if (this.useageTime >= this.strongMax)
         {
             hungerLevel = 2;
             main.log("Strong Hunger!");
 
-            //TODO: Check for mouse movement
             //do strong animation
-        }
-    }
+            var hasEaten = main.action.eat(activeRadius, function()
+            {
+                // Could send a callback to idle, but you don't have to
+                main.action.idle();
+            });
 
-    function updateEatTime()
-    {
-        if (nextEatTime <= 1 )
-            nextEatTime = this.eatInterval;
-        else
-            nextEatTime = nextEatTime - 1;
+            //if tamagotchi is starving (hasn't eaten in a while), force it to eat something even if it is
+            //outside the active radius of the cursor
+            if (!hasEaten)
+                timeSinceMeal += 1;
+            if (timeSinceMeal > starveMax){
+                main.action.eat(9999999, function()
+                {
+                    // Could send a callback to idle, but you don't have to
+                    main.action.idle();
+                });
+                timeSinceMeal = 0;
+            }
+        }
     }
 
     function checkSleep()
@@ -127,8 +114,8 @@ this.tgd = this.tgd || {};
         if ((curHour >= bedtimeHour && curHour <= 24) || (curHour >= 0 && curHour < wakeupHour))
         {
             if (!asleep){
-                //do sleep
-                this.asleep = true;
+                main.action.goToBed();
+                asleep = true;
             }
         }
         else
