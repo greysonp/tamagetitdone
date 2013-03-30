@@ -24,8 +24,8 @@ this.tgd = this.tgd || {};
     var asleep = false;
 
     //Hungry Websites
-    var sites = ["reddit.com", "youtube.com", "facebook.com", "twitter.com", "techcrunch.com", "stumbleupon.com",
-        "commitsfromlastnight.com", "tumblr.com", "memebase.com", "pinterest.com", "localhost"];
+    var sites = ["www.reddit.com", "www.youtube.com", "www.facebook.com", "www.twitter.com", "www.techcrunch.com", "www.stumbleupon.com",
+        "www.commitsfromlastnight.com", "www.tumblr.com", "www.memebase.com", "www.pinterest.com", "localhost"];
 
     main.init = function ()
     {
@@ -47,15 +47,15 @@ this.tgd = this.tgd || {};
         action.init();
 
         if (contains(sites, window.location.host))
-            main.timer.init(timerCallback);
+             timer.init(timerCallback);
         else
             main.log("Domain is not unproductive: " + window.location.host);
     }
 
     function timerCallback()
     {
-        main.timer.saveTime();
-        this.useageTime = main.timer.getTime();
+        timer.saveTime();
+        this.useageTime = timer.getTime();
         localStorage.setItem("hungerLevel", hungerLevel); // store hunger level
         checkHunger();
         checkSleep();
@@ -69,7 +69,7 @@ this.tgd = this.tgd || {};
             if (hungerLevel != 0)
             {
                 //do idle animation
-                main.action.idle();
+                action.idle();
                 hungerLevel = 0;
             }
         }
@@ -87,10 +87,10 @@ this.tgd = this.tgd || {};
             main.log("Strong Hunger!");
 
             //do strong animation
-            var hasEaten = main.action.eat(activeRadius, function ()
+            var hasEaten = action.eat(activeRadius, function ()
             {
                 // Could send a callback to idle, but you don't have to
-                main.action.idle();
+                action.idle();
             });
 
             //if tamagotchi is starving (hasn't eaten in a while), force it to eat something even if it is
@@ -99,10 +99,10 @@ this.tgd = this.tgd || {};
                 timeSinceMeal += 1;
             if (timeSinceMeal > starveMax)
             {
-                main.action.eat(9999999, function ()
+                action.eat(9999999, function ()
                 {
                     // Could send a callback to idle, but you don't have to
-                    main.action.idle();
+                    action.idle();
                 });
                 timeSinceMeal = 0;
             }
@@ -119,7 +119,7 @@ this.tgd = this.tgd || {};
         {
             if (!asleep)
             {
-                main.action.goToBed();
+                action.goToBed();
                 asleep = true;
             }
         }

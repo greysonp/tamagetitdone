@@ -73,6 +73,9 @@ action.eat = function(minDist, callback)
 
     // Play animation
     anim.run();
+
+    // Grab the closest item and make it unclickable
+    // if it's a link
     tgd.log(item.get(0).tagName);
     if (item.get(0).tagName == "A")
     {
@@ -80,15 +83,6 @@ action.eat = function(minDist, callback)
         item.click(function(e) { e.preventDefault(); });
     }
 
-    // Grab the closest item and make it unclickable
-    // if it's a link
-    var item = getClosestItem();
-    tgd.log(item.get(0).tagName);
-    if (item.get(0).tagName == "A")
-    {
-        // Make link unclickable
-        item.click(function(e) { e.preventDefault(); });
-    }
 
     // Get position (just off to the left)
     var flipped = false;
@@ -206,7 +200,6 @@ action.goToBed = function()
 
 function getClosestItem(minDist)
 {
-    //var minDist = 300;
     var minIndex = 9999999;
     $("a, img, iframe, embed").each(function(i)
     {
