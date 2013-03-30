@@ -86,8 +86,10 @@ action.eat = function(minDist, callback)
 
     // Get position (just off to the left)
     var flipped = false;
+    if (Math.random() <= 0.3) flipped = true; // 30% chance he'll flip
+
     var x = item.offset().left - $tgd.width();
-    if (x < 0)
+    if (x < 0 || flipped)
     {
         x = item.offset().left + item.width();
         flipped = true;
@@ -105,7 +107,7 @@ action.eat = function(minDist, callback)
         {
             // Eat it
             anim.eat(flipped);
-            nom(item, flipped, callback);
+            nom(item, flipped, Math.max(200, (1000/item.text().length)), callback);
         }
         else
         {
@@ -118,7 +120,7 @@ action.eat = function(minDist, callback)
 }
 
 // NOM NOM NOM
-function nom(target, flipped, callback)
+function nom(target, flipped, timePerChomp, callback)
 {
     var newText = target.text().substring(1);
     if (flipped)
@@ -132,7 +134,7 @@ function nom(target, flipped, callback)
         setTimeout(function()
         {
             nom(target, flipped, callback);
-        }, 200);
+        }, timePerChomp);
     }
     else
     {
