@@ -6,6 +6,7 @@ this.tgd = this.tgd || {};
     this.stage = {};
     var FPS = 30;
     this.useageTime = 0;
+    var domain = window.location.host;
 
     //Action Variables
     this.activeRadius = 240; //radius around mouse that will trigger eat()
@@ -46,10 +47,10 @@ this.tgd = this.tgd || {};
     {
         action.init();
 
-        if (contains(sites, window.location.host))
+        if (contains(sites, domain))
              timer.init(timerCallback);
         else
-            main.log("Domain is not unproductive: " + window.location.host);
+            main.log("Domain is not unproductive: " + domain);
     }
 
     function timerCallback()
@@ -79,6 +80,11 @@ this.tgd = this.tgd || {};
             main.log("Weak Hunger.");
 
             // do weak animation
+            action.eatWeak(activeRadius, function()
+            {
+               action.idle();
+            });
+
 
         }
         else if (this.useageTime >= this.strongMax)
@@ -120,6 +126,7 @@ this.tgd = this.tgd || {};
             if (!asleep)
             {
                 action.goToBed();
+                timer.resetTimer();
                 asleep = true;
             }
         }
@@ -128,6 +135,7 @@ this.tgd = this.tgd || {};
             if (asleep)
             {
                 //do wakeUp
+                timer.resetTimer();
                 asleep = false;
             }
         }
