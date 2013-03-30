@@ -10,6 +10,8 @@ this.tgd = this.tgd || {};
     //Timer Maximums
     this.weakMax = 300; //seconds until weak hunger
     this.strongMax = 600; //strong hunger
+    this.eatInterval = 10; //interval between munchies
+
     var hungerLevel = 0; //hunger level (0 = not hungry, 1 = weak, 2 = strong)
 
     //Clock Maximums (for sleeping)

@@ -63,11 +63,13 @@ this.tgd = this.tgd || {};
         return curTime;
     }
 
-    window.onfocus = function () {
+    window.onfocus = function ()
+    {
         isActive = true;
     };
 
-    window.onblur = function () {
+    window.onblur = function ()
+    {
         isActive = false;
     };
 
