@@ -34,7 +34,6 @@ this.tgd = this.tgd || {};
         // Initialize our modules
         main.anim.init();
         main.action.init();
-        main.timer.init();
 
         // Sample use of eat and idle
         main.action.eat(function()

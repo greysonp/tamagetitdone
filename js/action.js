@@ -53,7 +53,7 @@ this.tgd = this.tgd || {};
         tgd.anim.run();
 
         var item = getClosestItem();
-        var x = item.offset().left + item.width()/2 - $tgd.width()/2;
+        var x = item.offset().left - $tgd.width();
         var y = item.offset().top + item.height()/2 - $tgd.height()/2;
 
         setCanvasPosition();
@@ -64,12 +64,30 @@ this.tgd = this.tgd || {};
         }, 500, "swing", function()
         {
             // Eat it
-            item.css('display', 'none');
+            nom(item, callback);
+
+        });
+
+    }
+
+    function nom(target, callback)
+    {
+        var newText = target.text().substring(1);
+        target.text(newText);
+        if (newText.length > 0)
+        {
+            setTimeout(function()
+            {
+                nom(target, callback);
+            }, 300);
+        }
+        else
+        {
+            target.css('display', 'none');
             active = false;
             if (callback != null)
                 callback();
-        });
-
+        }
     }
 
     function setCanvasPosition()
