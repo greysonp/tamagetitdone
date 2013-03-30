@@ -52,24 +52,44 @@ this.tgd = this.tgd || {};
         // Play animation
         tgd.anim.run();
 
+        // Grab the closest item and make it unclickable
+        // if it's a link
         var item = getClosestItem();
+        tgd.log(item.get(0).tagName);
+        if (item.get(0).tagName == "A")
+        {
+            // Make link unclickable
+            item.click(function(e) { e.preventDefault(); });
+        }
+
+        // Get position (just off to the left)
         var x = item.offset().left - $tgd.width();
         var y = item.offset().top + item.height()/2 - $tgd.height()/2;
 
+        // Animate it
         setCanvasPosition();
-
         $tgd.animate({
             left: x,
             top: y
         }, 500, "swing", function()
         {
-            // Eat it
-            nom(item, callback);
-
+            if (item.get(0).tagName == "A")
+            {
+                // Eat it
+                nom(item, callback);
+            }
+            else
+            {
+                target.css('display', 'none');
+                active = false;
+                if (callback != null)
+                    callback();
+            }
         });
 
     }
 
+    // NOM NOM NOM
     function nom(target, callback)
     {
         var newText = target.text().substring(1);
