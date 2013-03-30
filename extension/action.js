@@ -121,11 +121,12 @@ action.eat = function(minDist, callback)
 function nom(target, flipped, callback)
 {
     var newText = target.text().substring(1);
-    target.text(newText);
     if (flipped)
     {
+        newText = target.text().substring(0, target.text().length - 1);
         $tgd.css('left', target.offset().left + target.width());
     }
+    target.text(newText);
     if (newText.length > 0)
     {
         setTimeout(function()
@@ -163,7 +164,7 @@ action.eatLinkStrong = function()
 action.goToBed = function()
 {
     // Add our cord
-    $("body").append('<img src="http://www.greysonparrelli.com/tgd/cord.png" id="cord" style="position: absolute; top:-200px; left: 65px;" />');
+    $("body").append('<img src="http://www.greysonparrelli.com/tgd/cord.png" id="cord" style="position: absolute; top:-200px; left: 65px; z-index: 77777" />');
 
     // Animate our pet jumping up to grab the cord
     $("#tgd").animate( { bottom: getTopOffset() - 20 }, 750, "swing", function()
