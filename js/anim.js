@@ -14,11 +14,21 @@ this.tgd = this.tgd || {};
         spritesheet = new createjs.SpriteSheet({
             "animations": {
                 "idle": {"frames": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]},
-                "eat": {"frames": [2, 2, 5, 5, 6, 6, 6]},
+                "eat": {"frames": [2, 2, 5, 5, 6, 6]},
                 "run": {"frames": [2, 2, 2, 3, 3, 3, 4, 4, 4]},
+                "eat_h": {"frames": [7, 7, 8, 8, 9, 9, 9]},
                 "all": {"frames": [0]}},
             "images": ["img/placeholder_anim.png"],
-            "frames": [[0, 0, 256, 256, 0, -3, -19], [256, 0, 256, 256, 0, -3, -19], [512, 0, 256, 256, 0, -3, -19], [768, 0, 256, 256, 0, -3, -19], [1024, 0, 256, 256, 0, -3, -19], [1280, 0, 256, 256, 0, -3, -19], [1536, 0, 256, 256, 0, -3, -19]]
+            "frames": [[0, 0, 256, 256, 0, -3, -19],
+                [256, 0, 256, 256, 0, -3, -19],
+                [512, 0, 256, 256, 0, -3, -19],
+                [768, 0, 256, 256, 0, -3, -19],
+                [1024, 0, 256, 256, 0, -3, -19],
+                [1280, 0, 256, 256, 0, -3, -19],
+                [1536, 0, 256, 256, 0, -3, -19],
+                [1792, 0, 256, 256, 0, -3, -19],
+                [0, 256, 256, 256, 0, -3, -19],
+                [256, 256, 256, 256, 0, -3, -19]]
         });
 
         sprite = new createjs.BitmapAnimation(spritesheet);
@@ -28,31 +38,20 @@ this.tgd = this.tgd || {};
 
     anim.idle = function(flipped)
     {
-        if (flipped)
-            sprite.scaleX = -1;
-        else
-            sprite.scaleX = 1;
         sprite.gotoAndPlay("idle");
     }
 
     anim.run = function(flipped)
     {
-        if (flipped)
-            sprite.scaleX = -1;
-        else
-            sprite.scaleX = 1;
-
         sprite.gotoAndPlay("run");
     }
 
     anim.eat = function(flipped)
     {
         if (flipped)
-            sprite.scaleX = 1;
+            sprite.gotoAndPlay("eat_h");
         else
-            sprite.scaleX = 1;
-
-        sprite.gotoAndPlay("eat");
+            sprite.gotoAndPlay("eat");
     }
 
     // Copy back
