@@ -12,8 +12,8 @@ this.tgd = this.tgd || {};
     this.activeRadius = 240; //radius around mouse that will trigger eat()
 
     //Timer Maximums
-    this.weakMax = 10; //seconds until weak hunger
-    this.strongMax = 20; //strong hunger
+    this.weakMax = 8; //seconds until weak hunger
+    this.strongMax = 16; //strong hunger
     this.starveMax = 5; //seconds until tamagotchi will start eating things beyond the activeRadius
     var timeSinceMeal = 0; //seconds since the tamagotchi last ate
 

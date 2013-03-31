@@ -194,7 +194,7 @@ action.goToBed = function()
     $("body").append('<img src="http://www.greysonparrelli.com/tgd/cord.png" id="cord" style="position: absolute; top:-200px; left: 65px; z-index: 77777" />');
 
     // Animate our pet jumping up to grab the cord
-    $("#tgd").animate( { bottom: getTopOffset() - 20 }, 750, "swing", function()
+    $("#tgd").animate( { top: 20 }, 750, "swing", function()
     {
         // When that's done, pull the cord down and... (see below)
         $("#cord").animate({ top: -50 }, 750, "swing", function()
@@ -209,7 +209,7 @@ action.goToBed = function()
                 setTimeout(function()
                 {
                     // Create our "Go to bed." header
-                    $("body").append('<h1 id="bed-header" style="position:fixed; top: 30px; margin:auto; font-size:5em; color:white; font-family: sans-serif; opacity:0; z-index:2000">Go to bed.</h1>');
+                    $("body").append('<h1 id="bed-header" style="position:fixed; top: 30px; left:140px; font-size:5em; color:white; font-family: sans-serif; opacity:0; z-index:2000">Go to bed.</h1>');
 
                     // Fade it in
                     $("#bed-header").animate({ opacity: 1}, 500);
