@@ -538,7 +538,7 @@ declare module createjs {
         next: string;
     }
 
-    export class SpriteSheet {
+    export class SpriteSheet extends EventDispatcher {
         // properties
         complete: boolean;
 
@@ -606,6 +606,7 @@ declare module createjs {
 
         // methods
         constructor (canvas: HTMLCanvasElement);
+        constructor (canvasId: String);
         clone(): Stage;
         enableMouseOver(frequency: number): void;
         enableDOMEvents(enable: boolean): void;

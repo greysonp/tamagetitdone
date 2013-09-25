@@ -28,7 +28,7 @@ module TGD {
             });
         }
 
-        public static idle(callback:()=>void):void {
+        public static idle(callback:()=>void = null):void {
             Animation.idle();
             Action.active = true;
             Action.setCanvasPosition();
@@ -111,10 +111,11 @@ module TGD {
             });
         }
 
-        public static eatWeak(minDist:number, callback:()=>void):void {
+        public static eatWeak(minDist:number, callback:()=>void = null):void {
             Action.eat(minDist, function() {
                 $('#tgd').unbind();
-                callback();
+                if (callback !== null)
+                    callback();
             }, true);
 
             $('#tgd').bind('mouseover', function() {

@@ -1,73 +1,63 @@
-console.log("top of anim");
-this.tgd = this.tgd || {};
+///<reference path="d/DefinitelyTyped/easeljs/easeljs.d.ts" />
 
+module TGD {
+    export class Animation {
 
-    // Namespace var
-    var anim = {};
+        private static spritesheet:createjs.SpriteSheet;
+        private static sprite:createjs.BitmapAnimation;
 
-    var spritesheet = {};
-
-    var sprite = {};
-
-    anim.init = function(callback)
-    {
-        spritesheet = new createjs.SpriteSheet({
-            "animations": {
-                "idle": {"frames": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]},
-                "eat": {"frames": [2, 2, 5, 5, 6, 6]},
-                "run": {"frames": [2, 2, 2, 3, 3, 3, 4, 4, 4]},
-                "eat_h": {"frames": [7, 7, 8, 8, 9, 9, 9]},
-                "all": {"frames": [0]}},
-            "images": ["http://www.greysonparrelli.com/tgd/placeholder_anim.png"],
-            "frames": [[0, 0, 256, 256, 0, -3, -19],
-                [256, 0, 256, 256, 0, -3, -19],
-                [512, 0, 256, 256, 0, -3, -19],
-                [768, 0, 256, 256, 0, -3, -19],
-                [1024, 0, 256, 256, 0, -3, -19],
-                [1280, 0, 256, 256, 0, -3, -19],
-                [1536, 0, 256, 256, 0, -3, -19],
-                [1792, 0, 256, 256, 0, -3, -19],
-                [0, 256, 256, 256, 0, -3, -19],
-                [256, 256, 256, 256, 0, -3, -19]]
-        });
-        if (!spritesheet.complete)
-        {
-            spritesheet.addEventListener("complete", function()
-            {
-                finishInit(callback);
+        public static init(callback):void {
+            Animation.spritesheet = new createjs.SpriteSheet({
+                "animations": {
+                    "idle": {"frames": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]},
+                    "eat": {"frames": [2, 2, 5, 5, 6, 6]},
+                    "run": {"frames": [2, 2, 2, 3, 3, 3, 4, 4, 4]},
+                    "eat_h": {"frames": [7, 7, 8, 8, 9, 9, 9]},
+                    "all": {"frames": [0]}},
+                "images": ["http://www.greysonparrelli.com/tgd/placeholder_anim.png"],
+                "frames": [[0, 0, 256, 256, 0, -3, -19],
+                    [256, 0, 256, 256, 0, -3, -19],
+                    [512, 0, 256, 256, 0, -3, -19],
+                    [768, 0, 256, 256, 0, -3, -19],
+                    [1024, 0, 256, 256, 0, -3, -19],
+                    [1280, 0, 256, 256, 0, -3, -19],
+                    [1536, 0, 256, 256, 0, -3, -19],
+                    [1792, 0, 256, 256, 0, -3, -19],
+                    [0, 256, 256, 256, 0, -3, -19],
+                    [256, 256, 256, 256, 0, -3, -19]]
             });
+            if (!Animation.spritesheet.complete) {
+                Animation.spritesheet.addEventListener("complete", function() {
+                    Animation.finishInit(callback);
+                });
+            }
+            else {
+                Animation.finishInit(callback);
+            }
         }
-        else
-        {
-            finishInit(callback);
+
+        private static finishInit(callback:()=>void):void {
+            Animation.sprite = new createjs.BitmapAnimation(Animation.spritesheet);
+            Animation.idle();
+            TGD.Main.stage.addChild(Animation.sprite);
+            if (callback != null)
+                callback();
         }
-    }
 
-    function finishInit(callback)
-    {
-        sprite = new createjs.BitmapAnimation(spritesheet);
-        anim.idle();
-        tgd.stage.addChild(sprite);
-        if (callback != null)
-            callback();
-    }
+        public static idle():void {
+            Animation.sprite.gotoAndPlay("idle");
+        }
 
-    anim.idle = function(flipped)
-    {
-        sprite.gotoAndPlay("idle");
-    }
+        public static run():void {
+            Animation.sprite.gotoAndPlay("run");
+        }
 
-    anim.run = function(flipped)
-    {
-        sprite.gotoAndPlay("run");
-    }
+        public static eat(flipped:boolean) {
+            if (flipped)
+                Animation.sprite.gotoAndPlay("eat_h");
+            else
+                Animation.sprite.gotoAndPlay("eat");
+        }
 
-    anim.eat = function(flipped)
-    {
-        if (flipped)
-            sprite.gotoAndPlay("eat_h");
-        else
-            sprite.gotoAndPlay("eat");
     }
-
-console.log("bottom of anim");
+}

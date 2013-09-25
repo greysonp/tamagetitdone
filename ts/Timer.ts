@@ -1,68 +1,72 @@
-this.tgd = this.tgd || {};
+module TGD {
+    export class Timer {
+        private tid;
+        private t:number = 0;
+        private domain:string = "";
+        private started:boolean = false;
+        private isActive:boolean = true;
+        private timer;
+        private cb;
+        private storage:TGD.Storage;
 
-timer = {};
-var tid = {};
-var t = 0;
-var domain = "";
-var started = false;
-var isActive = true;
-var timer = {};
-var cb = {};
+        constructor (callback) {
+            this.cb = callback;
+            this.domain = window.location.host;
+            this.storage = new TGD.StorageChrome();
+            var _this:Timer = this;
 
-timer.init = function (callback)
-{
-    cb = callback;
-    domain = window.location.host;
+            //Check if timer already exists
+            this.getTime(function(prevTime:number) {
+                if (prevTime != null && !isNaN(prevTime))
+                    this.t = prevTime;
+                else
+                    this.t = 0;    
+            });
+            
 
-    //Check if timer already exists
-    var prevTime = parseInt(timer.getTime());
-    if (prevTime != null && !isNaN(prevTime))
-        t = prevTime;
-    else
-        t = 0;
+            //Start timer
+            this.tid = setInterval(function () {
+                _this.myTimer();
+                if (_this.isActive)
+                    _this.cb();
+            }, 1000); //initialize timer
+            this.started = true; //timer flag
 
-    //Start timer
-    tid = setInterval(function ()
-    {
-        myTimer();
-        if (isActive)
-            cb();
-    }, 1000); //initialize timer
-    started = 1; //timer flag
+            // Add window focus events
+            window.onfocus = function () {
+                _this.isActive = true;
+            }
+
+            window.onblur = function () {
+                _this.isActive = false;
+            }
+        }
+
+        private myTimer():void {
+            if (this.isActive)
+                this.t = this.t + 1;
+        }
+
+        public resetTimer():void {
+            this.t = 0;
+        }
+
+        public resetTime():void {
+            this.storage.set(this.domain, this.t.toString(), null);
+        }
+
+        public getTime(callback:(number)=>void):void {
+            this.storage.get(this.domain, function(value:string) {
+                callback(parseInt(value));
+            });
+        }
+
+        public saveTime():void {
+
+        }
+    }
 }
 
-function myTimer()
-{
-    if (isActive)
-        t = t + 1;
-}
 
-timer.resetTimer = function (callback)
-{
-    t = 0;
-}
-
-timer.saveTime = function ()
-{
-    localStorage.setItem(domain, t); //saves to the database, key/value
-    //tgd.log("SAVED: " + domain + " : " + t); //dev
-}
-
-timer.getTime = function ()
-{
-    var curTime = parseInt(localStorage.getItem(domain));
-    tgd.log("RETRIEVED: " + domain + " : " + curTime); //dev
-    return curTime;
-}
-
-window.onfocus = function ()
-{
-    isActive = true;
-};
-
-window.onblur = function ()
-{
-    isActive = false;
-};
 
 
