@@ -1,13 +1,34 @@
-console.log("top of action");
-this.tgd = this.tgd || {};
+module TGD {
+    export class Action {
+
+        public static active:boolean;
+
+        public static mouseX:Number;
+        public static mouseY:Number;
+        
+        public static init() {
+
+            // Track mouse position
+            $(document).mousemove(function (e) {
+                Action.mouseX = e.pageX;
+                Action.mouseY = e.pageY;
+            });
+
+            // Reposition on scroll if not moving
+            $(document).scroll(function() {
+                if (!Action.active)
+                    $('#tgd').css('top', getTopOffset());
+            });
+
+            $(window).resize(function() {
+
+            });
+        }
+    }
+}
 
 // Namespace var
-var action = {};
 var $tgd = {};
-var active = false;
-
-var mouseX = 0;
-var mouseY = 0;
 
 action.init = function()
 {

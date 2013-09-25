@@ -2,8 +2,8 @@
   "manifest_version": 2,
 
   "name": "tamagetitdone",
-  "description": "This extension forces productivity using a tamagotchi.",
-  "version": "1.0",
+  "description": "A productivity-focused digital pet.",
+  "version": "2.0",
 
     "content_scripts": [
         {
@@ -17,7 +17,7 @@
                 "timer.js",
                 "tgd.js"
             ],
-            "run_at": "document_idle"
+            "run_at": "document_end"
         }
     ],
 
