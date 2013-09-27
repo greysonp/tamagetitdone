@@ -13,7 +13,6 @@ module TGD {
             this.cb = callback;
             this.domain = window.location.host;
             this.storage = new TGD.StorageChrome();
-            var _this:Timer = this;
 
             //Check if timer already exists
             this.getTime(function(prevTime:number) {
@@ -25,20 +24,20 @@ module TGD {
             
 
             //Start timer
-            this.tid = setInterval(function () {
-                _this.myTimer();
-                if (_this.isActive)
-                    _this.cb();
+            this.tid = setInterval(() => {
+                this.myTimer();
+                if (this.isActive)
+                    this.cb();
             }, 1000); //initialize timer
             this.started = true; //timer flag
 
             // Add window focus events
-            window.onfocus = function () {
-                _this.isActive = true;
+            window.onfocus = () => {
+                this.isActive = true;
             }
 
-            window.onblur = function () {
-                _this.isActive = false;
+            window.onblur = () => {
+                this.isActive = false;
             }
         }
 

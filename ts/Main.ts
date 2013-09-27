@@ -44,7 +44,7 @@ module TGD {
 
             // Initialize createjs
             Main.stage = new createjs.Stage("tgd");
-            createjs.Ticker.addListener(main);
+            createjs.Ticker.addEventListener("tick", this.tick);
             createjs.Ticker.setFPS(Main.FPS);
             createjs.Ticker.useRAF = true;
 
@@ -152,8 +152,9 @@ module TGD {
             return Main.self.asleep;
         }
 
-        public static tick():void {
+        public tick():void {
             Main.stage.update();
+            console.log("Tick!");
         }
 
         private contains(a, obj):boolean {

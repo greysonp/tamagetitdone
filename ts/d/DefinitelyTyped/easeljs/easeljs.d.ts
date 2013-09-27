@@ -144,7 +144,7 @@ declare module createjs {
     }
 
 
-    export class BitmapAnimation extends DisplayObject {
+    export class Sprite extends DisplayObject {
         // properties
         currentAnimation: string;
         currentAnimationFrame: number;
@@ -158,7 +158,7 @@ declare module createjs {
         constructor(spriteSheet: SpriteSheet);
         advance(): void;
         cache(): void;
-        clone(): BitmapAnimation;
+        clone(): Sprite;
         getBounds(): Rectangle;
         gotoAndPlay(frameOrAnimation: string): void;
         gotoAndPlay(frameOrAnimation: number): void;
@@ -182,7 +182,7 @@ declare module createjs {
 
         // methods
         constructor(target: MovieClip, outLabel: string, overLabel: string, downLabel: string, play: boolean, hitArea: DisplayObject, hitLabel: string);
-        constructor(target: BitmapAnimation, outLabel: string, overLabel: string, downLabel: string, play: boolean, hitArea: DisplayObject, hitLabel: string);
+        constructor(target: Sprite, outLabel: string, overLabel: string, downLabel: string, play: boolean, hitArea: DisplayObject, hitLabel: string);
         setEnabled(value: boolean): void;
         toString(): string;
     }

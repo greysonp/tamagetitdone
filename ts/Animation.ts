@@ -4,7 +4,7 @@ module TGD {
     export class Animation {
 
         private static spritesheet:createjs.SpriteSheet;
-        private static sprite:createjs.BitmapAnimation;
+        private static sprite:createjs.Sprite;
 
         public static init(callback):void {
             Animation.spritesheet = new createjs.SpriteSheet({
@@ -37,7 +37,7 @@ module TGD {
         }
 
         private static finishInit(callback:()=>void):void {
-            Animation.sprite = new createjs.BitmapAnimation(Animation.spritesheet);
+            Animation.sprite = new createjs.Sprite(Animation.spritesheet);
             Animation.idle();
             TGD.Main.stage.addChild(Animation.sprite);
             if (callback != null)
