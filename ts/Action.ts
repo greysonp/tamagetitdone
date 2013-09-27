@@ -130,7 +130,7 @@ module TGD {
         public static goToBed() {
             Action.active = true;
             // Add our cord
-            $("body").append('<img src="http://www.greysonparrelli.com/tgd/cord.png" id="cord" style="position: absolute; top:-200px; left: 65px; z-index: 77777" />');
+            $("body").append('<img src="' + chrome.extension.getURL("img/cord.png") + '" id="cord" style="position: absolute; top:-200px; left: 65px; z-index: 77777" />');
 
             // Animate our pet jumping up to grab the cord
             $("#tgd").animate( { top: 20 }, 750, "swing", function() {

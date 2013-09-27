@@ -1,5 +1,7 @@
 ///<reference path="d/DefinitelyTyped/easeljs/easeljs.d.ts" />
 ///<reference path="d/DefinitelyTyped/chrome/chrome.d.ts" />
+///<reference path="Storage.ts" />
+///<reference path="StorageChrome.ts" />
 
 module TGD {    
     export class Main {
@@ -47,7 +49,9 @@ module TGD {
             createjs.Ticker.useRAF = true;
 
             // Initialize our modules
-            TGD.Animation.init(this.finishInit);
+            TGD.Animation.init(() => {
+                this.finishInit.apply(this);
+            });
             this.storage = new TGD.StorageChrome();
             Main.self = this;
         }
@@ -56,7 +60,9 @@ module TGD {
             TGD.Action.init();
 
             if (this.contains(this.sites, this.domain))
-                 this.timer = new TGD.Timer(this.timerCallback);
+                 this.timer = new TGD.Timer(() => {
+                    this.timerCallback.apply(this);
+                });
             else
                 TGD.Util.log("Domain is not unproductive: " + this.domain);
         }

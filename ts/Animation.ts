@@ -14,7 +14,7 @@ module TGD {
                     "run": {"frames": [2, 2, 2, 3, 3, 3, 4, 4, 4]},
                     "eat_h": {"frames": [7, 7, 8, 8, 9, 9, 9]},
                     "all": {"frames": [0]}},
-                "images": ["http://www.greysonparrelli.com/tgd/placeholder_anim.png"],
+                "images": [chrome.extension.getURL("img/placeholder_anim.png")],
                 "frames": [[0, 0, 256, 256, 0, -3, -19],
                     [256, 0, 256, 256, 0, -3, -19],
                     [512, 0, 256, 256, 0, -3, -19],

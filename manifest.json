@@ -5,27 +5,32 @@
   "description": "A productivity-focused digital pet.",
   "version": "2.0",
 
-    "content_scripts": [
-        {
-            "matches": ["http://*/*",
-                        "https://*/*"],
-            "js": [
-                "jquery.min.js",
-                "easeljs-0.6.0.min.js",
-                "anim.js",
-                "action.js",
-                "timer.js",
-                "tgd.js"
-            ],
-            "run_at": "document_end"
-        }
-    ],
-
-  "permissions": [
-    "tabs", "http://*/*", "https://*/*"
+  "content_scripts": [
+      {
+          "matches": ["http://*/*",
+                      "https://*/*"],
+          "js": [
+              "js/libs/jquery.js",
+              "js/libs/jquery-ui.js",
+              "js/libs/easeljs-0.6.0.min.js",
+              "js/content_script.js"
+          ],
+          "run_at": "document_end"
+      }
   ],
 
-    "browser_action": {
-        "default_popup": "popup.html"
-    }
+  "permissions": [
+    "tabs", "http://*/*", "https://*/*", "storage"
+  ],
+
+  "browser_action": {
+      "default_popup": "popup.html"
+  },
+
+  "web_accessible_resources": [
+    "img/*.jpg",
+    "img/*.png",
+    "js/*.map",
+    "ts/*.ts"
+  ]
 }
