@@ -2,6 +2,9 @@
 js/content_script.js
 js/content_script.js.map
 
+# Node Stuff
+node_modules/
+
 # IDE
 .idea/
 
