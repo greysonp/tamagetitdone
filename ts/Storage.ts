@@ -1,6 +1,6 @@
 module TGD {
     export interface Storage {
-        set(key:String, value:String, callback:()=>void):void;
+        set(object:Object, callback:()=>void):void;
         get(key:String, callback:(string)=>void):void;
     }
 }

@@ -31,6 +31,7 @@ module TGD {
         private timer:TGD.Timer;
 
         private storage:TGD.Storage;
+        private action:TGD.Action;
 
         private static self:Main;
 
@@ -48,33 +49,28 @@ module TGD {
             createjs.Ticker.setFPS(Main.FPS);
             createjs.Ticker.useRAF = true;
 
-            // Initialize our modules
-            TGD.Animation.init(() => {
-                this.finishInit.apply(this);
-            });
             this.storage = new TGD.StorageChrome();
             Main.self = this;
-        }
 
-        private finishInit():void {
-            TGD.Action.init();
-
-            if (this.contains(this.sites, this.domain))
-                 this.timer = new TGD.Timer(() => {
-                    this.timerCallback.apply(this);
-                });
-            else
-                TGD.Util.log("Domain is not unproductive: " + this.domain);
+            // Initialize our modules
+            this.action = new TGD.Action(() => {
+                if (this.contains(this.sites, this.domain))
+                    this.timer = new TGD.Timer(() => {
+                        this.timerCallback.apply(this);
+                    });
+                else
+                    TGD.Util.log("Domain is not unproductive: " + this.domain);
+            });
+            
         }
 
         private timerCallback():void {
-            var _this:Main = this;
             if (!this.checkSleep()){
-                this.timer.getTime(function(time:number) {
-                    _this.timer.saveTime();
-                    _this.useageTime = this.timer.getTime();
-                    _this.storage.set("hungerLevel", this.hungerLevel.toString(), null); // store hunger level
-                    _this.checkHunger();
+                this.timer.getTime((time:number) => {
+                    this.timer.saveTime();
+                    this.useageTime = time;
+                    this.storage.set({"hungerLevel": this.hungerLevel}, null); // store hunger level
+                    this.checkHunger();
                 });
             }
         }
@@ -82,10 +78,9 @@ module TGD {
         private checkHunger():void  {
             if (this.useageTime < this.weakMax) { // idle
                 TGD.Util.log("Satisfied.");
-                if (this.hungerLevel != 0)
-                {
+                if (this.hungerLevel != 0) {
                     //do idle animation
-                    TGD.Action.idle();
+                    this.action.idle();
                     this.hungerLevel = 0;
                 }
             }
@@ -94,8 +89,8 @@ module TGD {
                 TGD.Util.log("Weak Hunger.");
 
                 // do weak animation
-                TGD.Action.eatWeak(this.activeRadius, function() {
-                   TGD.Action.idle();
+                this.action.eatWeak(this.activeRadius, () => {
+                   this.action.idle();
                 });
 
 
@@ -105,9 +100,9 @@ module TGD {
                 TGD.Util.log("Strong Hunger!");
 
                 //do strong animation
-                var hasEaten = TGD.Action.eat(this.activeRadius, function() {
+                var hasEaten = this.action.eat(this.activeRadius, () => {
                     // Could send a callback to idle, but you don't have to
-                    TGD.Action.idle();
+                    this.action.idle();
                 }, false);
 
                 //if tamagotchi is starving (hasn't eaten in a while), force it to eat something even if it is
@@ -116,9 +111,9 @@ module TGD {
                     this.timeSinceMeal += 1;
                 if (this.timeSinceMeal >= this.starveMax) {
                     TGD.Util.log("Starving!!!");
-                    TGD.Action.eat(9999999, function () {
+                    this.action.eat(9999999, () => {
                         // Could send a callback to idle, but you don't have to
-                        TGD.Action.idle();
+                        this.action.idle();
                     }, true);
                     this.timeSinceMeal = 0;
                 }
@@ -133,8 +128,8 @@ module TGD {
             if ((curHour >= this.bedtimeHour && curHour <= 24) || (curHour >= 0 && curHour < this.wakeupHour)) {
                 if (!this.asleep) {
                     TGD.Util.log("Going to bed.");
-                    TGD.Action.idle( function() {
-                        TGD.Action.goToBed();
+                    this.action.idle(() => {
+                        this.action.goToBed();
                     });
                     this.timer.resetTimer();
                     this.asleep = true;

@@ -1,74 +1,92 @@
 ///<reference path="d/DefinitelyTyped/jquery/jquery.d.ts" />
 ///<reference path="d/DefinitelyTyped/jqueryui/jqueryui.d.ts" />
-//
+
 module TGD {
     export class Action {
-        public static active:boolean;
+        // Whether or not an action is currently being performed
+        private _active:boolean;
 
-        public static mouseX:number;
-        public static mouseY:number;
+        // Mouse x and y position
+        private mouseX:number;
+        private mouseY:number;
         
-        public static init():void {
+        // A reference to our animator
+        private animation:TGD.Animation;
 
-            // Track mouse position
-            $(document).mousemove(function(e) {
-                Action.mouseX = e.pageX;
-                Action.mouseY = e.pageY;
-            });
-
-            // Reposition on scroll if not moving
-            $(document).scroll(function() {
-                if (!Action.active)
-                    $('#tgd').css('top', Action.getTopOffset());
-            });
-
-            $(window).resize(function() {
-                if (!Action.active) 
-                    $('#tgd').css('top', Action.getTopOffset());
+        /**
+         * Creates a new Action manager.
+         * @param   {Function}  A callback that will be executed when initialization
+         *                        is done.
+         */
+        constructor(callback:()=>void) {
+            this.animation = new TGD.Animation(() => {
+                this.init(callback);
             });
         }
 
-        public static idle(callback:()=>void = null):void {
-            Animation.idle();
-            Action.active = true;
-            Action.setCanvasPosition();
+        public init(callback:()=>void):void {
+            // Track mouse position
+            $(document).mousemove(function(e) {
+                this.mouseX = e.pageX;
+                this.mouseY = e.pageY;
+            });
+
+            // Reposition on scroll if not moving
+            $(document).scroll(() => {
+                if (!this._active)
+                    $('#tgd').css('top', this.getTopOffset());
+            });
+
+            // Reposition on browser resize if not moving
+            $(window).resize(() => {
+                if (!this._active) 
+                    $('#tgd').css('top', this.getTopOffset());
+            });
+
+            callback();
+        }
+
+        public idle(callback:()=>void = null):void {
+            this.animation.idle();
+            this._active = true;
+            this.setCanvasPosition();
 
             $('#tgd').stop().animate({
-                top: Action.getTopOffset(),
+                top: this.getTopOffset(),
                 left: 0
             }, 500, "swing", function() {
-                Action.active = false;
+                this._active = false;
                 if (callback != null)
                     callback();
             });
         }
 
-        public static eat(minDist:number, callback:()=>void, isWeak:boolean):boolean {
+        public eat(minDist:number, callback:()=>void, isWeak:boolean):boolean {
             // Return if eat is called before meal is finished
-            if (Action.active) {
+            if (this._active) {
                 TGD.Util.log("Already active. Exiting eat().")
                 return;
             }
 
             // Grab the closest item and make it unclickable
             // if it's a link
-            var item = Action.getClosestItem(minDist);
+            var item = this.getClosestItem(minDist);
 
             // If no item is close to the cursor, simply return
             if (item.get(0) == null)
             {
                 TGD.Util.log("No items close to cursor.");
-                Action.active = true;
+                this._active = true;
                 callback();
-                Action.active = false;
+                this._active = false;
                 return false;
             }
 
             // Set state
-            Action.active = true;
+            this._active = true;
 
             // Play animation
-            TGD.Animation.run();
+            this.animation.run();
 
             // Grab the closest item and make it unclickable
             // if it's a link
@@ -83,8 +101,7 @@ module TGD {
             if (Math.random() <= 0.3) flipped = true; // 30% chance he'll flip
 
             var x:number = item.offset().left - $('#tgd').width();
-            if (x < 0 || flipped)
-            {
+            if (x < 0 || flipped) {
                 x = item.offset().left + item.width();
                 flipped = true;
             }
@@ -92,43 +109,43 @@ module TGD {
 
             // Animate it
             var eatTime:number = isWeak ? 2000 : 500;
-            Action.setCanvasPosition();
+            this.setCanvasPosition();
             $('#tgd').animate({
                 left: x,
                 top: y
             }, eatTime, "swing", function() {
                 if (item.get(0).tagName == "A") {
                     // Eat it
-                    TGD.Animation.eat(flipped);
-                    Action.nom(item, flipped, Math.max(200, (1000/item.text().length)), callback);
+                    this.animation.eat(flipped);
+                    this.nom(item, flipped, Math.max(200, (1000/item.text().length)), callback);
                 }
                 else {
                     item.css('display', 'none');
-                    Action.active = false;
+                    this._active = false;
                     if (callback != null)
                         callback();
                 }
             });
         }
 
-        public static eatWeak(minDist:number, callback:()=>void = null):void {
-            Action.eat(minDist, function() {
+        public eatWeak(minDist:number, callback:()=>void = null):void {
+            this.eat(minDist, function() {
                 $('#tgd').unbind();
                 if (callback !== null)
                     callback();
             }, true);
 
-            $('#tgd').bind('mouseover', function() {
+            $('#tgd').bind('mouseover', () => {
                 TGD.Util.log("Shoo!!");
-                Action.active = false;
+                this._active = false;
                 $('#tgd').stop();
-                Animation.idle();
+                this.animation.idle();
                 $('#tgd').unbind();
             });
         }
 
-        public static goToBed() {
-            Action.active = true;
+        public goToBed() {
+            this._active = true;
             // Add our cord
             $("body").append('<img src="' + chrome.extension.getURL("img/cord.png") + '" id="cord" style="position: absolute; top:-200px; left: 65px; z-index: 77777" />');
 
@@ -157,13 +174,13 @@ module TGD {
                 // ...have the pet animate to where the cord snags
                 $("#tgd").animate( { top: 200 }, 750, "swing", function() {
                     // After he loses the cord, he falls to the floor
-                    $("#tgd").animate( { top: Action.getTopOffset() }, 750);
+                    $("#tgd").animate( { top: this.getTopOffset() }, 750);
                 });
             });
-            Action.active = false;
+            this._active = false;
         }
 
-        private static nom(target, flipped:boolean, timePerChomp:number, callback:()=>void):void {
+        private nom(target, flipped:boolean, timePerChomp:number, callback:()=>void):void {
             var newText:string = target.text().substring(1);
             if (flipped) {
                 newText = target.text().substring(0, target.text().length - 1);
@@ -171,42 +188,43 @@ module TGD {
             }
             target.text(newText);
             if (newText.length > 0) {
-                setTimeout(function() {
-                    Action.nom(target, flipped, 100, callback);
+                setTimeout(() => {
+                    this.nom(target, flipped, 100, callback);
                 }, timePerChomp);
             }
             else {
                 target.css('display', 'none');
-                Action.active = false;
+                this._active = false;
                 if (callback != null)
                     callback();
             }
         }
 
-        private static setCanvasPosition():void {
+        private setCanvasPosition():void {
             var x:number = $('#tgd').offset().left;
             var y:number = $('#tgd').offset().top;
 
             $('#tgd').css("left", x).css("top", y);
         }
 
-        private static getTopOffset():number {
+        private getTopOffset():number {
             return $("#bottom-marker").offset().top - $('#tgd').height();
         }
 
-        private static eatLinkStrong():void {
-            TGD.Animation.run();
+        private eatLinkStrong():void {
+            this.animation.run();
         }
 
-        private static getClosestItem(minDist) {
+        private getClosestItem(minDist) {
             var minIndex:number = 9999999;
+            var _this:Action = this;
             $('a, img, iframe, embed').each(function(i) {
                 if ($(this).is(":visible")) {
                     var x:number = $(this).offset().left + $(this).width()/2;
                     var y:number = $(this).offset().top + $(this).height()/2;
 
-                    var dx:number = x - Action.mouseX;
-                    var dy:number = y - Action.mouseY;
+                    var dx:number = x - _this.mouseX;
+                    var dy:number = y - _this.mouseY;
                     var dist:number = Math.sqrt((dx * dx) + (dy * dy));
 
                     if (dist < minDist) {

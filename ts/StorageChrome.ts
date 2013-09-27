@@ -2,11 +2,11 @@
 
 module TGD {
     export class StorageChrome implements TGD.Storage {
-        public set(key:String, value:String, callback:()=>void):void {
+        public set(object:Object, callback:()=>void):void {
             if (callback !== null)
-                chrome.storage.local.set(key, callback);
+                chrome.storage.local.set(object, callback);
             else
-                chrome.storage.local.set(key);
+                chrome.storage.local.set(object);
         }
 
         public get(key:String, callback:(string)=>void):void {

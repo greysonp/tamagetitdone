@@ -3,11 +3,11 @@
 module TGD {
     export class Animation {
 
-        private static spritesheet:createjs.SpriteSheet;
-        private static sprite:createjs.Sprite;
+        private spritesheet:createjs.SpriteSheet;
+        private sprite:createjs.Sprite;
 
-        public static init(callback):void {
-            Animation.spritesheet = new createjs.SpriteSheet({
+        constructor(callback:()=>void = null) {
+            this.spritesheet = new createjs.SpriteSheet({
                 "animations": {
                     "idle": {"frames": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]},
                     "eat": {"frames": [2, 2, 5, 5, 6, 6]},
@@ -26,37 +26,37 @@ module TGD {
                     [0, 256, 256, 256, 0, -3, -19],
                     [256, 256, 256, 256, 0, -3, -19]]
             });
-            if (!Animation.spritesheet.complete) {
-                Animation.spritesheet.addEventListener("complete", function() {
-                    Animation.finishInit(callback);
+            if (!this.spritesheet.complete) {
+                this.spritesheet.addEventListener("complete", () => {
+                    this.finishInit(callback);
                 });
             }
             else {
-                Animation.finishInit(callback);
+                this.finishInit(callback);
             }
         }
 
-        private static finishInit(callback:()=>void):void {
-            Animation.sprite = new createjs.Sprite(Animation.spritesheet);
-            Animation.idle();
-            TGD.Main.stage.addChild(Animation.sprite);
+        private finishInit(callback:()=>void):void {
+            this.sprite = new createjs.Sprite(this.spritesheet);
+            this.idle();
+            TGD.Main.stage.addChild(this.sprite);
             if (callback != null)
                 callback();
         }
 
-        public static idle():void {
-            Animation.sprite.gotoAndPlay("idle");
+        public idle():void {
+            this.sprite.gotoAndPlay("idle");
         }
 
-        public static run():void {
-            Animation.sprite.gotoAndPlay("run");
+        public run():void {
+            this.sprite.gotoAndPlay("run");
         }
 
-        public static eat(flipped:boolean) {
+        public eat(flipped:boolean) {
             if (flipped)
-                Animation.sprite.gotoAndPlay("eat_h");
+                this.sprite.gotoAndPlay("eat_h");
             else
-                Animation.sprite.gotoAndPlay("eat");
+                this.sprite.gotoAndPlay("eat");
         }
 
     }
