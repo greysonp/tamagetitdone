@@ -56,7 +56,7 @@ module TGD {
         public resetTime():void {
             var obj:Object = {};
             obj[this.domain] = this.t;
-            this.storage.set(obj, null);
+            this.storage.set(obj);
         }
 
         public getTime(callback:(number)=>void):void {

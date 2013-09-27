@@ -2,8 +2,8 @@
 
 module TGD {
     export class ChromeStorage implements TGD.IStorage {
-        public set(object:Object, callback:()=>void):void {
-            if (callback !== null)
+        public set(object:Object, callback?:()=>void):void {
+            if (typeof callback !== "undefined")
                 chrome.storage.local.set(object, callback);
             else
                 chrome.storage.local.set(object);

@@ -70,7 +70,7 @@ module TGD {
                 this.timer.getTime((time:number) => {
                     this.timer.saveTime();
                     this.useageTime = time;
-                    this.storage.set({"hungerLevel": this.hungerLevel}, null); // store hunger level
+                    this.storage.set({"hungerLevel": this.hungerLevel}); // store hunger level
                     this.checkHunger();
                 });
             }

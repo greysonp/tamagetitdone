@@ -49,7 +49,7 @@ module TGD {
         public idle(callback:()=>void = null):void {
             this.animation.idle();
             this._active = true;
-            this.setCanvasPosition();
+            Tommy.setPosition();
 
             $('#tgd').stop().animate({
                 top: this.getTopOffset(),
@@ -109,11 +109,11 @@ module TGD {
 
             // Animate it
             var eatTime:number = isWeak ? 2000 : 500;
-            this.setCanvasPosition();
+            Tommy.setPosition();
             $('#tgd').animate({
                 left: x,
                 top: y
-            }, eatTime, "swing", function() {
+            }, eatTime, "swing", () => {
                 if (item.get(0).tagName == "A") {
                     // Eat it
                     this.animation.eat(flipped);
@@ -200,11 +200,12 @@ module TGD {
             }
         }
 
-        private setCanvasPosition():void {
-            var x:number = $('#tgd').offset().left;
-            var y:number = $('#tgd').offset().top;
+        public static setPosition():void {
+            var $tgd = $('#tgd');
+            var x:number = $tgd.offset().left;
+            var y:number = $tgd.offset().top;
 
-            $('#tgd').css("left", x).css("top", y);
+            $tgd.css("left", x).css("top", y);
         }
 
         private getTopOffset():number {
