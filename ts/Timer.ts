@@ -1,3 +1,6 @@
+///<reference path="IStorage.ts" />
+///<reference path="ChromeStorage.ts" />
+
 module TGD {
     export class Timer {
         private tid;
@@ -7,12 +10,12 @@ module TGD {
         private isActive:boolean = true;
         private timer;
         private cb;
-        private storage:TGD.Storage;
+        private storage:TGD.IStorage;
 
         constructor (callback) {
             this.cb = callback;
             this.domain = window.location.host;
-            this.storage = new TGD.StorageChrome();
+            this.storage = new TGD.ChromeStorage();
 
             //Check if timer already exists
             this.getTime(function(prevTime:number) {

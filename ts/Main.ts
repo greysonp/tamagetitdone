@@ -1,7 +1,8 @@
 ///<reference path="d/DefinitelyTyped/easeljs/easeljs.d.ts" />
 ///<reference path="d/DefinitelyTyped/chrome/chrome.d.ts" />
-///<reference path="Storage.ts" />
-///<reference path="StorageChrome.ts" />
+///<reference path="IStorage.ts" />
+///<reference path="ChromeStorage.ts" />
+///<reference path="Tommy.ts" />
 
 module TGD {    
     export class Main {
@@ -30,8 +31,8 @@ module TGD {
 
         private timer:TGD.Timer;
 
-        private storage:TGD.Storage;
-        private action:TGD.Action;
+        private storage:TGD.IStorage;
+        private tommy:TGD.Tommy;
 
         private static self:Main;
 
@@ -49,11 +50,11 @@ module TGD {
             createjs.Ticker.setFPS(Main.FPS);
             createjs.Ticker.useRAF = true;
 
-            this.storage = new TGD.StorageChrome();
+            this.storage = new TGD.ChromeStorage();
             Main.self = this;
 
             // Initialize our modules
-            this.action = new TGD.Action(() => {
+            this.tommy = new TGD.Tommy(() => {
                 if (this.contains(this.sites, this.domain))
                     this.timer = new TGD.Timer(() => {
                         this.timerCallback.apply(this);
@@ -80,7 +81,7 @@ module TGD {
                 TGD.Util.log("Satisfied.");
                 if (this.hungerLevel != 0) {
                     //do idle animation
-                    this.action.idle();
+                    this.tommy.idle();
                     this.hungerLevel = 0;
                 }
             }
@@ -89,8 +90,8 @@ module TGD {
                 TGD.Util.log("Weak Hunger.");
 
                 // do weak animation
-                this.action.eatWeak(this.activeRadius, () => {
-                   this.action.idle();
+                this.tommy.eatWeak(this.activeRadius, () => {
+                   this.tommy.idle();
                 });
 
 
@@ -100,9 +101,9 @@ module TGD {
                 TGD.Util.log("Strong Hunger!");
 
                 //do strong animation
-                var hasEaten = this.action.eat(this.activeRadius, () => {
+                var hasEaten = this.tommy.eat(this.activeRadius, () => {
                     // Could send a callback to idle, but you don't have to
-                    this.action.idle();
+                    this.tommy.idle();
                 }, false);
 
                 //if tamagotchi is starving (hasn't eaten in a while), force it to eat something even if it is
@@ -111,9 +112,9 @@ module TGD {
                     this.timeSinceMeal += 1;
                 if (this.timeSinceMeal >= this.starveMax) {
                     TGD.Util.log("Starving!!!");
-                    this.action.eat(9999999, () => {
+                    this.tommy.eat(9999999, () => {
                         // Could send a callback to idle, but you don't have to
-                        this.action.idle();
+                        this.tommy.idle();
                     }, true);
                     this.timeSinceMeal = 0;
                 }
@@ -128,8 +129,8 @@ module TGD {
             if ((curHour >= this.bedtimeHour && curHour <= 24) || (curHour >= 0 && curHour < this.wakeupHour)) {
                 if (!this.asleep) {
                     TGD.Util.log("Going to bed.");
-                    this.action.idle(() => {
-                        this.action.goToBed();
+                    this.tommy.idle(() => {
+                        this.tommy.goToBed();
                     });
                     this.timer.resetTimer();
                     this.asleep = true;
@@ -149,7 +150,6 @@ module TGD {
 
         public tick():void {
             Main.stage.update();
-            console.log("Tick!");
         }
 
         private contains(a, obj):boolean {

@@ -1,7 +1,7 @@
 ///<reference path="d/DefinitelyTyped/chrome/chrome.d.ts" />
 
 module TGD {
-    export class StorageChrome implements TGD.Storage {
+    export class ChromeStorage implements TGD.IStorage {
         public set(object:Object, callback:()=>void):void {
             if (callback !== null)
                 chrome.storage.local.set(object, callback);

@@ -2,7 +2,7 @@
 ///<reference path="d/DefinitelyTyped/jqueryui/jqueryui.d.ts" />
 
 module TGD {
-    export class Action {
+    export class Tommy {
         // Whether or not an action is currently being performed
         private _active:boolean;
 
@@ -14,7 +14,7 @@ module TGD {
         private animation:TGD.Animation;
 
         /**
-         * Creates a new Action manager.
+         * Creates a new Tommy manager.
          * @param   {Function}  A callback that will be executed when initialization
          *                        is done.
          */
@@ -217,7 +217,7 @@ module TGD {
 
         private getClosestItem(minDist) {
             var minIndex:number = 9999999;
-            var _this:Action = this;
+            var _this:Tommy = this;
             $('a, img, iframe, embed').each(function(i) {
                 if ($(this).is(":visible")) {
                     var x:number = $(this).offset().left + $(this).width()/2;
