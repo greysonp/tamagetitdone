@@ -3,26 +3,27 @@ module TGD {
 
         private mouseX:number;
         private mouseY:number;
-        private minDist:number = 100;
         private $tgd;
 
-        private animator:TGD.Animation;
+        private animation:TGD.Animation;
 
-        constructor(animator:TGD.Animation, properties?:Object) {
-            super(animator, properties);
-            this.animator = animator;
+        constructor(animation:TGD.Animation, properties?:Object) {
+            super(animation, properties);
+            this.animation = animation;
             this.mouseX = properties["mouseX"];
             this.mouseY = properties["mouseY"];
             this.$tgd = $('#tgd');
         }
 
         public run(callback:()=>void, properties?:Object) {
-            this.mouseX = properties["mouseX"];
-            this.mouseY = properties["mouseY"];
+            if (typeof properties !== "undefined") {
+                this.mouseX = properties["mouseX"];
+                this.mouseY = properties["mouseY"];
+            }
 
             // Grab the closest item and make it unclickable
             // if it's a link
-            var item = TGD.Util.getClosestItem(this.mouseX, this.mouseY, this.minDist);
+            var item = TGD.Util.getClosestItem(this.mouseX, this.mouseY);
 
             // If no item is close to the cursor, simply return
             if (item.get(0) == null) {
@@ -31,7 +32,7 @@ module TGD {
             }
 
             // Play animation
-            this.animator.run();
+            this.animation.run();
 
             // Grab the closest item and make it unclickable
             // if it's a link
@@ -61,7 +62,7 @@ module TGD {
             }, eatTime, "swing", () => {
                 if (item.get(0).tagName == "A") {
                     // Eat it
-                    this.animator.eat(flipped);
+                    this.animation.eat(flipped);
                     this.nom(item, flipped, Math.max(200, (1000/item.text().length)), callback);
                 }
                 else {

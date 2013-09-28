@@ -1,11 +1,15 @@
 module TGD {
     export class Action {
-        
-        constructor(animator:TGD.Animation, properties?:Object) {
+
+        constructor(animation:TGD.Animation, properties?:Object) {
         }
 
-        run(callback:()=>void, properties?:Object) {
+        public run(callback:()=>void, properties?:Object) {
             callback();
+        }
+
+        public stop() {
+            $('#tgd').stop();
         }
     }
 }

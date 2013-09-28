@@ -5,8 +5,9 @@ module TGD {
                 console.info(text);
         }
 
-        public static getClosestItem(mouseX:number, mouseY:number, minDist:number) {
-            var minIndex:number = 9999999;
+        public static getClosestItem(mouseX:number, mouseY:number) {
+            var minDist:number = 9999999;
+            var minIndex:number = 0;
             $('a, img, iframe, embed').each(function(i) {
                 if ($(this).is(":visible")) {
                     var x:number = $(this).offset().left + $(this).width()/2;

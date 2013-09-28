@@ -3,9 +3,6 @@
 
 module TGD {
     export class Tommy {
-        // Whether or not an action is currently being performed
-        private _active:boolean;
-
         // Mouse x and y position
         private mouseX:number;
         private mouseY:number;
@@ -13,10 +10,17 @@ module TGD {
         // A reference to our animator
         private animation:TGD.Animation;
 
+        // List of actions
+        private actionList:TGD.Action[];
+        private listenerMap:Object;
+
+        // Event Constants
+        public static ACTIONS_DONE:string = "actionsdone";
+
         /**
          * Creates a new Tommy manager.
          * @param   {Function}  A callback that will be executed when initialization
-         *                        is done.
+         *                      is done.
          */
         constructor(callback:()=>void) {
             this.animation = new TGD.Animation(() => {
@@ -25,180 +29,103 @@ module TGD {
         }
 
         public init(callback:()=>void):void {
+            this.actionList = [];
+            this.listenerMap = {};
+
+            var $tgd = $('#tgd');
+
             // Track mouse position
-            $(document).mousemove(function(e) {
+            $(document).mousemove((e) => {
                 this.mouseX = e.pageX;
                 this.mouseY = e.pageY;
             });
 
             // Reposition on scroll if not moving
             $(document).scroll(() => {
-                if (!this._active)
-                    $('#tgd').css('top', this.getTopOffset());
+                if (!this.isActive())
+                    $tgd.css("top", Tommy.getTopOffset());
             });
 
             // Reposition on browser resize if not moving
             $(window).resize(() => {
-                if (!this._active) 
-                    $('#tgd').css('top', this.getTopOffset());
+                if (!this.isActive())
+                    $tgd.css("top", Tommy.getTopOffset());
             });
-
             callback();
         }
 
-        public idle(callback:()=>void = null):void {
-            this.animation.idle();
-            this._active = true;
-            Tommy.setPosition();
+        // ==========================================
+        // ACTION FACTORIES
+        // ==========================================
+        
+        public eat() {
+            var action:TGD.EatAction = new TGD.EatAction(this.animation, {
+                "mouseX": this.mouseX,
+                "mouseY": this.mouseY
+            }); 
 
-            $('#tgd').stop().animate({
-                top: this.getTopOffset(),
-                left: 0
-            }, 500, "swing", function() {
-                this._active = false;
-                if (callback != null)
-                    callback();
-            });
+            this.actionList.push(action);
+            if (this.actionList.length <= 1)
+                this.nextAction();
         }
 
-        public eat(minDist:number, callback:()=>void, isWeak:boolean):boolean {
-            // Return if eat is called before meal is finished
-            if (this._active) {
-                TGD.Util.log("Already active. Exiting eat().")
-                return;
-            }
+        public idle() {
+            var action:TGD.IdleAction = new TGD.IdleAction(this.animation); 
 
-            // Grab the closest item and make it unclickable
-            // if it's a link
-            var item = this.getClosestItem(minDist);
-
-            // If no item is close to the cursor, simply return
-            if (item.get(0) == null)
-            {
-                TGD.Util.log("No items close to cursor.");
-                this._active = true;
-                callback();
-                this._active = false;
-                return false;
-            }
-
-            // Set state
-            this._active = true;
-
-            // Play animation
-            this.animation.run();
-
-            // Grab the closest item and make it unclickable
-            // if it's a link
-            TGD.Util.log(item.get(0).tagName);
-            if (item.get(0).tagName == "A") {
-                // Make link unclickable
-                item.click(function(e) { e.preventDefault(); });
-            }
-
-            // Get position (just off to the left)
-            var flipped:boolean = false;
-            if (Math.random() <= 0.3) flipped = true; // 30% chance he'll flip
-
-            var x:number = item.offset().left - $('#tgd').width();
-            if (x < 0 || flipped) {
-                x = item.offset().left + item.width();
-                flipped = true;
-            }
-            var y:number = item.offset().top + item.height()/2 - $('#tgd').height()/2 - 30;
-
-            // Animate it
-            var eatTime:number = isWeak ? 2000 : 500;
-            Tommy.setPosition();
-            $('#tgd').animate({
-                left: x,
-                top: y
-            }, eatTime, "swing", () => {
-                if (item.get(0).tagName == "A") {
-                    // Eat it
-                    this.animation.eat(flipped);
-                    this.nom(item, flipped, Math.max(200, (1000/item.text().length)), callback);
-                }
-                else {
-                    item.css('display', 'none');
-                    this._active = false;
-                    if (callback != null)
-                        callback();
-                }
-            });
+            this.actionList.push(action);
+            if (this.actionList.length <= 1)
+                this.nextAction();
         }
 
-        public eatWeak(minDist:number, callback:()=>void = null):void {
-            this.eat(minDist, function() {
-                $('#tgd').unbind();
-                if (callback !== null)
-                    callback();
-            }, true);
-
-            $('#tgd').bind('mouseover', () => {
-                TGD.Util.log("Shoo!!");
-                this._active = false;
-                $('#tgd').stop();
-                this.animation.idle();
-                $('#tgd').unbind();
-            });
-        }
-
-        public goToBed() {
-            this._active = true;
-            // Add our cord
-            $("body").append('<img src="' + chrome.extension.getURL("img/cord.png") + '" id="cord" style="position: absolute; top:-200px; left: 65px; z-index: 77777" />');
-
-            // Animate our pet jumping up to grab the cord
-            $("#tgd").animate( { top: 20 }, 750, "swing", function() {
-                // When that's done, pull the cord down and... (see below)
-                $("#cord").animate({ top: -50 }, 750, "swing", function() {
-                    // Wait a little bit so we can see a little bounce
-                    setTimeout(function() {
-                        // Add our big black cover, just enough so we can see something is underneath, but not enough that we can read it easily
-                        $("body").append('<div style="position:fixed; top:0px; left:0px; width:100%; height:100%; background-color:black; opacity:0.95; z-index:1000;"></div>');
-
-                        // Wait a little bit for timing purposes
-                        setTimeout(function() {
-                            // Create our "Go to bed." header
-                            $("body").append('<h1 id="bed-header" style="position:fixed; top: 30px; left:140px; font-size:5em; color:white; font-family: sans-serif; opacity:0; z-index:2000">Go to bed.</h1>');
-
-                            // Fade it in
-                            $("#bed-header").animate({ opacity: 1}, 500);
-                        }, 500);
-                    }, 100);
-
-                    $("#cord").effect("bounce", "slow");
+        // ==========================================
+        // ACTION QUEUE
+        // ==========================================
+        private nextAction() {
+            if (this.actionList.length > 0) {
+                this.actionList[0].run(() => {
+                    this.actionList.shift();
+                    this.nextAction();    
+                }, {
+                    "mouseX": this.mouseX,
+                    "mouseY": this.mouseY    
                 });
-
-                // ...have the pet animate to where the cord snags
-                $("#tgd").animate( { top: 200 }, 750, "swing", function() {
-                    // After he loses the cord, he falls to the floor
-                    $("#tgd").animate( { top: this.getTopOffset() }, 750);
-                });
-            });
-            this._active = false;
-        }
-
-        private nom(target, flipped:boolean, timePerChomp:number, callback:()=>void):void {
-            var newText:string = target.text().substring(1);
-            if (flipped) {
-                newText = target.text().substring(0, target.text().length - 1);
-                $('#tgd').css('left', target.offset().left + target.width());
-            }
-            target.text(newText);
-            if (newText.length > 0) {
-                setTimeout(() => {
-                    this.nom(target, flipped, 100, callback);
-                }, timePerChomp);
             }
             else {
-                target.css('display', 'none');
-                this._active = false;
-                if (callback != null)
-                    callback();
+                this.trigger(Tommy.ACTIONS_DONE);
             }
         }
+
+        private isActive() {
+            return this.actionList.length > 0;
+        }
+
+        // ==========================================
+        // EVENT MANAGEMENT
+        // ==========================================
+        public addEventListener(eventName:string, callback:()=>void):void {
+            // Initialize array if this is the first listener for this event
+            var list:()=>void[] = this.listenerMap[eventName];
+            if (list == null || typeof list === "undefined")
+                this.listenerMap[eventName] = [];
+
+            // Add the listener to the list
+            this.listenerMap[eventName].push(callback);
+        }
+
+        private trigger(eventName:string):void {
+            var list:()=>void[] = this.listenerMap[eventName];
+            if (list == null || typeof list === "undefined")
+                return;
+
+            for (var i = 0; i < list.length; i++) {
+                var c = list[i];
+                c();
+            }
+        }
+
+        // ==========================================
+        // STATIC METHODS
+        // ==========================================
 
         public static setPosition():void {
             var $tgd = $('#tgd');
@@ -208,34 +135,9 @@ module TGD {
             $tgd.css("left", x).css("top", y);
         }
 
-        private getTopOffset():number {
+        public static getTopOffset():number {
             return $("#bottom-marker").offset().top - $('#tgd').height();
         }
 
-        private eatLinkStrong():void {
-            this.animation.run();
-        }
-
-        private getClosestItem(minDist) {
-            var minIndex:number = 9999999;
-            var _this:Tommy = this;
-            $('a, img, iframe, embed').each(function(i) {
-                if ($(this).is(":visible")) {
-                    var x:number = $(this).offset().left + $(this).width()/2;
-                    var y:number = $(this).offset().top + $(this).height()/2;
-
-                    var dx:number = x - _this.mouseX;
-                    var dy:number = y - _this.mouseY;
-                    var dist:number = Math.sqrt((dx * dx) + (dy * dy));
-
-                    if (dist < minDist) {
-                        minDist = dist;
-                        minIndex = i;
-                    }
-                }
-            });
-
-            return $('a, img, iframe, embed').eq(minIndex);
-        }
     }
 }

@@ -9,7 +9,7 @@ module TGD {
                 chrome.storage.local.set(object);
         }
 
-        public get(key:String, callback:(string)=>void):void {
+        public get(key:String, callback:(Object)=>void):void {
             chrome.storage.local.get(key, callback);
         }
     }
