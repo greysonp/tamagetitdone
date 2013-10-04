@@ -3,6 +3,7 @@
 ///<reference path="IStorage.ts" />
 ///<reference path="ChromeStorage.ts" />
 ///<reference path="Tommy.ts" />
+///<reference path="QTable.ts" />
 
 module TGD {    
     export class Main {
@@ -15,8 +16,11 @@ module TGD {
         private page:TGD.WebPage;
 
         // References to important objects
-        private timer:TGD.Timer;
         private tommy:TGD.Tommy;
+
+        // AI stuff
+        public static TIME_STEP:number = 1000;
+        private qTable:TGD.QTable;
 
         constructor() {
             // Add Tommy to the stage
@@ -30,17 +34,25 @@ module TGD {
             createjs.Ticker.useRAF = true;
 
             // Initialize our modules
-            this.tommy = new TGD.Tommy(() => {
-                this.page = new TGD.WebPage(window.location.href, () => {
-                    this.init();    
-                })
+            this.qTable = new TGD.QTable(() => {
+                this.tommy = new TGD.Tommy(() => {
+                    this.page = new TGD.WebPage(window.location.href, () => {
+                        this.init();    
+                    });
+                });    
             });
         }
 
         private init():void {
-            console.log(this.tommy);
+            setInterval(() => {
+                this.step();
+            }, Main.TIME_STEP);
             // this.tommy.eat();
             // this.tommy.idle();
+        }
+
+        private step():void {
+
         }
 
         public tick():void {
