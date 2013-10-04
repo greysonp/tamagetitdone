@@ -19,8 +19,10 @@ module TGD {
         private tommy:TGD.Tommy;
 
         // AI stuff
-        public static TIME_STEP:number = 1000;
         private qTable:TGD.QTable;
+        private lastAction:Object;
+
+
 
         constructor() {
             // Add Tommy to the stage
@@ -44,20 +46,33 @@ module TGD {
         }
 
         private init():void {
-            setInterval(() => {
+            this.tommy.addEventListener(TGD.Tommy.ACTIONS_DONE, () => {
                 this.step();
-            }, Main.TIME_STEP);
+            });
+            this.lastAction = this.qTable.getAction(this.getCurrentState());
+            this.tommy.performAction(this.lastAction["actionCode"]);
             // this.tommy.eat();
             // this.tommy.idle();
         }
 
         private step():void {
+            this.lastAction["callback"](1, this.getCurrentState());
+            this.lastAction = this.qTable.getAction(this.getCurrentState());
+            this.tommy.performAction(this.lastAction["actionCode"]);
+            console.log("Chose action: " + this.lastAction["actionCode"]);
+        }
 
+        /**
+         * Generates a State object based on several 
+         */
+        private getCurrentState():TGD.State {
+            return new TGD.State(0.5, 0.5, 0.5);
         }
 
         public tick():void {
             Main.stage.update();
         }
+
 
         private contains(a, obj):boolean {
             for (var i = 0; i < a.length; i++)

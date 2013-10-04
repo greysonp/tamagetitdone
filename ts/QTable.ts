@@ -3,37 +3,35 @@
 
 module TGD {
     export class QTable {
+        // Constants
         public static STORAGE_KEY:string = "qTable";
+
+        // Object references
         private table:Object = {};
         private storage:TGD.IStorage;
-
-        // Constants referring to the trifecta ranges
-        private static F_RANGE:number[] = [.25, .5, .75, 1];
-        private static P_RANGE:number[] = [.25, .5, .75, 1];
-        private static W_RANGE:number[] = [.25, .5, .75, 1];
-
-        // Action Constants
 
         constructor(callback) {
             this.storage = new TGD.ChromeStorage();
 
             this.storage.get(QTable.STORAGE_KEY, (data:Object) => {
-                if (Object.keys(data).length === 0) {
-                    this.initTable();
-                }
-                else {
-                    this.table = data;
-                }
+                // if (Object.keys(data).length === 0) {
+                //     this.initTable();
+                // }
+                // else {
+                //     this.table = data[QTable.STORAGE_KEY];
+                // }
+                this.initTable();
                 console.log(this.table);
                 callback();
             });
         }
 
         private initTable() {
-            for (var f = 0; f < QTable.F_RANGE.length; f ++) {
-                for (var p = 0; p < QTable.P_RANGE.length; p++) {
-                    for (var w = 0; w < QTable.W_RANGE.length; w++) {
-                        var key = this.makeKey(QTable.F_RANGE[f], QTable.P_RANGE[p], QTable.W_RANGE[w]);
+            for (var f = 0; f < 1; f += 1/TGD.State.F_RANGE.length) {
+                for (var p = 0; p < 1; p += 1/TGD.State.P_RANGE.length) {
+                    for (var w = 0; w < 1; w += 1/TGD.State.W_RANGE.length) {
+                        var state:TGD.State = new TGD.State(f, p, w);
+                        var key = state.toString();
                         this.table[key] = this.generateRandomArray(2);
                     }
                 }
@@ -41,34 +39,100 @@ module TGD {
             this.flush();
         }
 
-        public getAction(f:number, p:number, w:number) {
-            
+        /**
+         * Chooses an action based on the given state variables.
+         * @type {[type]}
+         */
+        public getAction(state:TGD.State):Object {
+            // Grab our stuff from the QTable
+            var key = state.toString();
+            var actionCode:number = this.chooseAction(key);
+            var cb = (val:number, state2:TGD.State) => {
+                this.reward(key, actionCode, val, state2);
+            }
+            return {
+                "actionCode": actionCode,
+                "callback": cb
+            }
         }
 
         /**
-         * Turns a set of fuzzy values into a key that we can use in table.
+         * Rewards an state/action combination a specified amount.
+         * 
+         * Implements the Q-Learning algorithm found at:
+         * http://webdocs.cs.ualberta.ca/~sutton/book/ebook/node65.html
          */
-        private makeKey(f:number, p:number, w:number):string {
-            f = this.getBucketValue(f, QTable.F_RANGE);
-            p = this.getBucketValue(p, QTable.P_RANGE);
-            w = this.getBucketValue(w, QTable.W_RANGE);
-            return f + "|" + p + "|" + w;
+        private reward(stateKey:string, actionCode:number, reward:number, state:TGD.State):void {
+            // The value of the action just taken
+            var prevQ:number = this.table[stateKey][actionCode];
+
+            // The value of the best possible action that comes from the state the prev action got us to
+            var nextStateKey:string = state.toString();
+            var maxQ:number = this.table[nextStateKey][this.getMaxAction(nextStateKey)];
+
+            // [0,1]: As this approaches 1, each reward is considered more important and influencial
+            var learningRate:number = 0.3;
+
+            // [0,1]: As this approaches 0, Tommy becomes more short-sighted
+            var discountRate:number = 0.5;
+
+            // Update our Q value with the new one
+            this.table[stateKey][actionCode] = prevQ + learningRate * (reward + discountRate * maxQ - prevQ);
+        }
+
+
+        /**
+         * Given a state key, this will choose an action from the
+         * QTable, returning the action code of the action chosen.
+         *
+         * Could use various algorithms, but right now it is always
+         * choosing the option with the highest value, with a percent
+         * chance that it will choose randomly based on how dominant
+         * the max option is.
+         */
+        private chooseAction(stateKey:string):number {
+            var maxIndex:number = 0;
+            var rowSum:number = 0;
+            var a:number[] = this.table[stateKey];
+            for (var i = 0; i < a.length; i++) {
+                rowSum += a[i];
+                if (a[i] > a[maxIndex]) {
+                    maxIndex = i;
+                }
+            }
+
+            // What percentage of the row the dominant action has
+            var dominance:number = a[maxIndex] / rowSum;
+
+            // Example: if dominance is 70% but we roll a 85%, then
+            // we'll just pick a random action. We'll likely have a 
+            // lot of very dominant actions, so by doing this, we mix it
+            // up a bit.
+            if (Math.random() > dominance)
+                return Math.floor(Math.random() * a.length);
+            else
+                return maxIndex;
         }
 
         /**
-         * We can't use any number between 0-1 to represent state because that would
-         * result in far too many combinations. Instead, we convert a fuzzy value
-         * into one of n distinct values. That's where the range comes in. The range
-         * defines the different buckets we toss the value into.
+         * Gets the action with the highest Q-Value for a given state.
          */
-        private getBucketValue(value:number, range:number[]):number {
-            var i = 0;
-            while (value > range[i] && i < range.length) {
-                i++;
+        private getMaxAction(stateKey:string):number {
+            var maxIndex:number = 0;
+            var a:number[] = this.table[stateKey];
+            for (var i = 0; i < a.length; i++) {
+                if (a[i] > a[maxIndex]) {
+                    maxIndex = i;
+                }
             }
             return i;
         }
 
+        /**
+         * Generates a random array of a specified length, putting in
+         * values for each index in the range [0, 1]
+         * @type {[type]}
+         */
         private generateRandomArray(length:number):number[] {
             var a = [];
             for (var i = 0; i < length; i++) {

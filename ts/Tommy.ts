@@ -58,6 +58,17 @@ module TGD {
         // ACTION FACTORIES
         // ==========================================
         
+        public performAction(actionCode:number) {
+            switch(actionCode) {
+                case TGD.Action.IDLE:
+                    this.idle();
+                    break;
+                case TGD.Action.EAT:
+                    this.eat();
+                    break;
+            }
+        }
+        
         public eat() {
             var action:TGD.EatAction = new TGD.EatAction(this.animation, {
                 "mouseX": this.mouseX,
