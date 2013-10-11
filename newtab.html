@@ -20,14 +20,14 @@
             <ul>
                 <li>
                     <div class="add-wrapper">
-                        <button><i class="icon-plus"></i></button>
-                        <div class="text-extender"><input type="text" placeholder="New Task" /></div>
+                        <button><i class="icon-plus" id="js-newtask-btn"></i></button>
+                        <div class="text-extender"><input type="text" placeholder="New Task" id="js-newtask-text"/></div>
                     </div>
                 </li>
                 {{#each tasks}}
                 <li>
                     <div class="checkbox-wrapper"><input type="checkbox" /></div>
-                    {{title}}
+                    <span>{{title}}</span>
                 </li>
                 {{/each}}
             </ul>
