@@ -50,7 +50,7 @@ module TGD {
                 this.step();
             });
             this.lastAction = this.qTable.getAction(this.getCurrentState());
-            this.tommy.performAction(this.lastAction["actionCode"]);
+            // this.tommy.performAction(this.lastAction["actionCode"]);
             // this.tommy.eat();
             // this.tommy.idle();
         }

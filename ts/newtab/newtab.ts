@@ -19,7 +19,7 @@ function init() {
 }
 
 function initList():void {
-    _listTemplate = Handlebars.compile($("#js-panel-center").html());
+    _listTemplate = Handlebars.compile($("#js-tasklist").html());
     updateList();
 }
 
@@ -34,14 +34,33 @@ function initEvents():void {
     });
 
     // Add task button press
-    $("#js-panel-center").on("click", "#js-newtask-btn", addTask);
+    $("#js-newtask-btn").click(addTask);
+}
+
+function initTaskEvents() {
+    $("#js-tasklist li").each(function(index) {
+            $(this).find("input[type=checkbox]").change(function(){
+                console.log(index);
+                _tasks[index].isComplete = this.checked;
+                console.log(_tasks[index]);
+                storeTasks();
+                updateList();
+            });
+            $(this).find(".delete-btn").click(function(){
+                console.log(index);
+                _tasks.splice(index, 1);
+                storeTasks();
+                updateList();
+            });
+    });
 }
 
 function getStoredData(callback):void {
     chrome.storage.local.get("tasks", function(data) {
+        console.log(data);
         _tasks = data["tasks"] || [];
         callback();    
-    })
+    });
 }
 
 // =================================================
@@ -65,18 +84,23 @@ function addTask():void {
 }
 
 function updateList():void {
-    var context = {"tasks":_tasks};
-    var compiledHtml = _listTemplate(context);
-    $("#js-panel-center").html(compiledHtml);
+    var compiledHtml = _listTemplate({"tasks": _tasks});
+    $("#js-tasklist").html(compiledHtml);
 
     // Give focus back to textbox
     $("#js-newtask-text").focus();
+    initTaskEvents();
+}
+
+function toggleComplete():void {
+
 }
 
 function storeTasks():void {
     console.log("Storing task.");
     chrome.storage.local.set({"tasks":_tasks});
 }
+
 // =================================================
 // EVENTS
 // =================================================
@@ -98,5 +122,4 @@ function resize():void {
 
     $center.css("width", (window.innerWidth - sum) + "px");
     $center.css("margin-left", marginLeft + "px");
-
 }

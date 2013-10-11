@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Raleway";
-  font-size: 14px;
+  font-size: 16px;
   background-color: #abedf6;
 }
 input:focus,
@@ -33,9 +33,7 @@ button:focus {
   color: #aaa;
 }
 .panel-center button {
-  float: left;
   padding: 5px;
-  margin: 0 10px 0 0;
   box-sizing: border-box;
   font-size: 21px;
   border: 0px;
@@ -50,12 +48,21 @@ button:focus {
 .panel-center button:active {
   color: #000;
 }
+.panel-center .add-btn {
+  float: left;
+  margin: 0 10px 0 0;
+}
+.panel-center .delete-btn {
+  position: absolute;
+  right: 0;
+  top: 2px;
+}
 .panel-center input[type=text] {
   width: 100%;
   box-sizing: border-box;
   padding: 5px;
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
 }
 .panel-center .checkbox-wrapper {
   display: inline-block;
@@ -76,7 +83,10 @@ button:focus {
 }
 .panel-center li {
   display: block;
-  border-bottom: 2px solid #aaa;
+}
+.panel-center li,
+.panel-center .add-wrapper {
+  box-shadow: 0 1px 3px -2px #000;
   padding: 10px;
   margin: 0;
 }

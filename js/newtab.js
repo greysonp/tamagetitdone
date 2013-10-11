@@ -5,6 +5,7 @@
             if (typeof tags === "undefined") { tags = []; }
             this.title = title;
             this.tags = tags;
+            this.isComplete = false;
         }
         return Task;
     })();
@@ -30,7 +31,7 @@ function init() {
 }
 
 function initList() {
-    _listTemplate = Handlebars.compile($("#js-panel-center").html());
+    _listTemplate = Handlebars.compile($("#js-tasklist").html());
     updateList();
 }
 
@@ -45,11 +46,30 @@ function initEvents() {
     });
 
     // Add task button press
-    $("#js-panel-center").on("click", "#js-newtask-btn", addTask);
+    $("#js-newtask-btn").click(addTask);
+}
+
+function initTaskEvents() {
+    $("#js-tasklist li").each(function (index) {
+        $(this).find("input[type=checkbox]").change(function () {
+            console.log(index);
+            _tasks[index].isComplete = this.checked;
+            console.log(_tasks[index]);
+            storeTasks();
+            updateList();
+        });
+        $(this).find(".delete-btn").click(function () {
+            console.log(index);
+            _tasks.splice(index, 1);
+            storeTasks();
+            updateList();
+        });
+    });
 }
 
 function getStoredData(callback) {
     chrome.storage.local.get("tasks", function (data) {
+        console.log(data);
         _tasks = data["tasks"] || [];
         callback();
     });
@@ -75,12 +95,15 @@ function addTask() {
 }
 
 function updateList() {
-    var context = { "tasks": _tasks };
-    var compiledHtml = _listTemplate(context);
-    $("#js-panel-center").html(compiledHtml);
+    var compiledHtml = _listTemplate({ "tasks": _tasks });
+    $("#js-tasklist").html(compiledHtml);
 
     // Give focus back to textbox
     $("#js-newtask-text").focus();
+    initTaskEvents();
+}
+
+function toggleComplete() {
 }
 
 function storeTasks() {

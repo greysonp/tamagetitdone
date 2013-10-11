@@ -1,7 +1,7 @@
 // =========================================
 // DEFAULTS
 // =========================================
-fontSize = 14px
+fontSize = 16px
 
 body
     margin 0
@@ -44,9 +44,7 @@ centerAccentColor = #aaa
         color centerAccentColor
 
     button
-        float left
         padding inputPadding
-        margin 0 listPadding 0 0
         box-sizing border-box
         font-size 21px
         border 0px
@@ -58,6 +56,13 @@ centerAccentColor = #aaa
             opacity 0.75
         &:active
             color black
+    .add-btn
+        float left
+        margin 0 listPadding 0 0
+    .delete-btn
+        position absolute
+        right 0
+        top 2px
 
     input[type=text]
         width 100%
@@ -82,7 +87,10 @@ centerAccentColor = #aaa
         padding 0
     li
         display block
-        border-bottom 2px solid centerAccentColor
+        // border-bottom 1px solid centerAccentColor
+
+    li, .add-wrapper
+        box-shadow 0 1px 3px -2px black
         padding listPadding
         margin 0
 

@@ -17,17 +17,22 @@
 
         <div class="panel-center" id="js-panel-center">
             <h1 class="text-center">Tamagetitdone</h1>
-            <ul>
-                <li>
-                    <div class="add-wrapper">
-                        <button><i class="icon-plus" id="js-newtask-btn"></i></button>
-                        <div class="text-extender"><input type="text" placeholder="New Task" id="js-newtask-text"/></div>
-                    </div>
-                </li>
+            <div class="add-wrapper">
+                <button class="add-btn"><i class="icon-plus" id="js-newtask-btn"></i></button>
+                <div class="text-extender"><input type="text" placeholder="New Task" id="js-newtask-text"/></div>
+            </div>
+            <ul id="js-tasklist">
                 {{#each tasks}}
-                <li>
-                    <div class="checkbox-wrapper"><input type="checkbox" /></div>
+                <li style="position: relative;">
+                    <div class="checkbox-wrapper">
+                        {{#if isComplete}}
+                            <input type="checkbox" checked="true" />
+                        {{else}}
+                            <input type="checkbox" />
+                        {{/if}}
+                    </div>
                     <span>{{title}}</span>
+                    {{#if isComplete}}<button class="delete-btn"><i class="icon-remove"></i></button>{{/if}}
                 </li>
                 {{/each}}
             </ul>
