@@ -23,16 +23,16 @@
             </div>
             <ul id="js-tasklist">
                 {{#each tasks}}
-                <li style="position: relative;">
-                    <div class="checkbox-wrapper">
+                <li>
+                    <div class="cell-side">
                         {{#if isComplete}}
                             <input type="checkbox" checked="true" />
                         {{else}}
                             <input type="checkbox" />
                         {{/if}}
                     </div>
-                    <span>{{title}}</span>
-                    {{#if isComplete}}<button class="delete-btn"><i class="icon-remove"></i></button>{{/if}}
+                    <div class="cell-center">{{title}}</div>
+                    <div class="cell-side">{{#if isComplete}}<button class="delete-btn"><i class="icon-remove"></i></button>{{/if}}</div>
                 </li>
                 {{/each}}
             </ul>

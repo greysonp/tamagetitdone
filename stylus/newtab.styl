@@ -18,9 +18,11 @@ input:focus, button:focus
 panelWidth = 250px
 inputPadding = 5px
 listPadding = 10px
+rowHeight = 35px
 
 panelAccentColor = #63a2be
 centerAccentColor = #aaa
+centerBkg = #fdfdfd
 
 
 .panel-side, .panel-center
@@ -36,21 +38,19 @@ centerAccentColor = #aaa
     right 0
 
 .panel-center
-    background-color #fdfdfd
+    background-color centerBkg
     height 100%
     box-shadow 0 0 10px -2px black
     z-index 100
+    overflow-x hidden
     h1
         color centerAccentColor
 
     button
-        padding inputPadding
         box-sizing border-box
         font-size 21px
         border 0px
         background none
-        width 31px
-        height 31px
         color centerAccentColor
         &:hover
             opacity 0.75
@@ -58,11 +58,10 @@ centerAccentColor = #aaa
             color black
     .add-btn
         float left
+        padding inputPadding
         margin 0 listPadding 0 0
-    .delete-btn
-        position absolute
-        right 0
-        top 2px
+        width 31px
+        height 31px
 
     input[type=text]
         width 100%
@@ -71,14 +70,6 @@ centerAccentColor = #aaa
         margin 0
         font-size fontSize
 
-    .checkbox-wrapper
-        display inline-block
-        text-align center
-        width 31px
-        margin 0 inputPadding 0 0
-    input[type=checkbox]
-        margin 0
-
     .text-extender
         overflow hidden
     ul
@@ -86,13 +77,25 @@ centerAccentColor = #aaa
         margin 0
         padding 0
     li
-        display block
-        // border-bottom 1px solid centerAccentColor
+        display table
+        width calc(100% \- (2 * listPadding))
+        height rowHeight
+        div
+            display table-cell
+            padding (listPadding / 2)
+            vertical-align middle
+        .cell-side
+            text-align center
+            width 25px
+            vertical-align middle
+        button, input[type=checkbox]
+            margin 0
+            padding 0
 
     li, .add-wrapper
         box-shadow 0 1px 3px -2px black
-        padding listPadding
         margin 0
+        padding listPadding
 
 @media (max-width: 800px)
     .panel-right

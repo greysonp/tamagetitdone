@@ -28,18 +28,16 @@ button:focus {
   height: 100%;
   box-shadow: 0 0 10px -2px #000;
   z-index: 100;
+  overflow-x: hidden;
 }
 .panel-center h1 {
   color: #aaa;
 }
 .panel-center button {
-  padding: 5px;
   box-sizing: border-box;
   font-size: 21px;
   border: 0px;
   background: none;
-  width: 31px;
-  height: 31px;
   color: #aaa;
 }
 .panel-center button:hover {
@@ -50,12 +48,10 @@ button:focus {
 }
 .panel-center .add-btn {
   float: left;
+  padding: 5px;
   margin: 0 10px 0 0;
-}
-.panel-center .delete-btn {
-  position: absolute;
-  right: 0;
-  top: 2px;
+  width: 31px;
+  height: 31px;
 }
 .panel-center input[type=text] {
   width: 100%;
@@ -63,15 +59,6 @@ button:focus {
   padding: 5px;
   margin: 0;
   font-size: 16px;
-}
-.panel-center .checkbox-wrapper {
-  display: inline-block;
-  text-align: center;
-  width: 31px;
-  margin: 0 5px 0 0;
-}
-.panel-center input[type=checkbox] {
-  margin: 0;
 }
 .panel-center .text-extender {
   overflow: hidden;
@@ -82,13 +69,30 @@ button:focus {
   padding: 0;
 }
 .panel-center li {
-  display: block;
+  display: table;
+  width: calc(100% - 20px);
+  height: 35px;
+}
+.panel-center li div {
+  display: table-cell;
+  padding: 5px;
+  vertical-align: middle;
+}
+.panel-center li .cell-side {
+  text-align: center;
+  width: 25px;
+  vertical-align: middle;
+}
+.panel-center li button,
+.panel-center li input[type=checkbox] {
+  margin: 0;
+  padding: 0;
 }
 .panel-center li,
 .panel-center .add-wrapper {
   box-shadow: 0 1px 3px -2px #000;
-  padding: 10px;
   margin: 0;
+  padding: 10px;
 }
 @media (max-width: 800px) {
   .panel-right {
