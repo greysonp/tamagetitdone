@@ -1,6 +1,9 @@
 # Generated Files
 js/content_script.js
 js/content_script.js.map
+js/newtab.js
+js/newtab.js.map
+css/*.css
 
 # Node Stuff
 node_modules/
