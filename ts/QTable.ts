@@ -27,9 +27,9 @@ module TGD {
         }
 
         private initTable() {
-            for (var f = 0; f < 1; f += 1/TGD.State.F_RANGE.length) {
-                for (var p = 0; p < 1; p += 1/TGD.State.P_RANGE.length) {
-                    for (var w = 0; w < 1; w += 1/TGD.State.W_RANGE.length) {
+            for (var f = 0; f <= 1; f += 1/TGD.State.F_RANGE.length) {
+                for (var p = 0; p <= 1; p += 1/TGD.State.P_RANGE.length) {
+                    for (var w = 0; w <= 1; w += 1/TGD.State.W_RANGE.length) {
                         var state:TGD.State = new TGD.State(f, p, w);
                         var key = state.toString();
                         this.table[key] = this.generateRandomArray(2);
@@ -71,13 +71,19 @@ module TGD {
             var maxQ:number = this.table[nextStateKey][this.getMaxAction(nextStateKey)];
 
             // [0,1]: As this approaches 1, each reward is considered more important and influencial
-            var learningRate:number = 0.3;
+            var learningRate:number = 0.2;
 
             // [0,1]: As this approaches 0, Tommy becomes more short-sighted
-            var discountRate:number = 0.5;
+            var discountRate:number = 0.9;
 
             // Update our Q value with the new one
             this.table[stateKey][actionCode] = prevQ + learningRate * (reward + discountRate * maxQ - prevQ);
+
+            /**
+             * Check if we are ever going above 1 or below -1. Cap it for now, but keep track of how often
+             * we go out of bounds. We don't want to lose that experience. In the future, we can cap, but
+             * then scale all other values to keep the relative importance of this action.
+             */
         }
 
 
