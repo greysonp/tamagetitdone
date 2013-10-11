@@ -2,37 +2,37 @@
 ///<reference path="../d/DefinitelyTyped/chrome/chrome.d.ts" />
 ///<reference path="../d/DefinitelyTyped/handlebars/handlebars.d.ts" />
 $(document).ready(init);
-$(window).resize(resize);
-
 var _listTemplate;
 
+// =================================================
+// INITIALIZATION
+// =================================================
+
 function init() {
-    initList();
     resize();
+    initList();
+    initEvents();
+}
+
+function initList():void {
+    _listTemplate = Handlebars.compile($("#js-panel-center").html());
     updateList();
 }
 
-function resize() {
-    var sum = 0;
-    var marginLeft = 0;
-    if ($("#js-panel-left").is(":visible")) {
-        sum += $("#js-panel-left").width();
-        marginLeft = $("#js-panel-left").width();
-    }
-    if ($("#js-panel-right").is(":visible")) {
-        sum += $("#js-panel-right").width();
-    }
-
-    $("#js-panel-center").css("width", (window.innerWidth - sum) + "px");
-    $("#js-panel-center").css("margin-left", marginLeft + "px");
+function initEvents():void {
+    $(window).resize(resize);
 
 }
 
-function initList() {
-    _listTemplate = Handlebars.compile($("#js-panel-center").html());
+// =================================================
+// TASK MANAGEMENT
+// =================================================
+
+function addTask():void {
+    console.log("Task Added!");
 }
 
-function updateList() {
+function updateList():void {
     var tasks = {
         "tasks": [
             {
@@ -45,4 +45,27 @@ function updateList() {
     };
     var compiledHtml = _listTemplate(tasks);
     $("#js-panel-center").html(compiledHtml);
+}
+// =================================================
+// EVENTS
+// =================================================
+
+function resize():void {
+    var sum = 0;
+    var marginLeft = 0;
+    var $left = $("#js-panel-left");
+    var $right = $("#js-panel-right");
+    var $center = $("#js-panel-center");
+
+    if ($left.is(":visible")) {
+        sum += $left.width();
+        marginLeft = $left.width();
+    }
+    if ($right.is(":visible")) {
+        sum += $right.width();
+    }
+
+    $center.css("width", (window.innerWidth - sum) + "px");
+    $center.css("margin-left", marginLeft + "px");
+
 }

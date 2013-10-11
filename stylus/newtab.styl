@@ -1,16 +1,27 @@
 // =========================================
 // DEFAULTS
 // =========================================
+fontSize = 14px
+
 body
     margin 0
     padding 0
     font-family "Raleway"
+    font-size fontSize
+    background-color #abedf6
 
-
+input:focus, button:focus
+    outline none
 // =========================================
 // PANELS
 // =========================================
 panelWidth = 250px
+inputPadding = 5px
+listPadding = 10px
+
+panelAccentColor = #63a2be
+centerAccentColor = #aaa
+
 
 .panel-side, .panel-center
     position fixed
@@ -18,37 +29,80 @@ panelWidth = 250px
 .panel-side
     width panelWidth
     height 100%
+    h1
+        color panelAccentColor
 
 .panel-right
     right 0
 
 .panel-center
+    background-color #fdfdfd
     height 100%
-    border-left 1px solid black
-    border-right 1px solid black
+    box-shadow 0 0 10px -2px black
+    z-index 100
+    h1
+        color centerAccentColor
+
+    button
+        float left
+        padding inputPadding
+        margin 0 listPadding 0 0
+        box-sizing border-box
+        font-size 21px
+        border 0px
+        background none
+        width 31px
+        height 31px
+        color centerAccentColor
+        &:hover
+            opacity 0.75
+        &:active
+            color black
+
     input[type=text]
-        display block
         width 100%
+        box-sizing border-box
+        padding inputPadding
+        margin 0
+        font-size fontSize
+
+    .checkbox-wrapper
+        display inline-block
+        text-align center
+        width 31px
+        margin 0 inputPadding 0 0
+    input[type=checkbox]
+        margin 0
+
+    .text-extender
+        overflow hidden
     ul
         list-style none
         margin 0
         padding 0
     li
         display block
-        border-bottom 1px solid black
-        padding 15px
+        border-bottom 2px solid centerAccentColor
+        padding listPadding
         margin 0
 
-@media (max-width: 750px)
+@media (max-width: 800px)
     .panel-right
         display none
 
-@media (max-width: 500px)
+@media (max-width: 550px)
     .panel-left
         display none
 
 // =========================================
 // GENERAL
 // =========================================
+.grass-tile
+    position fixed
+    bottom 0
+    height 50px
+    width 100%
+    background-image url("../img/newtab/grass_tile.png")
+
 .text-center 
     text-align center

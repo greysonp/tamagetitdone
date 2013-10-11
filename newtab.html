@@ -2,12 +2,15 @@
     <head>
         <title>Tamagetitdone</title>
         <link href='http://fonts.googleapis.com/css?family=Raleway:400,700' rel='stylesheet' type='text/css'>
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
         <link rel="stylesheet" href="css/newtab.css">
         <script src="js/libs/jquery.js"></script>
         <script src="js/libs/handlebars.js"></script>
         <script src="js/newtab.js"></script>
     </head>
     <body>
+        <div class="grass-tile"></div>
+
         <div class="panel-side panel-left" id="js-panel-left">
             <h1 class="text-center">Tommy</h1>
         </div>
@@ -16,11 +19,14 @@
             <h1 class="text-center">Tamagetitdone</h1>
             <ul>
                 <li>
-                    <input type="text" placeholder="New Task" />
+                    <div class="add-wrapper">
+                        <button><i class="icon-plus"></i></button>
+                        <div class="text-extender"><input type="text" placeholder="New Task" /></div>
+                    </div>
                 </li>
                 {{#each tasks}}
                 <li>
-                    <input type="checkbox" />
+                    <div class="checkbox-wrapper"><input type="checkbox" /></div>
                     {{title}}
                 </li>
                 {{/each}}
