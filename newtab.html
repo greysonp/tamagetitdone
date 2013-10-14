@@ -24,15 +24,15 @@
             <ul id="js-tasklist">
                 {{#each tasks}}
                 <li>
-                    <div class="cell-side">
-                        {{#if isComplete}}
-                            <input type="checkbox" checked="true" />
-                        {{else}}
-                            <input type="checkbox" />
-                        {{/if}}
-                    </div>
-                    <div class="cell-center">{{title}}</div>
-                    <div class="cell-side">{{#if isComplete}}<button class="delete-btn"><i class="icon-remove"></i></button>{{/if}}</div>
+                    {{#if isComplete}}
+                        <div class="cell-side"><input type="checkbox" checked="true" /></div>
+                        <div class="cell-center task-complete">{{title}}</div>
+                        <div class="cell-side"><button class="delete-btn"><i class="icon-remove"></i></button>
+                    {{else}}
+                        <div class="cell-side"><input type="checkbox" /></div>
+                        <div class="cell-center">{{title}}</div>
+                        <div class="cell-side"></button>
+                    {{/if}}
                 </li>
                 {{/each}}
             </ul>
