@@ -1,43 +1,55 @@
-<html>
+<html ng-app>
     <head>
         <title>Tamagetitdone</title>
         <link href='http://fonts.googleapis.com/css?family=Raleway:400,700' rel='stylesheet' type='text/css'>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
         <link rel="stylesheet" href="css/newtab.css">
+        <script src="js/libs/angular.min.js"></script>
         <script src="js/libs/jquery.js"></script>
-        <script src="js/libs/handlebars.js"></script>
         <script src="js/newtab.js"></script>
     </head>
     <body>
         <div class="grass-tile"></div>
 
+        <!-- Left Panel -->
         <div class="panel-side panel-left" id="js-panel-left">
             <h1 class="text-center">Tommy</h1>
         </div>
 
-        <div class="panel-center" id="js-panel-center">
+        <!-- Center Panel -->
+        <div class="panel-center" id="js-panel-center" ng-controller="TaskCtrl" ng-cloak>
             <h1 class="text-center">Tamagetitdone</h1>
             <div class="add-wrapper">
-                <button class="add-btn"><i class="icon-plus" id="js-newtask-btn"></i></button>
-                <div class="text-extender"><input type="text" placeholder="New Task" id="js-newtask-text"/></div>
+                <button class="add-btn"><i class="icon-plus" id="js-newtask-btn" ng-click="addTask()"></i></button>
+                <div class="text-extender">
+                    <input type="text" placeholder="New Task" id="js-newtask-text" ng-keydown="inputKeyDown($event)"/>
+                </div>
             </div>
-            <ul id="js-tasklist">
-                {{#each tasks}}
-                <li>
-                    {{#if isComplete}}
-                        <div class="cell-side"><i class="icon-check-sign checkbox"></i></div>
-                        <div class="cell-center task-complete">{{title}}</div>
-                        <div class="cell-side"><button class="delete-btn"><i class="icon-remove"></i></button>
-                    {{else}}
-                        <div class="cell-side"><i class="icon-check-empty checkbox"></i></div>
-                        <div class="cell-center">{{title}}</div>
-                        <div class="cell-side"></button>
-                    {{/if}}
+
+            <!-- Task List -->
+            <ul id="js-tasklist" ng-repeat="task in tasks track by $index">
+                <!-- Complete Task -->
+                <li ng-if="task.isComplete">
+                    <div class="cell-side">
+                        <i class="icon-check-sign checkbox" ng-click="toggleComplete($event, task)"></i>
+                    </div>
+                    <div class="cell-center task-complete">{{task.title}}</div>
+                    <div class="cell-side">
+                        <button class="delete-btn" ng-click="deleteTask($event, $index)"><i class="icon-remove"></i></button>
+                    </div>
                 </li>
-                {{/each}}
+                <!-- Incomplete Task -->
+                <li ng-if="!task.isComplete">
+                    <div class="cell-side">
+                        <i class="icon-check-empty checkbox" ng-click="toggleComplete($event, task)"></i>
+                    </div>
+                    <div class="cell-center">{{task.title}}</div>
+                    <div class="cell-side"></div>
+                </li>
             </ul>
         </div>
 
+        <!-- Right Panel -->
         <div class="panel-side panel-right" id="js-panel-right">
             <h1 class="text-center">Apps</h1>
         </div>
