@@ -1,4 +1,4 @@
-<html ng-app>
+<html ng-app="newTab">
     <head>
         <title>Tamagetitdone</title>
         <link href='http://fonts.googleapis.com/css?family=Raleway:400,700' rel='stylesheet' type='text/css'>
@@ -17,41 +17,51 @@
         </div>
 
         <!-- Center Panel -->
-        <div class="panel-center" id="js-panel-center" ng-controller="TaskCtrl" ng-cloak>
+        <div class="panel-center" id="js-panel-center" ng-controller="TaskCtrl" ng-init="init()" ng-cloak>
             <h1 class="text-center">Tamagetitdone</h1>
             <div class="add-wrapper">
-                <button class="add-btn"><i class="icon-plus" id="js-newtask-btn" ng-click="addTask()"></i></button>
+                <button class="add-btn"><i class="icon-plus" ng-click="addTask()"></i></button>
                 <div class="text-extender">
                     <input type="text" placeholder="New Task" id="js-newtask-text" ng-keydown="inputKeyDown($event)"/>
                 </div>
             </div>
 
-            <!-- Task List -->
-            <ul id="js-tasklist" ng-repeat="task in tasks track by $index">
-                <!-- Complete Task -->
-                <li ng-if="task.isComplete">
-                    <div class="cell-side">
-                        <i class="icon-check-sign checkbox" ng-click="toggleComplete($event, task)"></i>
-                    </div>
-                    <div class="cell-center task-complete">{{task.title}}</div>
-                    <div class="cell-side">
-                        <button class="delete-btn" ng-click="deleteTask($event, $index)"><i class="icon-remove"></i></button>
-                    </div>
-                </li>
-                <!-- Incomplete Task -->
-                <li ng-if="!task.isComplete">
-                    <div class="cell-side">
-                        <i class="icon-check-empty checkbox" ng-click="toggleComplete($event, task)"></i>
-                    </div>
-                    <div class="cell-center">{{task.title}}</div>
-                    <div class="cell-side"></div>
-                </li>
-            </ul>
+            <div class="content-scroll">
+                <!-- Task List -->
+                <ul ng-repeat="task in tasks track by $index">
+                    <!-- Complete Task -->
+                    <li ng-if="task.isComplete">
+                        <div class="cell-side">
+                            <i class="icon-check-sign checkbox" ng-click="toggleComplete($event, task)"></i>
+                        </div>
+                        <div class="cell-center task-complete">{{task.title}}</div>
+                        <div class="cell-side">
+                            <button class="delete-btn" ng-click="deleteTask($event, $index)"><i class="icon-remove"></i></button>
+                        </div>
+                    </li>
+                    <!-- Incomplete Task -->
+                    <li ng-if="!task.isComplete">
+                        <div class="cell-side">
+                            <i class="icon-check-empty checkbox" ng-click="toggleComplete($event, task)"></i>
+                        </div>
+                        <div class="cell-center">{{task.title}}</div>
+                        <div class="cell-side"></div>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <!-- Right Panel -->
-        <div class="panel-side panel-right" id="js-panel-right">
+        <div class="panel-side panel-right" id="js-panel-right" ng-controller="AppCtrl" ng-cloak>
             <h1 class="text-center">Apps</h1>
+            <div class="content-scroll">
+                <ul ng-repeat="app in apps track by $index">
+                    <li>
+                        <a href="#"><img src="{{app.imgUrl}}" ng-click="launchApp(app)"/></a>
+                        <h2>{{app.name}}</h2>
+                    </li>
+                </ul>
+            </div>
         </div>
     </body>
 </html>

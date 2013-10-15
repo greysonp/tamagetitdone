@@ -24,7 +24,11 @@
   ],
 
   "permissions": [
-    "tabs", "http://*/*", "https://*/*", "storage"
+    "tabs", 
+    "http://*/*", 
+    "https://*/*", 
+    "storage",
+    "management"
   ],
 
   "browser_action": {

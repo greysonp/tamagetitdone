@@ -1,9 +1,16 @@
 ///<reference path="../d/DefinitelyTyped/jquery/jquery.d.ts" />
 ///<reference path="../d/DefinitelyTyped/chrome/chrome.d.ts" />
-///<reference path="../d/DefinitelyTyped/handlebars/handlebars.d.ts" />
+///<reference path="../d/DefinitelyTyped/angularjs/angular.d.ts" />
 ///<reference path="Task.ts" />
 
-
+var app = angular.module("newTab", [])
+    .config( [
+        "$compileProvider",
+        function($compileProvider) {   
+            $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|chrome):/);
+            $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|chrome):/);
+        }
+    ]);
 // Controller
 function TaskCtrl($scope) {
     // =================================================
@@ -14,6 +21,11 @@ function TaskCtrl($scope) {
         $scope.tasks = data["tasks"] || [];
         $scope.$apply();
     });
+
+    $scope.init = function() {
+        resize();
+        $(window).resize(resize);
+    }
 
     // =================================================
     // EVENTS
@@ -57,30 +69,23 @@ function TaskCtrl($scope) {
     function storeTasks():void {
         chrome.storage.local.set({"tasks":$scope.tasks});
     }
-}
 
-// Initialize generic stuff
-$(document).ready(init);
-function init() {
-    resize();
-    $(window).resize(resize);
-}
+    function resize():void {
+        var sum = 0;
+        var marginLeft = 0;
+        var $left = $("#js-panel-left");
+        var $right = $("#js-panel-right");
+        var $center = $("#js-panel-center");
 
-function resize():void {
-    var sum = 0;
-    var marginLeft = 0;
-    var $left = $("#js-panel-left");
-    var $right = $("#js-panel-right");
-    var $center = $("#js-panel-center");
+        if ($left.is(":visible")) {
+            sum += $left.width();
+            marginLeft = $left.width();
+        }
+        if ($right.is(":visible")) {
+            sum += $right.width();
+        }
 
-    if ($left.is(":visible")) {
-        sum += $left.width();
-        marginLeft = $left.width();
+        $center.css("width", (window.innerWidth - sum) + "px");
+        $center.css("margin-left", marginLeft + "px");
     }
-    if ($right.is(":visible")) {
-        sum += $right.width();
-    }
-
-    $center.css("width", (window.innerWidth - sum) + "px");
-    $center.css("margin-left", marginLeft + "px");
 }
