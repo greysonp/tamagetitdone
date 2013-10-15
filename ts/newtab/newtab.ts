@@ -39,25 +39,21 @@ function initEvents():void {
 
 function initTaskEvents() {
     $("#js-tasklist li").each(function(index) {
-            $(this).find("input[type=checkbox]").change(function(){
-                console.log(index);
-                _tasks[index].isComplete = this.checked;
-                console.log(_tasks[index]);
-                storeTasks();
-                updateList();
-            });
-            $(this).find(".delete-btn").click(function(){
-                console.log(index);
-                _tasks.splice(index, 1);
-                storeTasks();
-                updateList();
-            });
+        $(this).find(".delete-btn").click(function(){
+            _tasks.splice(index, 1);
+            storeTasks();
+            updateList();
+        });
+        $(this).find(".checkbox").click(function() {
+            _tasks[index].isComplete = !_tasks[index].isComplete;
+            storeTasks();
+            updateList(); 
+        });
     });
 }
 
 function getStoredData(callback):void {
     chrome.storage.local.get("tasks", function(data) {
-        console.log(data);
         _tasks = data["tasks"] || [];
         callback();    
     });
@@ -97,7 +93,6 @@ function toggleComplete():void {
 }
 
 function storeTasks():void {
-    console.log("Storing task.");
     chrome.storage.local.set({"tasks":_tasks});
 }
 
