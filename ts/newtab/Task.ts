@@ -2,6 +2,7 @@ module NewTab {
     export class Task {
         public title:string;
         public tags:string[];
+        public isEdit:boolean;
         public isComplete:boolean;
 
         constructor(title:string, tags:string[] = []) {

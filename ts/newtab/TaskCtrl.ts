@@ -11,6 +11,7 @@ var app = angular.module("newTab", [])
             $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|chrome):/);
         }
     ]);
+
 // Controller
 function TaskCtrl($scope) {
     // =================================================
@@ -25,6 +26,8 @@ function TaskCtrl($scope) {
     $scope.init = function() {
         resize();
         $(window).resize(resize);
+        for (var i = 0; i < $scope.tasks.length; i++)
+            $scope.taskspi[i].isEdit = false;
     }
 
     // =================================================
@@ -61,6 +64,25 @@ function TaskCtrl($scope) {
 
         // Clear out the text
         $text.val("");
+    }
+
+    $scope.editTask = function($event, task) {
+        task.isEdit = true;
+    }
+
+    $scope.finishTaskEdit = function($event, task) {
+        // This event is run for both a blur event and a keydown, so we have a little
+        // check here for that
+        if (!$event.keyCode || ($event.keyCode && $event.keyCode === 13)) {
+            task.title = $event.target.value;
+            task.isEdit = false;
+            storeTasks();
+        }
+    }
+
+    $scope.focusInput = function() {
+        $(".panel-center li input").focus();
+        $(".panel-center li input").select();
     }
 
     // =================================================
