@@ -17,6 +17,12 @@ function AppCtrl($scope) {
                 filteredApps.push(app);
             }
         }
+        filteredApps.sort(function(a, b):number {
+            if (a.name > b.name)
+                return 1;
+            else
+                return -1;
+        });
         $scope.apps = filteredApps;
         $scope.$apply();
     });
