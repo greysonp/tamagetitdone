@@ -39,6 +39,8 @@
     "img/*.jpg",
     "img/*.png",
     "js/*.map",
-    "ts/*.ts"
+    "ts/*.ts",
+    "css/*",
+    "css/*/*"
   ]
 }
