@@ -30,11 +30,11 @@
                 <!-- Task List -->
                 <ul ng-repeat="task in tasks track by $index">
                     <!-- Complete Task -->
-                    <li ng-if="task.isComplete">
+                    <li ng-if="task.isComplete" class="task-complete">
                         <div class="cell-side">
                             <i class="icon-check-sign checkbox" ng-click="toggleComplete($event, task)"></i>
                         </div>
-                        <div class="cell-center task-complete">{{task.title}}</div>
+                        <div class="cell-center">{{task.title}}</div>
                         <div class="cell-side">
                             <button class="delete-btn" ng-click="deleteTask($event, $index)"><i class="icon-remove"></i></button>
                         </div>
@@ -54,7 +54,6 @@
                             <i class="icon-check-empty checkbox" ng-click="toggleComplete($event, task)"></i>
                         </div>
                         <div class="cell-center"><input type="text" value="{{task.title}}" ng-init="focusInput()" ng-blur="finishTaskEdit($event, task)" ng-keydown="finishTaskEdit($event, task)"/></div>
-                        <div class="cell-side"></div>
                     </li>
                 </ul>
             </div>

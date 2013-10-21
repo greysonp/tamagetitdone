@@ -9,7 +9,7 @@ listPadding = 10px
 body
     margin 0
     padding 0
-    font-family "Raleway"
+    font-family "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif
     font-size fontSize
     background-color #abedf6
 
@@ -58,7 +58,7 @@ centerBkg = #fdfdfd
 .panel-center
     background-color centerBkg
     height 100%
-    box-shadow 0 0 10px -2px black
+    // box-shadow 4px 0 0 2px #5aaa
     z-index 100
     overflow-x hidden
     overflow-y hidden
@@ -117,7 +117,8 @@ centerBkg = #fdfdfd
             word-break break-word
 
     li, .add-wrapper
-        box-shadow 0 1px 3px -2px black
+        // box-shadow 0 1px 3px -2px black
+        border-bottom 2px solid #ddd
         margin 0
         padding listPadding
 
@@ -128,6 +129,7 @@ centerBkg = #fdfdfd
 
     .checkbox
         font-size 18px
+
 
 appIconWidth = 75px
 appTitleColor = #33728e
