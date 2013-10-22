@@ -4,8 +4,10 @@
         <link href="css/libs/raleway.css" rel="stylesheet" type="text/css">
         <link href="css/libs/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="css/newtab.css">
+        <script src="js/libs/underscore.min.js"></script>
         <script src="js/libs/angular.min.js"></script>
         <script src="js/libs/jquery.js"></script>
+        <script src="js/libs/jquery.highlight.js"></script>
         <script src="js/newtab.js"></script>
     </head>
     <body>
@@ -30,7 +32,7 @@
                 <!-- Task List -->
                 <ul ng-repeat="task in tasks track by $index">
                     <!-- Complete Task -->
-                    <li ng-if="task.isComplete" class="task-complete">
+                    <li ng-if="task.isComplete && task.isVisible" class="task-complete">
                         <div class="cell-side">
                             <i class="icon-check-sign checkbox" ng-click="toggleComplete($event, task)"></i>
                         </div>
@@ -40,7 +42,7 @@
                         </div>
                     </li>
                     <!-- Incomplete Non-Editing Task -->
-                    <li ng-if="!task.isComplete && !task.isEdit">
+                    <li ng-if="!task.isComplete && !task.isEdit && task.isVisible">
                         <div class="cell-side">
                             <i class="icon-check-empty checkbox" ng-click="toggleComplete($event, task)"></i>
                         </div>
@@ -49,7 +51,7 @@
                     </li>
 
                     <!-- Incomplete Editing Task -->
-                    <li ng-if="task.isEdit">
+                    <li ng-if="task.isEdit && task.isVisible">
                         <div class="cell-side">
                             <i class="icon-check-empty checkbox" ng-click="toggleComplete($event, task)"></i>
                         </div>

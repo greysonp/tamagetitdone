@@ -1,6 +1,7 @@
 ///<reference path="../d/DefinitelyTyped/jquery/jquery.d.ts" />
 ///<reference path="../d/DefinitelyTyped/chrome/chrome.d.ts" />
 ///<reference path="../d/DefinitelyTyped/angularjs/angular.d.ts" />
+///<reference path="../d/DefinitelyTyped/underscore/underscore.d.ts" />
 ///<reference path="Task.ts" />
 
 var app = angular.module("newTab", [])
@@ -21,13 +22,16 @@ function TaskCtrl($scope) {
     chrome.storage.local.get("tasks", function(data) {
         $scope.tasks = data["tasks"] || [];
         $scope.$apply();
+        highlightAllTags();
     });
 
     $scope.init = function() {
         resize();
         $(window).resize(resize);
-        for (var i = 0; i < $scope.tasks.length; i++)
-            $scope.taskspi[i].isEdit = false;
+        for (var i = 0; i < $scope.tasks.length; i++) {
+            $scope.tasks[i].isEdit = false;
+            $scope.tasks[i].isVisible = true;
+        }
     }
 
     // =================================================
@@ -58,7 +62,8 @@ function TaskCtrl($scope) {
             return;
 
         // Create a new task and add it to the list
-        var task:NewTab.Task = new NewTab.Task($text.val());
+        var tags = parseTags($text.val());
+        var task:NewTab.Task = new NewTab.Task($text.val(), tags);
         $scope.tasks.unshift(task);
         storeTasks();
 
@@ -75,6 +80,7 @@ function TaskCtrl($scope) {
         // check here for that
         if (!$event.keyCode || ($event.keyCode && $event.keyCode === 13)) {
             task.title = $event.target.value;
+            task.tags = parseTags($event.target.value);
             task.isEdit = false;
             storeTasks();
         }
@@ -89,7 +95,51 @@ function TaskCtrl($scope) {
     // HELPERS
     // =================================================
     function storeTasks():void {
-        chrome.storage.local.set({"tasks":$scope.tasks});
+        chrome.storage.local.set({"tasks":$scope.tasks}, highlightAllTags);
+    }
+
+    function parseTags(text):string[] {
+        var tags:string[] = [];
+        var tokens:string[] = text.split(' ');
+
+        // Go through all of the tokens and keep the ones that start with
+        // a hash tag (but strip it off before we store it)
+        for (var i = 0; i < tokens.length; i++)
+            if (tokens[i].charAt(0) == '#')
+                tags.push(tokens[i].substring(1));
+
+        return tags;
+    }
+
+    function highlightAllTags():void {
+        $(".panel-center").unhighlight();
+        var tags:string[] = [];
+
+        // Make one list of everything
+        for (var i = 0; i < $scope.tasks.length; i++) {
+            tags = _.union(tags, $scope.tasks[i].tags);
+        }
+
+        // Prepend hashtag to everything
+        for (var i = 0; i < tags.length; i++) tags[i] = '#' + tags[i];
+
+        // Highlight everything
+        $(".panel-center").highlight(tags, {element: "a", className: "tag"});
+        $(".panel-center a.tag").each(function(index) {
+            $(this).attr("href", "#");
+            $(this).click(function(){ filterTag($(this).text().substring(1)); });
+        });
+    }
+
+    function filterTag(tag:string):void {
+        console.log(tag);
+        for (var i = 0; i < $scope.tasks.length; i++) {
+            var t:NewTab.Task = $scope.tasks[i];
+            if (_.indexOf(t.tags, tag) < 0) {
+                t.isVisible = false;
+            }
+        }
+        $scope.$apply();
     }
 
     function resize():void {
