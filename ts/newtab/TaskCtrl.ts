@@ -32,7 +32,7 @@ function TaskCtrl($scope) {
             $scope.tasks[i].isVisible = true;
         }
         $(".panel-center").on("click", "a.tag", function() {
-            filterTag($(this).text().substring(1));
+            $scope.filterTag($(this).text().substring(1), true);
         });
     }
 
@@ -47,17 +47,17 @@ function TaskCtrl($scope) {
     // =================================================
     // TASK MANAGEMENT
     // =================================================
-    $scope.deleteTask = function($event, $index) {
+    $scope.deleteTask = function($event, $index):void {
         $scope.tasks.splice($index, 1);
         storeTasks();
     }
 
-    $scope.toggleComplete = function($event, task) {
+    $scope.toggleComplete = function($event, task):void {
         task.isComplete = !task.isComplete;
         storeTasks();
     }
     
-    $scope.addTask = function($event) {
+    $scope.addTask = function($event):void {
         // We don't do anything if there's nothing in the text box
         var $text = $("#js-newtask-text");
         if ($text.val().length <= 0)
@@ -73,12 +73,12 @@ function TaskCtrl($scope) {
         $text.val("");
     }
 
-    $scope.editTask = function($event, task) {
+    $scope.editTask = function($event, task):void {
         task.title = getUntaggedString(task.title);
         task.isEdit = true;
     }
 
-    $scope.finishTaskEdit = function($event, task) {
+    $scope.finishTaskEdit = function($event, task):void {
         // This event is run for both a blur event and a keydown, so we have a little
         // check here for that
         if (!$event.keyCode || ($event.keyCode && $event.keyCode === 13)) {
@@ -89,9 +89,44 @@ function TaskCtrl($scope) {
         }
     }
 
-    $scope.focusInput = function() {
+    $scope.focusInput = function():void {
         $(".panel-center li input").focus();
         $(".panel-center li input").select();
+    }
+
+    $scope.getTagList = function():string[] {
+        var out:string[] = [];
+        for (var i = 0; i < $scope.tasks.length; i++) {
+            out = _.union(out, $scope.tasks[i].tags);
+        }
+        for (var i = 0; i < out.length; i++) {
+            out[i] = "#" + out[i];
+        }
+        return out;
+    }
+
+    $scope.filterTag = function(tag:string, apply:boolean):void {
+        if (tag.charAt(0) == '#')
+            tag = tag.substring(1);
+        console.log("Tag: " + tag);
+        for (var i = 0; i < $scope.tasks.length; i++) {
+            var t:NewTab.Task = $scope.tasks[i];
+            if (_.indexOf(t.tags, tag) < 0) {
+                t.isVisible = false;
+            }
+            else {
+                t.isVisible = true;
+            }
+        }
+        if (apply) {
+            $scope.$apply();
+        }
+    }
+
+    $scope.clearFilter = function():void {
+        for (var i = 0; i < $scope.tasks.length; i++) {
+            $scope.tasks[i].isVisible = true;
+        }
     }
 
     // =================================================
@@ -134,17 +169,6 @@ function TaskCtrl($scope) {
         text = text.replace(regex, "");
 
         return text;
-    }
-
-    function filterTag(tag:string):void {
-        console.log(tag);
-        for (var i = 0; i < $scope.tasks.length; i++) {
-            var t:NewTab.Task = $scope.tasks[i];
-            if (_.indexOf(t.tags, tag) < 0) {
-                t.isVisible = false;
-            }
-        }
-        $scope.$apply();
     }
 
     function resize():void {
