@@ -4,7 +4,7 @@
 ///<reference path="../d/DefinitelyTyped/underscore/underscore.d.ts" />
 ///<reference path="Task.ts" />
 
-var app = angular.module("newTab", [])
+var app = angular.module("newTab", ["ngSanitize"])
     .config( [
         "$compileProvider",
         function($compileProvider) {   
@@ -22,7 +22,6 @@ function TaskCtrl($scope) {
     chrome.storage.local.get("tasks", function(data) {
         $scope.tasks = data["tasks"] || [];
         $scope.$apply();
-        highlightAllTags();
     });
 
     $scope.init = function() {
@@ -63,7 +62,7 @@ function TaskCtrl($scope) {
 
         // Create a new task and add it to the list
         var tags = parseTags($text.val());
-        var task:NewTab.Task = new NewTab.Task($text.val(), tags);
+        var task:NewTab.Task = new NewTab.Task(getTaggedString($text.val()), tags);
         $scope.tasks.unshift(task);
         storeTasks();
 
@@ -72,6 +71,7 @@ function TaskCtrl($scope) {
     }
 
     $scope.editTask = function($event, task) {
+        task.title = getUntaggedString(task.title);
         task.isEdit = true;
     }
 
@@ -79,7 +79,7 @@ function TaskCtrl($scope) {
         // This event is run for both a blur event and a keydown, so we have a little
         // check here for that
         if (!$event.keyCode || ($event.keyCode && $event.keyCode === 13)) {
-            task.title = $event.target.value;
+            task.title = getTaggedString($event.target.value);
             task.tags = parseTags($event.target.value);
             task.isEdit = false;
             storeTasks();
@@ -95,7 +95,11 @@ function TaskCtrl($scope) {
     // HELPERS
     // =================================================
     function storeTasks():void {
-        chrome.storage.local.set({"tasks":$scope.tasks}, highlightAllTags);
+        chrome.storage.local.set({"tasks":$scope.tasks}, function() {
+            $(".content-scroll ul li .cell-center").each(function(index) {
+                // $(this).html($scope.tasks[index].title);
+            });    
+        });
     }
 
     function parseTags(text):string[] {
@@ -111,24 +115,22 @@ function TaskCtrl($scope) {
         return tags;
     }
 
-    function highlightAllTags():void {
-        $(".panel-center").unhighlight();
-        var tags:string[] = [];
+    function getTaggedString(text):string {
+        var regex:RegExp = new RegExp("#[a-z|A-Z|0-9]+", "g");
+        console.log("before: " + text);
+        text = text.replace(regex, "<a href='#' class='tag'>$&</a>");
+        console.log("after: " + text);
+        return text;
+    }
 
-        // Make one list of everything
-        for (var i = 0; i < $scope.tasks.length; i++) {
-            tags = _.union(tags, $scope.tasks[i].tags);
-        }
+    function getUntaggedString(text):string {
+        var regex:RegExp = new RegExp("<a[\\s\\S]+?>", "g");
+        text = text.replace(regex, "");
 
-        // Prepend hashtag to everything
-        for (var i = 0; i < tags.length; i++) tags[i] = '#' + tags[i];
+        regex = new RegExp("</a>", "g");
+        text = text.replace(regex, "");
 
-        // Highlight everything
-        $(".panel-center").highlight(tags, {element: "a", className: "tag"});
-        $(".panel-center a.tag").each(function(index) {
-            $(this).attr("href", "#");
-            $(this).click(function(){ filterTag($(this).text().substring(1)); });
-        });
+        return text;
     }
 
     function filterTag(tag:string):void {

@@ -39,6 +39,8 @@
     "img/*.jpg",
     "img/*.png",
     "js/*.map",
+    "js/*.js",
+    "js/*/*.js",
     "ts/*.ts",
     "css/*",
     "css/*/*"

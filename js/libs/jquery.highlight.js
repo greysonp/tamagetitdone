@@ -97,7 +97,7 @@ jQuery.fn.highlight = function (words, options) {
     var flag = settings.caseSensitive ? "" : "i";
     var pattern = "(" + words.join("|") + ")";
     if (settings.wordsOnly) {
-        pattern = "\\b" + pattern + "\\b";
+        pattern = "\\B" + pattern + "\\b";
     }
     var re = new RegExp(pattern, flag);
     

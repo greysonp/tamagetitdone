@@ -808,8 +808,10 @@ interface JQuery {
     queue(queueName?: string): any[];
     queue(queueName: string, newQueueOrCallback: any): JQuery;
     queue(newQueueOrCallback: any): JQuery;
-    highlight(text:string[], obj:any): void;
+    highlight(text: string[], obj: any): void;
+    highlight(text: string, obj: any): void;
     unhighlight(): void;
+    unhighlight(obj: any): void;
 }
 declare module "jquery" {
     export = $;

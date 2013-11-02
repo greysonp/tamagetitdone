@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="css/newtab.css">
         <script src="js/libs/underscore.min.js"></script>
         <script src="js/libs/angular.min.js"></script>
+        <script src="js/libs/angular-sanitize.min.js"></script>
         <script src="js/libs/jquery.js"></script>
         <script src="js/libs/jquery.highlight.js"></script>
         <script src="js/newtab.js"></script>
@@ -36,7 +37,7 @@
                         <div class="cell-side">
                             <i class="icon-check-sign checkbox" ng-click="toggleComplete($event, task)"></i>
                         </div>
-                        <div class="cell-center">{{task.title}}</div>
+                        <div class="cell-center" ng-bind-html="task.title"></div>
                         <div class="cell-side">
                             <button class="delete-btn" ng-click="deleteTask($event, $index)"><i class="icon-remove"></i></button>
                         </div>
@@ -46,7 +47,7 @@
                         <div class="cell-side">
                             <i class="icon-check-empty checkbox" ng-click="toggleComplete($event, task)"></i>
                         </div>
-                        <div class="cell-center" ng-dblclick="editTask($event, task)">{{task.title}}</div>
+                        <div class="cell-center" ng-dblclick="editTask($event, task)" ng-bind-html="task.title"></div>
                         <div class="cell-side"></div>
                     </li>
 
