@@ -81,12 +81,6 @@ centerBkg = #fdfdfd
             opacity 0.75
         &:active
             color black
-    .add-btn
-        float left
-        padding inputPadding
-        margin 0 (listPadding - 3) 0 3px
-        width 31px
-        height 31px
 
     input[type=text]
         width 100%
@@ -102,25 +96,38 @@ centerBkg = #fdfdfd
         display table
         width calc(100% \- (2 * listPadding))
         height rowHeight
-        div
-            display table-cell
-            padding (listPadding / 2)
-            vertical-align middle
-        .cell-side
-            text-align center
-            width 25px
-            vertical-align middle
+        
         button, input[type=checkbox]
             margin 0
             padding 0
-        .cell-center
-            word-break break-word
+        
 
     li, .add-wrapper
-        // box-shadow 0 1px 3px -2px black
         border-bottom 2px solid #ddd
         margin 0
         padding listPadding
+
+    .cell-side, .cell-center
+        display table-cell
+        padding (listPadding / 2)
+        vertical-align middle
+
+    .cell-side
+        text-align center
+        width 25px
+        vertical-align middle
+
+    .cell-center
+        word-break break-word
+
+    .add-wrapper
+        display table
+        width calc(100% \- (2 * listPadding))
+        i
+            color centerAccentColor
+            width 31px
+            height 31px
+            font-size 21px
 
     .tag-list li
         display inline !important

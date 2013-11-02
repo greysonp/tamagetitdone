@@ -23,10 +23,11 @@
         <div class="panel-center" id="js-panel-center" ng-controller="TaskCtrl" ng-init="init()" ng-cloak>
             <h1 class="text-center">Tamagetitdone</h1>
             <div class="add-wrapper">
-                <button class="add-btn"><i class="icon-plus" ng-click="addTask()"></i></button>
-                <div class="text-extender">
+                <div class="cell-side"><i class="icon-plus" ng-click="addTask()"></i></div>
+                <div class="cell-center">
                     <input type="text" placeholder="New Task" id="js-newtask-text" ng-keydown="inputKeyDown($event)"/>
                 </div>
+                <div class="cell-side"><i class="icon-reorder"></i></div>
             </div>
 
             <div class="content-scroll">
