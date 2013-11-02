@@ -31,6 +31,9 @@ function TaskCtrl($scope) {
             $scope.tasks[i].isEdit = false;
             $scope.tasks[i].isVisible = true;
         }
+        $(".panel-center").on("click", "a.tag", function() {
+            filterTag($(this).text().substring(1));
+        });
     }
 
     // =================================================
