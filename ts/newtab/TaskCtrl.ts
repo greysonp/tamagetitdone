@@ -18,6 +18,7 @@ function TaskCtrl($scope) {
     // =================================================
     // INITIALIZATION
     // =================================================
+    $scope.selectedTag = -1;
     $scope.tasks = []
     chrome.storage.local.get("tasks", function(data) {
         $scope.tasks = data["tasks"] || [];
@@ -102,13 +103,20 @@ function TaskCtrl($scope) {
         for (var i = 0; i < out.length; i++) {
             out[i] = "#" + out[i];
         }
+
+        out.sort();
         return out;
     }
 
-    $scope.filterTag = function(tag:string, apply:boolean):void {
+    $scope.filterTag = function(tag:string, apply:boolean, index:number):void {
         if (tag.charAt(0) == '#')
             tag = tag.substring(1);
-        console.log("Tag: " + tag);
+        if (typeof(index) === "undefined") {
+            index = getIndexOfTag(tag);
+        }
+        console.log(index);
+        $scope.selectedTag = index;
+
         for (var i = 0; i < $scope.tasks.length; i++) {
             var t:NewTab.Task = $scope.tasks[i];
             if (_.indexOf(t.tags, tag) < 0) {
@@ -124,6 +132,7 @@ function TaskCtrl($scope) {
     }
 
     $scope.clearFilter = function():void {
+        $scope.selectedTag = -1;
         for (var i = 0; i < $scope.tasks.length; i++) {
             $scope.tasks[i].isVisible = true;
         }
@@ -133,11 +142,7 @@ function TaskCtrl($scope) {
     // HELPERS
     // =================================================
     function storeTasks():void {
-        chrome.storage.local.set({"tasks":$scope.tasks}, function() {
-            $(".content-scroll ul li .cell-center").each(function(index) {
-                // $(this).html($scope.tasks[index].title);
-            });    
-        });
+        chrome.storage.local.set({"tasks":$scope.tasks});    
     }
 
     function parseTags(text):string[] {
@@ -151,6 +156,17 @@ function TaskCtrl($scope) {
                 tags.push(tokens[i].substring(1));
 
         return tags;
+    }
+
+    function getIndexOfTag(tag:string):number {
+        if (tag.charAt(0) != '#') {
+            tag = '#' + tag;
+        }
+        var items:string[] = $scope.getTagList();
+        for (var i = 0; i < items.length; i++) {
+            if (tag == items[i])
+                return i;
+        }
     }
 
     function getTaggedString(text):string {

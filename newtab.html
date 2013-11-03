@@ -33,7 +33,7 @@
                     <i class="icon-tags"></i>
                     <ul>
                         <li ng-click="clearFilter()"><i class="icon-ban-circle"></i> Clear Selection</li>
-                        <li ng-repeat="tag in getTagList() track by $index" ng-click="filterTag(tag)"><a href="#" class="tag">{{tag}}</a></li>
+                        <li ng-repeat="tag in getTagList() track by $index" ng-click="filterTag(tag, false, $index)" ng-class="{ 'tag-selected': $index == selectedTag }"><a href="#" class="tag">{{tag}}</a></li>
                     </ul>
                 </div>
             </div>
