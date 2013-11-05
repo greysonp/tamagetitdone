@@ -2,6 +2,7 @@
 ///<reference path="../d/DefinitelyTyped/chrome/chrome.d.ts" />
 ///<reference path="../d/DefinitelyTyped/angularjs/angular.d.ts" />
 ///<reference path="../d/DefinitelyTyped/underscore/underscore.d.ts" />
+///<reference path="../d/DefinitelyTyped/sugar/sugar.d.ts" />
 ///<reference path="Task.ts" />
 
 var app = angular.module("newTab", ["ngSanitize"])
@@ -21,7 +22,12 @@ function TaskCtrl($scope) {
     $scope.selectedTag = -1;
     $scope.tasks = []
     chrome.storage.local.get("tasks", function(data) {
-        $scope.tasks = data["tasks"] || [];
+        if (data["tasks"])
+            for (var i = 0; i < data["tasks"].length; i++)
+                $scope.tasks.push(NewTab.Task.createFromStoredObject(data["tasks"][i]))
+        $scope.tasks.sort(taskSort);
+
+        console.log($scope.tasks);
         $scope.$apply();
     });
 
@@ -66,12 +72,17 @@ function TaskCtrl($scope) {
 
         // Create a new task and add it to the list
         var tags = parseTags($text.val());
-        var task:NewTab.Task = new NewTab.Task(getTaggedString($text.val()), tags);
+        var date = parseDate($text.val());
+        console.log(date);
+        var task:NewTab.Task = new NewTab.Task(getTaggedString($text.val()), tags, date);
         $scope.tasks.unshift(task);
+        $scope.tasks.sort(taskSort);
         storeTasks();
 
         // Clear out the text
         $text.val("");
+
+        console.log(task);
     }
 
     $scope.editTask = function($event, task):void {
@@ -85,7 +96,9 @@ function TaskCtrl($scope) {
         if (!$event.keyCode || ($event.keyCode && $event.keyCode === 13)) {
             task.title = getTaggedString($event.target.value);
             task.tags = parseTags($event.target.value);
+            task.date = parseDate($event.target.value);
             task.isEdit = false;
+            $scope.tasks.sort(taskSort);
             storeTasks();
         }
     }
@@ -114,7 +127,6 @@ function TaskCtrl($scope) {
         if (typeof(index) === "undefined") {
             index = getIndexOfTag(tag);
         }
-        console.log(index);
         $scope.selectedTag = index;
 
         for (var i = 0; i < $scope.tasks.length; i++) {
@@ -142,10 +154,49 @@ function TaskCtrl($scope) {
     // HELPERS
     // =================================================
     function storeTasks():void {
-        chrome.storage.local.set({"tasks":$scope.tasks});    
+        var stored:Object[] = [];
+        for (var i = 0; i < $scope.tasks.length; i++) {
+            var date = $scope.tasks[i].date;
+            if (date)
+                date = date.toString();
+            var obj:Object = {
+                "title": $scope.tasks[i].title,
+                "tags": $scope.tasks[i].tags,
+                "date": date 
+            };
+            stored.push(obj);
+        }
+        chrome.storage.local.set({"tasks":stored});    
     }
 
-    function parseTags(text):string[] {
+    function parseDate(text:string):Date {
+        var words:string[] = text.split(' ');
+        var biggestLength:number = 0;
+        var returnDate:Date = null;
+        for (var i = 0; i < words.length; i++) {
+            for (var j = i; j < words.length; j++) {
+                var test:string = concatWordsToString(words, i, j);
+                var date:Date = Date.future(test);
+                if (date.toString() != "Invalid Date" && test.length > biggestLength) {
+                    biggestLength = test.length;
+                    returnDate = date;
+                }
+            }
+        }
+        return returnDate;
+    }
+
+    function concatWordsToString(words:string[], start:number, end:number) {
+        var output:string = "";
+        for (var i = start; i <= end; i++) {
+            output += words[i];
+            if (i != end)
+                output += ' ';
+        }
+        return output;
+    }
+
+    function parseTags(text:string):string[] {
         var tags:string[] = [];
         var tokens:string[] = text.split(' ');
 
@@ -171,9 +222,7 @@ function TaskCtrl($scope) {
 
     function getTaggedString(text):string {
         var regex:RegExp = new RegExp("#[a-z|A-Z|0-9]+", "g");
-        console.log("before: " + text);
         text = text.replace(regex, "<a href='#' class='tag'>$&</a>");
-        console.log("after: " + text);
         return text;
     }
 
@@ -185,6 +234,17 @@ function TaskCtrl($scope) {
         text = text.replace(regex, "");
 
         return text;
+    }
+
+    function taskSort(a:NewTab.Task, b:NewTab.Task) {
+        if (!a.date && !b.date)
+            return 1;
+        if(a.date && !b.date)
+            return -1;
+        if (b.date && !a.date)
+            return 1;
+        // console.log(b.toString() + " | " + a.toString() + " | " + (b < a));
+        return b.date < a.date;
     }
 
     function resize():void {
