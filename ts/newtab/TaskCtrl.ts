@@ -27,7 +27,6 @@ function TaskCtrl($scope) {
                 $scope.tasks.push(NewTab.Task.createFromStoredObject(data["tasks"][i]))
         $scope.tasks.sort(taskSort);
 
-        console.log($scope.tasks);
         $scope.$apply();
     });
 
@@ -73,7 +72,6 @@ function TaskCtrl($scope) {
         // Create a new task and add it to the list
         var tags = parseTags($text.val());
         var date = parseDate($text.val());
-        console.log(date);
         var task:NewTab.Task = new NewTab.Task(getTaggedString($text.val()), tags, date);
         $scope.tasks.unshift(task);
         $scope.tasks.sort(taskSort);
@@ -81,8 +79,6 @@ function TaskCtrl($scope) {
 
         // Clear out the text
         $text.val("");
-
-        console.log(task);
     }
 
     $scope.editTask = function($event, task):void {
@@ -176,7 +172,7 @@ function TaskCtrl($scope) {
         for (var i = 0; i < words.length; i++) {
             for (var j = i; j < words.length; j++) {
                 var test:string = concatWordsToString(words, i, j);
-                var date:Date = Date.future(test);
+                var date:Date = Date["future"](test);
                 if (date.toString() != "Invalid Date" && test.length > biggestLength) {
                     biggestLength = test.length;
                     returnDate = date;
@@ -243,7 +239,6 @@ function TaskCtrl($scope) {
             return -1;
         if (b.date && !a.date)
             return 1;
-        // console.log(b.toString() + " | " + a.toString() + " | " + (b < a));
         return b.date < a.date;
     }
 

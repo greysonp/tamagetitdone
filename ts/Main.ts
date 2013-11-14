@@ -63,7 +63,7 @@ module TGD {
         }
 
         /**
-         * Generates a State object based on several 
+         * Generates a State object based on several factors
          */
         private getCurrentState():TGD.State {
             return new TGD.State(0.5, 0.5, 0.5);
@@ -71,6 +71,7 @@ module TGD {
 
         public tick():void {
             Main.stage.update();
+            console.log(this.tommy.isActive());
         }
 
 
