@@ -43,17 +43,14 @@ module TGD {
          * Chooses an action based on the given state variables.
          * @type {[type]}
          */
-        public getAction(state:TGD.State):Object {
+        public getAction(state:TGD.State):TGD.ActionInfo {
             // Grab our stuff from the QTable
             var key = state.toString();
             var actionCode:number = this.chooseAction(key);
             var cb = (val:number, state2:TGD.State) => {
                 this.reward(key, actionCode, val, state2);
             }
-            return {
-                "actionCode": actionCode,
-                "callback": cb
-            }
+            return new TGD.ActionInfo(actionCode, cb);
         }
 
         /**

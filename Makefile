@@ -3,6 +3,6 @@ newtab = tsc ts/newtab/*.ts --out js/newtab.js --sourcemap
 stylus = stylus stylus/*.styl --out css/
 
 all:
-	# $(content_script)
-	$(newtab)
+	$(content_script)
+	# $(newtab)
 	$(stylus)

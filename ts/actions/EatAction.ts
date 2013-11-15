@@ -13,6 +13,8 @@ module TGD {
             this.mouseX = properties["mouseX"];
             this.mouseY = properties["mouseY"];
             this.$tgd = $('#tgd');
+
+            this.actionCode = Action.EAT;
         }
 
         public run(callback:()=>void, properties?:Object) {

@@ -20,7 +20,7 @@ module TGD {
 
         // AI stuff
         private qTable:TGD.QTable;
-        private lastAction:Object;
+        private lastAction:TGD.ActionInfo;
 
 
 
@@ -31,7 +31,9 @@ module TGD {
 
             // Initialize createjs
             Main.stage = new createjs.Stage("tgd");
-            createjs.Ticker.addEventListener("tick", this.tick);
+            createjs.Ticker.addEventListener("tick", (e) => {
+                this.tick.call(this, e);
+            });
             createjs.Ticker.setFPS(Main.FPS);
             createjs.Ticker.useRAF = true;
 
@@ -46,32 +48,46 @@ module TGD {
         }
 
         private init():void {
-            this.tommy.addEventListener(TGD.Tommy.ACTIONS_DONE, () => {
-                this.step();
+            this.getCurrentState((state) => {
+                this.lastAction = this.qTable.getAction(state);
+                this.tommy.performAction(this.lastAction.actionCode);
+                this.tommy.addEventListener(TGD.Tommy.ACTIONS_DONE, () => {
+                    this.step();
+                });
             });
-            this.lastAction = this.qTable.getAction(this.getCurrentState());
             // this.tommy.performAction(this.lastAction["actionCode"]);
             // this.tommy.eat();
             // this.tommy.idle();
         }
 
         private step():void {
-            this.lastAction["callback"](1, this.getCurrentState());
-            this.lastAction = this.qTable.getAction(this.getCurrentState());
-            this.tommy.performAction(this.lastAction["actionCode"]);
-            console.log("Chose action: " + this.lastAction["actionCode"]);
+            this.getCurrentState((state) => {
+                // console.log(state);
+                this.lastAction.callback(1, state);
+                this.lastAction = this.qTable.getAction(state);
+                this.tommy.performAction(this.lastAction.actionCode);
+                // console.log("Chose action: " + this.lastAction.actionCode);
+            });
         }
 
         /**
          * Generates a State object based on several factors
          */
-        private getCurrentState():TGD.State {
-            return new TGD.State(0.5, 0.5, 0.5);
+        private getCurrentState(callback:(state:TGD.State)=>void):void {
+            var storage:IStorage = new ChromeStorage();
+
+            var workLevel:number = 0;
+            var funLevel:number = 0;
+            var prodLevel:number = 0;
+            storage.get("workLevel", (data:Object) => {
+                workLevel = data["workLevel"];
+                callback(new TGD.State(0.5, 0.5, workLevel));
+            });
         }
 
         public tick():void {
             Main.stage.update();
-            console.log(this.tommy.isActive());
+            // console.log(this.tommy.isActive());
         }
 
 

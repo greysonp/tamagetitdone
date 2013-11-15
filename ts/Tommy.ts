@@ -42,7 +42,7 @@ module TGD {
 
             // Reposition on scroll if not moving
             $(document).scroll(() => {
-                if (!this.isActive())
+                if (!this.isActive() || this.actionList[0].actionCode === TGD.Action.IDLE)
                     $tgd.css("top", Tommy.getTopOffset());
             });
 
@@ -106,7 +106,7 @@ module TGD {
             }
         }
 
-        private isActive() {
+        public isActive() {
             return this.actionList.length > 0;
         }
 
