@@ -94,27 +94,33 @@ module TGD {
          * the max option is.
          */
         private chooseAction(stateKey:string):number {
-            var maxIndex:number = 0;
-            var rowSum:number = 0;
-            var a:number[] = this.table[stateKey];
-            for (var i = 0; i < a.length; i++) {
-                rowSum += a[i];
-                if (a[i] > a[maxIndex]) {
-                    maxIndex = i;
-                }
+            // var maxIndex:number = 0;
+            // var rowSum:number = 0;
+            // var a:number[] = this.table[stateKey];
+            // for (var i = 0; i < a.length; i++) {
+            //     rowSum += a[i];
+            //     if (a[i] > a[maxIndex]) {
+            //         maxIndex = i;
+            //     }
+            // }
+
+            // // What percentage of the row the dominant action has
+            // var dominance:number = a[maxIndex] / rowSum;
+
+            // // Example: if dominance is 70% but we roll a 85%, then
+            // // we'll just pick a random action. We'll likely have a 
+            // // lot of very dominant actions, so by doing this, we mix it
+            // // up a bit.
+            // if (Math.random() > dominance)
+            //     return Math.floor(Math.random() * a.length);
+            // else
+            //     return maxIndex;
+
+            var state:TGD.State = TGD.State.buildFromString(stateKey);
+            if (state.w > 0.75) {
+                return TGD.Action.EAT;
             }
-
-            // What percentage of the row the dominant action has
-            var dominance:number = a[maxIndex] / rowSum;
-
-            // Example: if dominance is 70% but we roll a 85%, then
-            // we'll just pick a random action. We'll likely have a 
-            // lot of very dominant actions, so by doing this, we mix it
-            // up a bit.
-            if (Math.random() > dominance)
-                return Math.floor(Math.random() * a.length);
-            else
-                return maxIndex;
+            return TGD.Action.IDLE;
         }
 
         /**

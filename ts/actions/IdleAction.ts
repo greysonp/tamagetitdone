@@ -19,19 +19,18 @@
 
         public run(callback:()=>void, properties?:Object) {
             this.animation.idle();
-            // this.$tgd.animate({
-            //     top: TGD.Tommy.getTopOffset(),
-            //     left: 0
-            // }, this.time, "swing", () => {
-            //     // Make sure it's at the bottom - we may have scrolled
-            //     // while Tommy was animating
-            //     this.$tgd.css({
-            //         top: TGD.Tommy.getTopOffset(),
-            //         left: 0
-            //     });
-            //     if (callback != null)
-            //         callback();
-            // });
+            var dist = TGD.Util.getDistanceFromCorner();
+            this.$tgd.animate({
+                top: TGD.Tommy.getTopOffset(),
+                left: 0
+            }, dist, "swing", () => {
+                // Make sure it's at the bottom - we may have scrolled
+                // while Tommy was animating
+                this.$tgd.css({
+                    top: TGD.Tommy.getTopOffset(),
+                    left: 0
+                });
+            });
             setTimeout(function() {
                 if (callback) 
                     callback();

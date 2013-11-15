@@ -27,6 +27,15 @@ module TGD {
             // if it's a link
             var item = TGD.Util.getClosestItem(this.mouseX, this.mouseY);
 
+            // If we didn't get anything back, make this an idle action instead
+            // of a eat action
+            if (!item) {
+                var action:TGD.Action = new TGD.IdleAction(this.animation);
+                this.actionCode = Action.IDLE;
+                action.run(callback);
+                return;
+            }
+
             // If no item is close to the cursor, simply return
             if (item.get(0) == null) {
                 TGD.Util.log("No items close to cursor.");
