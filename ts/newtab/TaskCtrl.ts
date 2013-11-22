@@ -61,6 +61,13 @@ function TaskCtrl($scope) {
     $scope.toggleComplete = function($event, task):void {
         task.isComplete = !task.isComplete;
         storeTasks();
+
+        chrome.runtime["sendMessage"]({
+            "TGD": {
+                "action": "toggleFromPopup",
+                "task": task
+            }
+        });
     }
     
     $scope.addTask = function($event):void {
@@ -160,6 +167,7 @@ function TaskCtrl($scope) {
             var obj:Object = {
                 "title": $scope.tasks[i].title,
                 "tags": $scope.tasks[i].tags,
+                "isComplete": $scope.tasks[i].isComplete,
                 "date": date 
             };
             stored.push(obj);
@@ -200,7 +208,7 @@ function TaskCtrl($scope) {
                 }
             }
         }
-        if (returnDate.getTime() - new Date().getTime() < 0) {
+        if (returnDate != null && (returnDate.getTime() - new Date().getTime()) < 0) {
             return new Date();
         }
 

@@ -38,7 +38,7 @@ module TGD {
             // Initialize our modules
             this.qTable = new TGD.QTable(() => {
                 this.tommy = new TGD.Tommy(() => {
-                    this.page = new TGD.WebPage(window.location.href, () => {
+                    this.page = new TGD.WebPage(document.domain, () => {
                         this.init();
                     });
                 });    
@@ -80,13 +80,14 @@ module TGD {
             storage.get("workLevel", (data:Object) => {
                 workLevel = data["workLevel"];
                 prodLevel = this.page.getProductivityRating();
-                callback(new TGD.State(0.5, prodLevel, workLevel));
+                var state = new TGD.State(0.5, prodLevel, workLevel);
+                console.log(state);
+                callback(state);
             });
         }
 
         public tick():void {
             Main.stage.update();
-            // console.log(this.tommy.isActive());
         }
 
 

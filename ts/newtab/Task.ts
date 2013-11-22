@@ -19,7 +19,9 @@ module NewTab {
         public static createFromStoredObject(obj:Object) {
             var date = null;
             if (obj["date"]) date = new Date(obj["date"].toString());
-            return new Task(obj["title"], obj["tags"], date);
+            var task:Task = new Task(obj["title"], obj["tags"], date);
+            task.isComplete = obj["isComplete"];
+            return task;
         }
     }
 }

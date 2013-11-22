@@ -4,5 +4,5 @@ stylus = stylus stylus/*.styl --out css/
 
 all:
 	$(content_script)
-	# $(newtab)
+	$(newtab)
 	$(stylus)

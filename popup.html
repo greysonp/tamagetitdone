@@ -1,0 +1,70 @@
+<html ng-app="newTab">
+    <head>
+        <title>Tamagetitdone</title>
+        <link href="css/libs/raleway.css" rel="stylesheet" type="text/css">
+        <link href="css/libs/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="css/newtab.css">
+        <script src="js/libs/underscore.min.js"></script>
+        <script src="js/libs/angular.min.js"></script>
+        <script src="js/libs/angular-sanitize.min.js"></script>
+        <script src="js/libs/jquery.js"></script>
+        <script src="js/libs/jquery.highlight.js"></script>
+        <script src="js/libs/sugar.min.js"></script>
+        <script src="js/newtab.js"></script>
+    </head>
+    <body style="width: 300px; height: 500px">
+        <div class="grass-tile"></div>
+
+        <!-- Center Panel -->
+        <div class="panel-center" id="js-panel-center" ng-controller="TaskCtrl" ng-init="init()" ng-cloak>
+            <div class="add-wrapper">
+                <div class="cell-side">
+                    <i class="icon-plus" ng-click="addTask()"></i>
+                </div>
+                <div class="cell-center">
+                    <input type="text" placeholder="New Task" id="js-newtask-text" ng-keydown="inputKeyDown($event)"/>
+                </div>
+                <div class="cell-side">
+                    <i class="icon-tags"></i>
+                    <ul>
+                        <li ng-click="clearFilter()"><i class="icon-ban-circle"></i> Clear Selection</li>
+                        <li ng-repeat="tag in getTagList() track by $index" ng-click="filterTag(tag, false, $index)" ng-class="{ 'tag-selected': $index == selectedTag }"><a href="#" class="tag">{{tag}}</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-scroll">
+                <!-- Task List -->
+                <ul ng-repeat="task in tasks track by $index">
+                    <!-- Complete Task -->
+                    <li ng-if="task.isComplete && task.isVisible" class="task-complete">
+                        <div class="cell-side">
+                            <i class="icon-check-sign checkbox" ng-click="toggleComplete($event, task)"></i>
+                        </div>
+                        <div class="cell-center" ng-bind-html="task.title"></div>
+                        <div class="cell-side">
+                            <button class="delete-btn" ng-click="deleteTask($event, $index)"><i class="icon-remove"></i></button>
+                        </div>
+                    </li>
+                    <!-- Incomplete Non-Editing Task -->
+                    <li ng-if="!task.isComplete && !task.isEdit && task.isVisible">
+                        <div class="cell-side">
+                            <i class="icon-check-empty checkbox" ng-click="toggleComplete($event, task)"></i>
+                        </div>
+                        <div class="cell-center" ng-dblclick="editTask($event, task)" ng-bind-html="task.title"></div>
+                        <div class="cell-side"></div>
+                    </li>
+
+                    <!-- Incomplete Editing Task -->
+                    <li ng-if="task.isEdit && task.isVisible">
+                        <div class="cell-side">
+                            <i class="icon-check-empty checkbox" ng-click="toggleComplete($event, task)"></i>
+                        </div>
+                        <div class="cell-center"><input type="text" value="{{task.title}}" ng-init="focusInput()" ng-blur="finishTaskEdit($event, task)" ng-keydown="finishTaskEdit($event, task)"/></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </body>
+</html>

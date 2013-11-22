@@ -27,6 +27,7 @@ module TGD {
             // Check to see if we have data on this domain
             this.storage = new TGD.ChromeStorage();
             this.storage.get(WebPage.STORAGE_KEY, (results) => {
+                console.log("Pulled from storage.");
                 console.log(results);          
 
                 // If this is the first domain we've ever visited, initialize the data
@@ -45,7 +46,7 @@ module TGD {
                 // If we haven't visited this domain before, we have to grab the categories
                 // and give it an initial p value (0.5, just to stay neutral).
                 if (!results["domains"][domain]) {
-                console.log("Never visited. Retrieving categories.");                    
+                    console.log("Never visited. Retrieving categories.");                    
                     this.retrieveCategories((error, categories) => {
                         if (!error) {
                             results["domains"][domain] = {
@@ -57,7 +58,7 @@ module TGD {
                             this.initCategories(results, categories);
                         }
                         this.storedData = results;
-                        this.storeData();
+                        this.storeAllData();
                     });
                 }
                 // Otherwise, we can just keep reference to the data we already had
@@ -89,8 +90,8 @@ module TGD {
          */
         private initCategories(data:any, categories:string[]):void {
             for (var i = 0; i < categories.length; i++) {
-                if (!this.storedData["categories"][categories[i]]) {
-                    this.storedData["categories"][categories[i]] = {
+                if (!data["categories"][categories[i]]) {
+                    data["categories"][categories[i]] = {
                         "p": 0.5
                     }
                 }
@@ -100,7 +101,7 @@ module TGD {
         /**
          * Updates local storage with the data item we have stored.
          */
-        private storeData():void {
+        private storeAllData():void {
             console.log("Storing data.");
             console.log(this.storedData);
             var obj = {};
@@ -115,12 +116,12 @@ module TGD {
          *         A number between 0.0-1.0, where 1 is the most productive.
          */
         public getProductivityRating():number {
-            var p:number = this.storeData["domains"][this.domain]["p"];
+            var p:number = this.storedData["domains"][this.domain]["p"];
 
             var categories = this.storedData["domains"][this.domain]["categories"];
             var sum:number = 0;
             for (var i = 0; i < categories.length; i++) {
-                sum += this.storeData["categories"][categories[i]]["p"];
+                sum += this.storedData["categories"][categories[i]]["p"];
             }
             var avgCat = sum / categories.length;
             return (p + avgCat) / 2;

@@ -5,9 +5,20 @@
   "description": "A productivity-focused digital pet.",
   "version": "2.0",
 
+  "icons": {
+        "16": "img/icon_small.png",
+        "48": "img/icon_small.png",
+        "128": "img/icon_small.png"
+  },
+
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": "img/icon_small.png"
+  },
+
   "chrome_url_overrides": {
       "newtab": "newtab.html"
-    },
+  },
 
   "content_scripts": [
     {
@@ -23,6 +34,10 @@
     }
   ],
 
+  "background": {
+    "scripts": ["js/background.js"]
+  },
+
   "permissions": [
     "http://*/*", 
     "https://*/*", 
@@ -30,10 +45,6 @@
     "storage",
     "management"
   ],
-
-  "browser_action": {
-    "default_popup": "popup.html"
-  },
 
   "web_accessible_resources": [
     "img/*.jpg",
