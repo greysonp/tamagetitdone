@@ -5,7 +5,7 @@ module TGD {
                 console.info(text);
         }
 
-        public static getClosestItem(mouseX:number, mouseY:number, minDist:number = 200) {
+        public static getClosestItem(mouseX:number, mouseY:number, minDist:number = 250) {
             var minIndex:number = -1;
             $('a, img, iframe, embed').each(function(i) {
                 if ($(this).is(":visible")) {

@@ -33,6 +33,7 @@ module TGD {
             this.listenerMap = {};
 
             var $tgd = $('#tgd');
+            $tgd.css("top", Tommy.getTopOffset());
 
             // Track mouse position
             $(document).mousemove((e) => {
@@ -42,7 +43,7 @@ module TGD {
 
             // Reposition on scroll if not moving
             $(document).scroll(() => {
-                if (!this.isActive() || this.actionList[0].actionCode === TGD.Action.IDLE)
+                if (!this.isActive() || (this.actionList[0].actionCode === TGD.Action.IDLE && !$tgd.is(':animated')))
                     $tgd.css("top", Tommy.getTopOffset());
             });
 

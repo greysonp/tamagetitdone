@@ -74,7 +74,7 @@ module TGD {
                 if (item.get(0).tagName == "A") {
                     // Eat it
                     this.animation.eat(flipped);
-                    this.nom(item, flipped, Math.max(200, (1000/item.text().length)), callback);
+                    this.nom(item, flipped, Math.max(750/item.text().length, 25), callback);
                 }
                 else {
                     item.css('display', 'none');
@@ -85,6 +85,7 @@ module TGD {
         }
 
         private nom(target, flipped:boolean, timePerChomp:number, callback:()=>void):void {
+            console.log("timePerChomp: " + timePerChomp);
             var newText:string = target.text().substring(1);
             if (flipped) {
                 newText = target.text().substring(0, target.text().length - 1);
@@ -93,7 +94,7 @@ module TGD {
             target.text(newText);
             if (newText.length > 0) {
                 setTimeout(() => {
-                    this.nom(target, flipped, 100, callback);
+                    this.nom(target, flipped, timePerChomp, callback);
                 }, timePerChomp);
             }
             else {

@@ -182,7 +182,7 @@ function TaskCtrl($scope) {
         var minutesUntil:number = until/1000/60;
 
         // var workLevel:number = Math.E^((1440 - minutesUntil)/( (2880/Math.log(10) - 720/Math.log(2))/1440 * (minutesUntil - 2880) + 720/Math.log(2) ));
-        var workLevel = Math.pow(1440, 1.4)/Math.pow(minutesUntil, 1.4);
+        var workLevel = Math.pow(1440, 2)/Math.pow(minutesUntil, 2);
         return Math.min(workLevel, 1);
     }
 

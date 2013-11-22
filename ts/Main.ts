@@ -22,8 +22,6 @@ module TGD {
         private qTable:TGD.QTable;
         private lastAction:TGD.ActionInfo;
 
-
-
         constructor() {
             // Add Tommy to the stage
             $("body").append('<canvas id="tgd" width="150" height="150" style="position: absolute; bottom: 0px; left: 0px; z-index: 55555"></canvas>');
@@ -41,7 +39,7 @@ module TGD {
             this.qTable = new TGD.QTable(() => {
                 this.tommy = new TGD.Tommy(() => {
                     this.page = new TGD.WebPage(window.location.href, () => {
-                        this.init();    
+                        this.init();
                     });
                 });    
             });
@@ -81,7 +79,8 @@ module TGD {
             var prodLevel:number = 0;
             storage.get("workLevel", (data:Object) => {
                 workLevel = data["workLevel"];
-                callback(new TGD.State(0.5, 0.5, workLevel));
+                prodLevel = this.page.getProductivityRating();
+                callback(new TGD.State(0.5, prodLevel, workLevel));
             });
         }
 
