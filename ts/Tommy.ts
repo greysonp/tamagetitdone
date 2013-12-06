@@ -23,6 +23,12 @@ module TGD {
         // Mouse Movement
         private prevX:number = -1;
         private prevY:number = -1;
+        private vx:number = 0;
+        private vy:number = 0;
+        private freefallTimer:number = 0;
+
+        private static WIDTH:number = 150;
+        private static HEIGHT:number = 150;
 
         /**
          * Creates a new Tommy manager.
@@ -163,19 +169,84 @@ module TGD {
 
         public stopDrag() {
             $("body").off("mousemove");
+
+            // Reset prevX and prevY so we don't have inconsistent values on the next drag
             this.prevX = -1;
             this.prevY = -1;
-            this.idle();
+
+            // Enter freefall
+            this.vx /= 2;
+            this.vy /= 2;
+            clearInterval(this.freefallTimer);
+            this.freefallTimer = setInterval(() => { this.onFreefall(); }, 33);
         }
 
         private onDrag(e:any) {
             if (this.prevX > 0 && this.prevY > 0) {
-                TGD.Tommy.setX(TGD.Tommy.getX() + (e.pageX - this.prevX));
-                TGD.Tommy.setY(TGD.Tommy.getY() + (e.pageY - this.prevY));    
+                this.vx = e.pageX - this.prevX;
+                this.vy = e.pageY - this.prevY;
+                Tommy.setX(Tommy.getX() + this.vx);
+                Tommy.setY(Tommy.getYAbsolute() + this.vy);
             }
-            
             this.prevX = e.pageX;
             this.prevY = e.pageY;
+        }
+
+        private onFreefall() {
+            var $tgd = $("#tgd");
+            
+            var x:number = Tommy.getX();
+            var y:number = Tommy.getY();
+            var friction:number = 0.8;
+            var sideFriction:number = 0.6;
+
+            // Take care of gravity
+            var gravity:number = 8;
+            this.vy += gravity;
+            if (this.vy > 40) {
+                this.vy = 40;
+            }
+
+            // Increment to our new position
+            x += this.vx;
+            y += this.vy;
+        
+            // Do bounds checking
+            var screenWidth = $(window).width();
+            var screenHeight = $(window).height();
+            if (x + Tommy.WIDTH > screenWidth) {
+                TGD.Util.log("bounce right");
+                x = screenWidth - Tommy.WIDTH;
+                this.vx *= -friction;
+            }
+            else if (x < 0) {
+                TGD.Util.log("bounce left");
+                x = 0;
+                this.vx *= -friction;
+            }
+            if (y + Tommy.HEIGHT > screenHeight) {
+                TGD.Util.log("bounce bottom: y: " + y + "  height: " + screenHeight);
+                y = screenHeight - Tommy.HEIGHT;
+                this.vy *= -friction;
+                this.vx *= sideFriction;
+
+            }
+            else if (y < 0) {
+                TGD.Util.log("bounce top: y: " + y + "  height: " + screenHeight);
+                y = 0;
+                this.vy *= -friction;
+                this.vx *= sideFriction;
+            }
+
+            // Check if it's settled
+            if (Math.abs(this.vx) < 0.25 && Math.abs(this.vy) < 0.25 && screenHeight - (y + Tommy.HEIGHT) < 5) {
+                y = screenHeight - Tommy.HEIGHT;
+                clearInterval(this.freefallTimer);
+            }
+
+            // Update our actual position            
+            Tommy.setX(x);
+            Tommy.setY(y);
         }
 
         // ==========================================
@@ -203,6 +274,10 @@ module TGD {
         }
 
         public static getY():number {
+            return $("#tgd").offset().top - $("body").scrollTop();
+        }
+
+        public static getYAbsolute():number {
             return $("#tgd").offset().top;
         }
 
