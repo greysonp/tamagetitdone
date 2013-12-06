@@ -23,13 +23,13 @@
             var dist = TGD.Util.getDistanceFromCorner();
             this.$tgd.animate({
                 top: TGD.Tommy.getTopOffset(),
-                left: 0
+                left: TGD.Main.restingX
             }, dist, "swing", () => {
                 // Make sure it's at the bottom - we may have scrolled
                 // while Tommy was animating
                 this.$tgd.css({
                     top: TGD.Tommy.getTopOffset(),
-                    left: 0
+                    left: TGD.Main.restingX
                 });
             });
             this.timeoutId = setTimeout(function() {

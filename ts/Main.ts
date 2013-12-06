@@ -11,6 +11,7 @@ module TGD {
         // Graphics stuff
         public static stage:createjs.Stage;
         public static FPS:number = 30;
+        public static restingX:number = 0;
 
         // State variables
         private page:TGD.WebPage;
@@ -36,12 +37,17 @@ module TGD {
             createjs.Ticker.useRAF = true;
 
             // Initialize our modules
-            this.qTable = new TGD.QTable(() => {
-                this.tommy = new TGD.Tommy(() => {
-                    this.page = new TGD.WebPage(document.domain, () => {
-                        this.init();
-                    });
-                });    
+            var storage:TGD.IStorage = new TGD.ChromeStorage();
+            storage.get("restingX", (data) => {
+                if (data.restingX) Main.restingX = data.restingX;
+                TGD.Util.log(data);
+                this.qTable = new TGD.QTable(() => {
+                    this.tommy = new TGD.Tommy(() => {
+                        this.page = new TGD.WebPage(document.domain, () => {
+                            this.init();
+                        });
+                    });    
+                });
             });
         }
 

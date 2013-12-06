@@ -46,7 +46,8 @@ module TGD {
             this.listenerMap = {};
 
             var $tgd = $('#tgd');
-            $tgd.css("top", Tommy.getTopOffset());
+            Tommy.setY(Tommy.getTopOffset());
+            Tommy.setX(TGD.Main.restingX);
 
             // Track mouse position
             $(document).mousemove((e) => {
@@ -196,9 +197,11 @@ module TGD {
             var $tgd = $("#tgd");
             
             var x:number = Tommy.getX();
-            var y:number = Tommy.getY();
+            var y:number = Tommy.getYAbsolute();
             var friction:number = 0.8;
             var sideFriction:number = 0.6;
+            var screenWidth = $(window).width();
+            var screenHeight = $(window).height() + $("body").scrollTop();
 
             // Take care of gravity
             var gravity:number = 8;
@@ -210,38 +213,35 @@ module TGD {
             // Increment to our new position
             x += this.vx;
             y += this.vy;
-        
-            // Do bounds checking
-            var screenWidth = $(window).width();
-            var screenHeight = $(window).height();
+
+            // Do bounds checking            
             if (x + Tommy.WIDTH > screenWidth) {
-                TGD.Util.log("bounce right");
                 x = screenWidth - Tommy.WIDTH;
                 this.vx *= -friction;
             }
             else if (x < 0) {
-                TGD.Util.log("bounce left");
                 x = 0;
                 this.vx *= -friction;
             }
             if (y + Tommy.HEIGHT > screenHeight) {
-                TGD.Util.log("bounce bottom: y: " + y + "  height: " + screenHeight);
                 y = screenHeight - Tommy.HEIGHT;
                 this.vy *= -friction;
                 this.vx *= sideFriction;
 
             }
-            else if (y < 0) {
-                TGD.Util.log("bounce top: y: " + y + "  height: " + screenHeight);
-                y = 0;
+            else if (y < $("body").scrollTop()) {
+                y = $("body").scrollTop();
                 this.vy *= -friction;
                 this.vx *= sideFriction;
             }
 
             // Check if it's settled
-            if (Math.abs(this.vx) < 0.25 && Math.abs(this.vy) < 0.25 && screenHeight - (y + Tommy.HEIGHT) < 5) {
+            if (Math.abs(this.vx) < 1 && Math.abs(this.vy) < 4 && screenHeight - (y + Tommy.HEIGHT) < 5) {
                 y = screenHeight - Tommy.HEIGHT;
                 clearInterval(this.freefallTimer);
+                var storage:TGD.IStorage = new TGD.ChromeStorage();
+                TGD.Main.restingX = x;
+                storage.set({"restingX": x});
             }
 
             // Update our actual position            
