@@ -19,10 +19,10 @@ module TGD {
 
         public static buildFromString(s:string) {
             var vals = s.split("|");
-            var f = State.F_RANGE[vals[0]];
-            var p = State.P_RANGE[vals[1]];
-            var w = State.W_RANGE[vals[2]];
-            return new State(f, p, w);
+            // var f = State.F_RANGE[vals[0]];
+            // var p = State.P_RANGE[vals[1]];
+            // var w = State.W_RANGE[vals[2]];
+            return new State(parseFloat(vals[0]), parseFloat(vals[1]), parseFloat(vals[2]));
         }
 
         /**
@@ -40,10 +40,11 @@ module TGD {
         }
 
         public toString():string {
-            var f2 = this.getBucketValue(this.f, State.F_RANGE);
-            var p2 = this.getBucketValue(this.p, State.P_RANGE);
-            var w2 = this.getBucketValue(this.w, State.W_RANGE);
-            return f2 + "|" + p2 + "|" + w2;
+            // var f2 = this.getBucketValue(this.f, State.F_RANGE);
+            // var p2 = this.getBucketValue(this.p, State.P_RANGE);
+            // var w2 = this.getBucketValue(this.w, State.W_RANGE);
+            // return f2 + "|" + p2 + "|" + w2;
+            return this.f + "|" + this.p + "|" + this.w;
         }
     }
 }

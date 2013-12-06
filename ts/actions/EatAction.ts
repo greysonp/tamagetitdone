@@ -85,7 +85,6 @@
         }
 
         private nom(target, flipped:boolean, timePerChomp:number, callback:()=>void):void {
-            TGD.Util.log("timePerChomp: " + timePerChomp);
             var newText:string = target.text().substring(1);
             if (flipped) {
                 newText = target.text().substring(0, target.text().length - 1);

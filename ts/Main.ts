@@ -77,6 +77,7 @@ module TGD {
             this.getCurrentState((state) => {
                 this.lastAction.callback(1, state);
                 this.lastAction = this.qTable.getAction(state);
+                TGD.Util.log(this.lastAction.actionCode);
                 this.tommy.performAction(this.lastAction.actionCode);
             });
         }
@@ -93,6 +94,7 @@ module TGD {
             storage.get("workLevel", (data:Object) => {
                 workLevel = data["workLevel"];
                 prodLevel = this.page.getProductivityRating();
+                TGD.Util.log("prodLevel: " + prodLevel + "   workLevel: " + workLevel);
                 var state = new TGD.State(0.5, prodLevel, workLevel);
                 // TGD.Util.log(state);
                 callback(state);

@@ -20,8 +20,8 @@ module TGD {
                 // else {
                 //     this.table = data[QTable.STORAGE_KEY];
                 // }
-                this.initTable();
-                TGD.Util.log(this.table);
+                // this.initTable();
+                // TGD.Util.log(this.table);
                 callback();
             });
         }
@@ -48,7 +48,7 @@ module TGD {
             var key = state.toString();
             var actionCode:number = this.chooseAction(key);
             var cb = (val:number, state2:TGD.State) => {
-                this.reward(key, actionCode, val, state2);
+                // this.reward(key, actionCode, val, state2);
             }
             return new TGD.ActionInfo(actionCode, cb);
         }
@@ -117,6 +117,7 @@ module TGD {
             //     return maxIndex;
 
             var state:TGD.State = TGD.State.buildFromString(stateKey);
+            console.log("state: " + state.p + "  " + state.w);
             if (state.w > 0.75 && state.p < 0.5) {
                 return TGD.Action.EAT;
             }

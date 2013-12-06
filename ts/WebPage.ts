@@ -35,7 +35,7 @@ module TGD {
                     TGD.Util.log("Initializing data for the first time.")
                     results = {
                         "domains": {},
-                        "categories": {}
+                        "categories": WebPage.generateDefaultCategories()
                     }
                 }
                 // Otherwise, grab the data inside the root key
@@ -51,7 +51,7 @@ module TGD {
                         if (!error) {
                             results["domains"][domain] = {
                                 "categories": categories,
-                                "p": 0.5
+                                "p": 0.6
                             }
                             // Make sure that if there are categories that haven't been accounted
                             // for yet that they get added in
@@ -59,6 +59,7 @@ module TGD {
                         }
                         this.storedData = results;
                         this.storeAllData();
+                        callback();
                     });
                 }
                 // Otherwise, we can just keep reference to the data we already had
@@ -123,14 +124,39 @@ module TGD {
             for (var i = 0; i < categories.length; i++) {
                 sum += this.storedData["categories"][categories[i]]["p"];
             }
-            var avgCat = sum / categories.length;
-            return (p + avgCat) / 2;
+
+            if (categories.length > 0) {
+                var avgCat = sum / categories.length;
+                return (p + avgCat) / 2;
+            }
+            return p;
         }
 
         public taskCompleted(isDirect:boolean):void {
             // Make sure to get updated data before altering and storing new data.
             // We could have completed tasks in other tabs in the meantime.
 
+        }
+
+        public static generateDefaultCategories():Object {
+            return {
+                "Blogs": { "p": 0.6 },
+                "Business Services": { "p": 0.8 },
+                "Content Delivery Networks": { "p": 0.6 },
+                "Educational Institutions": { "p": 1.0 },
+                "File Storage": { "p": 1.0 },
+                "Forums/Message boards": { "p": 0.7 },
+                "Games": { "p": 0.1 },
+                "Humor": { "p": 0.1 },
+                "Jobs/Employment": { "p": 1.0 },
+                "News/Media": { "p": 0.6 },
+                "Photo Sharing": { "p": 0.6 },
+                "Research/Reference": { "p": 1.0 },
+                "Search Engines": { "p": 0.9 },
+                "Social Networking": { "p": 0.1 },
+                "Software/Technology": { "p": 0.6 },
+                "Video Sharing": { "p": 0.3 }
+            };
         }
     }
 }
