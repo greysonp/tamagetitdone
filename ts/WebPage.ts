@@ -51,7 +51,7 @@ module TGD {
                         if (!error) {
                             results["domains"][domain] = {
                                 "categories": categories,
-                                "p": 0.6
+                                "p": 0.5
                             }
                             // Make sure that if there are categories that haven't been accounted
                             // for yet that they get added in
@@ -140,21 +140,39 @@ module TGD {
 
         public static generateDefaultCategories():Object {
             return {
+                "Academic Fraud": { "p": 0.0 },
+                "Adult Themes": { "p": 0.4 },
+                "Alcohol": { "p": 0.5 },
+                "Anime/Manga/Webcomic": { "p": 0.1 },
+                "Automotive": { "p": 0.2 },
                 "Blogs": { "p": 0.6 },
                 "Business Services": { "p": 0.8 },
                 "Content Delivery Networks": { "p": 0.6 },
+                "Dating": { "p": 0.9 },
                 "Educational Institutions": { "p": 1.0 },
                 "File Storage": { "p": 1.0 },
                 "Forums/Message boards": { "p": 0.7 },
                 "Games": { "p": 0.1 },
+                "Government": { "p": 1.0 },
                 "Humor": { "p": 0.1 },
                 "Jobs/Employment": { "p": 1.0 },
+                "Lingerie/Bikini": { "p": 0.1 },
+                "Movies": { "p": 0.1 },
+                "Music": { "p": 0.2 },
                 "News/Media": { "p": 0.6 },
+                "Non-Profits": { "p": 1.0 },
+                "Nudity": { "p": 0.1 },
+                "P2P/File sharing": { "p": 0.1 },
                 "Photo Sharing": { "p": 0.6 },
+                "Pornography": { "p": 0.0 },
+                "Politics": { "p": 1.0 },
                 "Research/Reference": { "p": 1.0 },
                 "Search Engines": { "p": 0.9 },
+                "Sexuality": { "p": 0.1 },
                 "Social Networking": { "p": 0.1 },
                 "Software/Technology": { "p": 0.6 },
+                "Sports": { "p": 0.2 },
+                "Tasteless": { "p": 0.0 },
                 "Video Sharing": { "p": 0.3 }
             };
         }
