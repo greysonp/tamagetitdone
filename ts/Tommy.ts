@@ -242,6 +242,7 @@ module TGD {
                 var storage:TGD.IStorage = new TGD.ChromeStorage();
                 TGD.Main.restingX = x;
                 storage.set({"restingX": x});
+                this.idle();
             }
 
             // Update our actual position            

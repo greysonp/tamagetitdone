@@ -20,18 +20,20 @@
 
         public run(callback:()=>void, properties?:Object) {
             this.animation.idle();
-            var dist = TGD.Util.getDistanceFromCorner();
-            this.$tgd.animate({
+            var dist = TGD.Util.getDistanceFromRest();
+            if (dist > 0) {
+                this.$tgd.animate({
                 top: TGD.Tommy.getTopOffset(),
                 left: TGD.Main.restingX
-            }, dist, "swing", () => {
-                // Make sure it's at the bottom - we may have scrolled
-                // while Tommy was animating
-                this.$tgd.css({
-                    top: TGD.Tommy.getTopOffset(),
-                    left: TGD.Main.restingX
-                });
-            });
+                }, dist, "swing", () => {
+                    // Make sure it's at the bottom - we may have scrolled
+                    // while Tommy was animating
+                    this.$tgd.css({
+                        top: TGD.Tommy.getTopOffset(),
+                        left: TGD.Main.restingX
+                    });
+                });    
+            }
             this.timeoutId = setTimeout(function() {
                 if (callback) 
                     callback();

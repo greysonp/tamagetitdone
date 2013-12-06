@@ -27,13 +27,13 @@ module TGD {
                 return null;
         }
 
-        public static getDistanceFromCorner() {
+        public static getDistanceFromRest() {
             var $tgd = $("#tgd");
 
             var x1 = $tgd.offset().left;
             var y1 = $tgd.offset().top;
 
-            var x2 = 0;
+            var x2 = TGD.Main.restingX;
             var y2 = TGD.Tommy.getTopOffset();
 
             var xDiff = x2 - x1;
