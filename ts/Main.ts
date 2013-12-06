@@ -49,22 +49,29 @@ module TGD {
             this.getCurrentState((state) => {
                 this.lastAction = this.qTable.getAction(state);
                 this.tommy.performAction(this.lastAction.actionCode);
-                this.tommy.addEventListener(TGD.Tommy.ACTIONS_DONE, () => {
-                    this.step();
+                this.initEvents();
+            });
+        }
+
+        private initEvents() {
+            this.tommy.addEventListener(TGD.Tommy.ACTIONS_DONE, () => {
+                this.step();
+            });
+            
+            this.tommy.addEventListener(TGD.Tommy.MOUSE_DOWN, () => {
+                this.tommy.startDrag();
+                $("body").on("mouseup", () => {
+                    this.tommy.stopDrag();
+                    $("body").off("mouseup");
                 });
             });
-            // this.tommy.performAction(this.lastAction["actionCode"]);
-            // this.tommy.eat();
-            // this.tommy.idle();
         }
 
         private step():void {
             this.getCurrentState((state) => {
-                // console.log(state);
                 this.lastAction.callback(1, state);
                 this.lastAction = this.qTable.getAction(state);
                 this.tommy.performAction(this.lastAction.actionCode);
-                // console.log("Chose action: " + this.lastAction.actionCode);
             });
         }
 
@@ -81,7 +88,7 @@ module TGD {
                 workLevel = data["workLevel"];
                 prodLevel = this.page.getProductivityRating();
                 var state = new TGD.State(0.5, prodLevel, workLevel);
-                console.log(state);
+                // TGD.Util.log(state);
                 callback(state);
             });
         }

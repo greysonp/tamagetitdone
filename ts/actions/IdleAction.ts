@@ -4,6 +4,7 @@
         private $tgd;
         private time:number;
         private animation:TGD.Animation;
+        private timeoutId:number;
 
         constructor(animation:TGD.Animation, properties?:Object) {
             super(animation, properties);
@@ -12,7 +13,7 @@
             else
                 this.time = 1000;
             this.animation = animation;
-            this.$tgd = $('#tgd');
+            this.$tgd = $("#tgd");
 
             this.actionCode = Action.IDLE;
         }
@@ -31,10 +32,17 @@
                     left: 0
                 });
             });
-            setTimeout(function() {
+            this.timeoutId = setTimeout(function() {
                 if (callback) 
                     callback();
             }, this.time);
+        }
+
+        public stop() {
+            super.stop();
+            if (this.timeoutId)
+                clearTimeout(this.timeoutId);
+
         }
     }
 }

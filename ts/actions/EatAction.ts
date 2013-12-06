@@ -1,4 +1,4 @@
-module TGD {
+ module TGD {
     export class EatAction extends Action {
 
         private mouseX:number;
@@ -66,7 +66,7 @@ module TGD {
 
             // Animate it
             var eatTime:number = 500;
-            TGD.Tommy.setPosition();
+            TGD.Tommy.updateCSSPosition();
             this.$tgd.animate({
                 left: x,
                 top: y
@@ -85,7 +85,7 @@ module TGD {
         }
 
         private nom(target, flipped:boolean, timePerChomp:number, callback:()=>void):void {
-            console.log("timePerChomp: " + timePerChomp);
+            TGD.Util.log("timePerChomp: " + timePerChomp);
             var newText:string = target.text().substring(1);
             if (flipped) {
                 newText = target.text().substring(0, target.text().length - 1);

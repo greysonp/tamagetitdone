@@ -27,12 +27,12 @@ module TGD {
             // Check to see if we have data on this domain
             this.storage = new TGD.ChromeStorage();
             this.storage.get(WebPage.STORAGE_KEY, (results) => {
-                console.log("Pulled from storage.");
-                console.log(results);          
+                // TGD.Util.log("Pulled from storage.");
+                TGD.Util.log(results);          
 
                 // If this is the first domain we've ever visited, initialize the data
                 if (Object.keys(results).length === 0) {
-                    console.log("Initializing data for the first time.")
+                    TGD.Util.log("Initializing data for the first time.")
                     results = {
                         "domains": {},
                         "categories": {}
@@ -46,7 +46,7 @@ module TGD {
                 // If we haven't visited this domain before, we have to grab the categories
                 // and give it an initial p value (0.5, just to stay neutral).
                 if (!results["domains"][domain]) {
-                    console.log("Never visited. Retrieving categories.");                    
+                    TGD.Util.log("Never visited. Retrieving categories.");                    
                     this.retrieveCategories((error, categories) => {
                         if (!error) {
                             results["domains"][domain] = {
@@ -63,7 +63,7 @@ module TGD {
                 }
                 // Otherwise, we can just keep reference to the data we already had
                 else {
-                    console.log("Visited before. Can use the data we already have.");
+                    TGD.Util.log("Visited before. Can use the data we already have.");
                     this.storedData = results;
                     callback();
                 }
@@ -102,8 +102,8 @@ module TGD {
          * Updates local storage with the data item we have stored.
          */
         private storeAllData():void {
-            console.log("Storing data.");
-            console.log(this.storedData);
+            TGD.Util.log("Storing data.");
+            TGD.Util.log(this.storedData);
             var obj = {};
             obj[WebPage.STORAGE_KEY] = this.storedData;
             this.storage.set(obj);

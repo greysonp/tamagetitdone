@@ -21,7 +21,7 @@ module TGD {
                 //     this.table = data[QTable.STORAGE_KEY];
                 // }
                 this.initTable();
-                console.log(this.table);
+                TGD.Util.log(this.table);
                 callback();
             });
         }

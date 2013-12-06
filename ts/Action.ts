@@ -14,7 +14,8 @@ module TGD {
         }
 
         public stop() {
-            $('#tgd').stop();
+            $('#tgd').stop(true);
+            console.log("stopped");
         }
     }
 }

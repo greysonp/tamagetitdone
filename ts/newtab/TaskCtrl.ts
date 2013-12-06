@@ -79,7 +79,7 @@ function TaskCtrl($scope) {
         // Create a new task and add it to the list
         var tags = parseTags($text.val());
         var date = parseDate($text.val());
-        console.log(date);
+        TGD.Util.log(date);
         var task:NewTab.Task = new NewTab.Task(getTaggedString($text.val()), tags, date);
         $scope.tasks.unshift(task);
         $scope.tasks.sort(taskSort);
@@ -178,7 +178,7 @@ function TaskCtrl($scope) {
 
         chrome.storage.local.set({"tasks":stored});  
         chrome.storage.local.set({"workLevel": workLevel});
-        console.log("workLevel: " + workLevel);
+        TGD.Util.log("workLevel: " + workLevel);
     }
 
     function getTaskValue(task:NewTab.Task):number {

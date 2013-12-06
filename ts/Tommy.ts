@@ -16,6 +16,13 @@ module TGD {
 
         // Event Constants
         public static ACTIONS_DONE:string = "actionsdone";
+        public static CLICK:string = "click";
+        public static MOUSE_DOWN:string = "mousedown";
+        public static MOUSE_UP:string = "mouseup";
+
+        // Mouse Movement
+        private prevX:number = -1;
+        private prevY:number = -1;
 
         /**
          * Creates a new Tommy manager.
@@ -51,6 +58,17 @@ module TGD {
             $(window).resize(() => {
                 if (!this.isActive())
                     $tgd.css("top", Tommy.getTopOffset());
+            });
+
+            // Manage mouse clicks
+            $tgd.click(() => {
+                this.trigger(Tommy.CLICK);
+            });
+            $tgd.mousedown(() => {
+                this.trigger(Tommy.MOUSE_DOWN);
+            });
+            $tgd.mouseup(() => {
+                this.trigger(Tommy.MOUSE_UP);
             });
             callback();
         }
@@ -135,16 +153,57 @@ module TGD {
             }
         }
 
+        public startDrag() {
+            $("body").on("mousemove", (e) => { this.onDrag(e); });
+            if (this.isActive()) {
+                this.actionList[0].stop();
+                this.actionList = [];    
+            }
+        }
+
+        public stopDrag() {
+            $("body").off("mousemove");
+            this.prevX = -1;
+            this.prevY = -1;
+            this.idle();
+        }
+
+        private onDrag(e:any) {
+            if (this.prevX > 0 && this.prevY > 0) {
+                TGD.Tommy.setX(TGD.Tommy.getX() + (e.pageX - this.prevX));
+                TGD.Tommy.setY(TGD.Tommy.getY() + (e.pageY - this.prevY));    
+            }
+            
+            this.prevX = e.pageX;
+            this.prevY = e.pageY;
+        }
+
         // ==========================================
         // STATIC METHODS
         // ==========================================
 
-        public static setPosition():void {
-            var $tgd = $('#tgd');
+        public static updateCSSPosition():void {
+            var $tgd = $("#tgd");
             var x:number = $tgd.offset().left;
             var y:number = $tgd.offset().top;
 
             $tgd.css("left", x).css("top", y);
+        }
+
+        public static setX(x:number):void {
+            $("#tgd").css("left", x);
+        }
+
+        public static setY(y:number):void {
+            $("#tgd").css("top", y);
+        }
+
+        public static getX():number {
+            return $("#tgd").offset().left;
+        }
+
+        public static getY():number {
+            return $("#tgd").offset().top;
         }
 
         public static getTopOffset():number {
