@@ -11,6 +11,7 @@
         <script src="js/libs/jquery.highlight.js"></script>
         <script src="js/libs/sugar.min.js"></script>
         <script src="js/newtab.js"></script>
+        <script src="js/popup.js"></script>
     </head>
     <body style="width: 300px; height: 500px">
         <div class="grass-tile"></div>
@@ -63,6 +64,11 @@
                         <div class="cell-center"><input type="text" value="{{task.title}}" ng-init="focusInput()" ng-blur="finishTaskEdit($event, task)" ng-keydown="finishTaskEdit($event, task)"/></div>
                     </li>
                 </ul>
+            </div>
+            <div class="add-wrapper">
+                <div class="cell-center">
+                    <span id="js-productive-btn"><i class="icon-shield"></i> Mark Site as Productive</span>
+                </div>
             </div>
         </div>
 

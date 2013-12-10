@@ -22,6 +22,9 @@ module TGD {
             else if (domain.indexOf("https://") > -1) {
                 domain = domain.substring(8);
             }
+            if (domain.indexOf("www.") > -1) {
+                domain = domain.substring(4);
+            }
             this.domain = domain;
 
             // Check to see if we have data on this domain

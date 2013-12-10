@@ -92,12 +92,13 @@ module TGD {
             var funLevel:number = 0;
             var prodLevel:number = 0;
             storage.get("workLevel", (data:Object) => {
-                workLevel = data["workLevel"];
-                prodLevel = this.page.getProductivityRating();
-                TGD.Util.log("prodLevel: " + prodLevel + "   workLevel: " + workLevel);
-                var state = new TGD.State(0.5, prodLevel, workLevel);
-                // TGD.Util.log(state);
-                callback(state);
+                this.page = new TGD.WebPage(document.domain, () => {
+                    workLevel = data["workLevel"];
+                    prodLevel = this.page.getProductivityRating();
+                    var state = new TGD.State(0.5, prodLevel, workLevel);
+                    // TGD.Util.log(state);
+                    callback(state);
+                });        
             });
         }
 
