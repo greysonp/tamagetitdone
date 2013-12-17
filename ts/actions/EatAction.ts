@@ -23,6 +23,8 @@
                 this.mouseY = properties["mouseY"];
             }
 
+            TGD.Notification.info("Hello, world!");
+
             // Grab the closest item and make it unclickable
             // if it's a link
             var item = TGD.Util.getClosestItem(this.mouseX, this.mouseY);

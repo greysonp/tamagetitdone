@@ -30,6 +30,11 @@
         "js/libs/createjs.min.js",
         "js/content_script.js"
       ],
+
+      "css": [
+        "css/content_script.css"
+      ],
+      
       "run_at": "document_end"
     }
   ],

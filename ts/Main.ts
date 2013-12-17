@@ -21,7 +21,7 @@ module TGD {
 
         // AI stuff
         private qTable:TGD.QTable;
-        private lastAction:TGD.ActionInfo;
+        public static lastAction:TGD.ActionInfo;
 
         constructor() {
             // Add Tommy to the stage
@@ -96,7 +96,6 @@ module TGD {
                     workLevel = data["workLevel"];
                     prodLevel = this.page.getProductivityRating();
                     var state = new TGD.State(0.5, prodLevel, workLevel);
-                    // TGD.Util.log(state);
                     callback(state);
                 });        
             });
@@ -105,7 +104,6 @@ module TGD {
         public tick():void {
             Main.stage.update();
         }
-
 
         private contains(a, obj):boolean {
             for (var i = 0; i < a.length; i++)

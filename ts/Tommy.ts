@@ -45,7 +45,7 @@ module TGD {
             this.actionList = [];
             this.listenerMap = {};
 
-            var $tgd = $('#tgd');
+            var $tgd = $("#tgd");
             Tommy.setY(Tommy.getTopOffset());
             Tommy.setX(TGD.Main.restingX);
 
@@ -57,7 +57,7 @@ module TGD {
 
             // Reposition on scroll if not moving
             $(document).scroll(() => {
-                if (this.actionList[0].actionCode === TGD.Action.IDLE && !$tgd.is(':animated'))
+                if (this.actionList[0].actionCode === TGD.Action.IDLE && !$tgd.is(":animated"))
                     $tgd.css("top", Tommy.getTopOffset());
             });
 
@@ -121,7 +121,7 @@ module TGD {
             if (this.actionList.length > 0) {
                 this.actionList[0].run(() => {
                     this.actionList.shift();
-                    this.nextAction();    
+                    this.nextAction();
                 }, {
                     "mouseX": this.mouseX,
                     "mouseY": this.mouseY    
