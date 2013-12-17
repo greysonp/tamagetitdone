@@ -13,6 +13,7 @@ module TGD {
         // List of actions
         private actionList:TGD.Action[];
         private listenerMap:Object;
+        private lastAction:TGD.Action;
 
         // Event Constants
         public static ACTIONS_DONE:string = "actionsdone";
@@ -57,7 +58,7 @@ module TGD {
 
             // Reposition on scroll if not moving
             $(document).scroll(() => {
-                if (this.actionList[0].actionCode === TGD.Action.IDLE && !$tgd.is(":animated"))
+                if (this.actionList[0] && this.actionList[0].actionCode === TGD.Action.IDLE && !$tgd.is(":animated"))
                     $tgd.css("top", Tommy.getTopOffset());
             });
 
@@ -96,9 +97,11 @@ module TGD {
         }
         
         public eat() {
+            console.log(this.lastAction);
             var action:TGD.EatAction = new TGD.EatAction(this.animation, {
                 "mouseX": this.mouseX,
-                "mouseY": this.mouseY
+                "mouseY": this.mouseY,
+                "showAlert": this.lastAction ? (this.lastAction.actionCode !== TGD.Action.EAT) : true
             }); 
 
             this.actionList.push(action);
@@ -119,6 +122,7 @@ module TGD {
         // ==========================================
         private nextAction() {
             if (this.actionList.length > 0) {
+                this.lastAction = this.actionList[0];
                 this.actionList[0].run(() => {
                     this.actionList.shift();
                     this.nextAction();

@@ -14,14 +14,14 @@ module TGD {
         public static restingX:number = 0;
 
         // State variables
-        private page:TGD.WebPage;
+        public static page:TGD.WebPage;
 
         // References to important objects
         private tommy:TGD.Tommy;
 
         // AI stuff
         private qTable:TGD.QTable;
-        public static lastAction:TGD.ActionInfo;
+        private lastAction:TGD.ActionInfo;
 
         constructor() {
             // Add Tommy to the stage
@@ -43,7 +43,7 @@ module TGD {
                 TGD.Util.log(data);
                 this.qTable = new TGD.QTable(() => {
                     this.tommy = new TGD.Tommy(() => {
-                        this.page = new TGD.WebPage(document.domain, () => {
+                        Main.page = new TGD.WebPage(document.domain, () => {
                             this.init();
                         });
                     });    
@@ -92,9 +92,9 @@ module TGD {
             var funLevel:number = 0;
             var prodLevel:number = 0;
             storage.get("workLevel", (data:Object) => {
-                this.page = new TGD.WebPage(document.domain, () => {
+                Main.page = new TGD.WebPage(document.domain, () => {
                     workLevel = data["workLevel"];
-                    prodLevel = this.page.getProductivityRating();
+                    prodLevel = Main.page.getProductivityRating();
                     var state = new TGD.State(0.5, prodLevel, workLevel);
                     callback(state);
                 });        

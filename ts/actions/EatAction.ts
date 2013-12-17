@@ -3,6 +3,7 @@
 
         private mouseX:number;
         private mouseY:number;
+        private showAlert:boolean;
         private $tgd;
 
         private animation:TGD.Animation;
@@ -12,7 +13,8 @@
             this.animation = animation;
             this.mouseX = properties["mouseX"];
             this.mouseY = properties["mouseY"];
-            this.$tgd = $('#tgd');
+            this.showAlert = properties["showAlert"];
+            this.$tgd = $("#tgd");
 
             this.actionCode = Action.EAT;
         }
@@ -22,8 +24,6 @@
                 this.mouseX = properties["mouseX"];
                 this.mouseY = properties["mouseY"];
             }
-
-            TGD.Notification.info("Hello, world!");
 
             // Grab the closest item and make it unclickable
             // if it's a link
@@ -36,6 +36,16 @@
                 this.actionCode = Action.IDLE;
                 action.run(callback);
                 return;
+            }
+
+            // Show an alert with the most important task due if we're supposed to
+            if (this.showAlert) {
+                this.getMostImportantTask((task:any) => {
+                    if (task)
+                        TGD.Notification.alert("You should be working on '" + task.title + "'!");
+                    else
+                        TGD.Notification.alert("Get back to work!");
+                });
             }
 
             // If no item is close to the cursor, simply return
@@ -79,7 +89,7 @@
                     this.nom(item, flipped, Math.max(750/item.text().length, 25), callback);
                 }
                 else {
-                    item.css('display', 'none');
+                    item.css("display", "none");
                     if (callback != null)
                         callback();
                 }
@@ -90,7 +100,7 @@
             var newText:string = target.text().substring(1);
             if (flipped) {
                 newText = target.text().substring(0, target.text().length - 1);
-                this.$tgd.css('left', target.offset().left + target.width());
+                this.$tgd.css("left", target.offset().left + target.width());
             }
             target.text(newText);
             if (newText.length > 0) {
@@ -99,10 +109,21 @@
                 }, timePerChomp);
             }
             else {
-                target.css('display', 'none');
+                target.css("display", "none");
                 if (callback != null)
                     callback();
             }
+        }
+
+        private getMostImportantTask(callback:(task:any)=>void):void {
+            var storage:TGD.IStorage = new TGD.ChromeStorage();
+            storage.get("tasks", (data) => {
+                if (data["tasks"] && data["tasks"].length > 0) {
+                    callback(data["tasks"][0]);
+                    return;
+                }
+                callback(null);
+            });
         }
     }
 }
