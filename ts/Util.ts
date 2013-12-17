@@ -1,7 +1,7 @@
 module TGD {
     export class Util {
         public static log(text:any):void {
-            console.info(text);
+            // console.info(text);
         }
 
         public static getClosestItem(mouseX:number, mouseY:number, minDist:number = 250) {

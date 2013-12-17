@@ -117,7 +117,7 @@ module TGD {
             //     return maxIndex;
 
             var state:TGD.State = TGD.State.buildFromString(stateKey);
-            console.log("state: " + state.p + "  " + state.w);
+            TGD.Util.log("state: " + state.p + "  " + state.w);
             if (state.w > 0.75 && state.p < 0.5) {
                 return TGD.Action.EAT;
             }

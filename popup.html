@@ -13,12 +13,12 @@
         <script src="js/newtab.js"></script>
         <script src="js/popup.js"></script>
     </head>
-    <body style="width: 300px; height: 500px">
+    <body style="width: 300px; height: 550px">
         <div class="grass-tile"></div>
 
         <!-- Center Panel -->
         <div class="panel-center" id="js-panel-center" ng-controller="TaskCtrl" ng-init="init()" ng-cloak>
-            <div class="add-wrapper">
+            <div class="add-wrapper" id="js-top-panel">
                 <div class="cell-side">
                     <i class="icon-plus" ng-click="addTask()"></i>
                 </div>
@@ -34,7 +34,7 @@
                 </div>
             </div>
 
-            <div class="content-scroll">
+            <div class="content-scroll" id="js-scrollview">
                 <!-- Task List -->
                 <ul ng-repeat="task in tasks track by $index">
                     <!-- Complete Task -->
@@ -65,9 +65,10 @@
                     </li>
                 </ul>
             </div>
-            <div class="add-wrapper">
+            <div class="add-wrapper bottom-panel" id="js-bottom-panel">
                 <div class="cell-center">
-                    <span id="js-productive-btn"><i class="icon-shield"></i> Mark Site as Productive</span>
+                    <a href="#" id="js-productive-btn"><i class='icon-bullhorn'></i> Mark Site as adsfasdfUnproductive</a>
+                    <div class="category-list">Categories: <span id="js-categories"></span></div>
                 </div>
             </div>
         </div>
