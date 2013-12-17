@@ -36,12 +36,13 @@ module TGD {
         }
 
         public static showNotification(text:string, duration:number = Notification.DURATION_LONG, style:any = {}):void {
+            $(".tgd-popup").remove();
             $("body").prepend("<div class='tgd-popup'></div>");
             var $popup = $(".tgd-popup");
             $popup.text(text);
             $popup.css(style);
 
-            var topOffset:number = -1 * $popup.height();
+            var topOffset:number = -1 * ($popup.height() + parseInt($popup.css("padding")) * 2);
             $popup.css("top", topOffset + "px");
             $popup.animate({"top": 0}, Notification.TWEEN_TIME, function() {
                 console.log("finished: animate down");
