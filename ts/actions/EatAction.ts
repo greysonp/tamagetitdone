@@ -119,10 +119,17 @@
             var storage:TGD.IStorage = new TGD.ChromeStorage();
             storage.get("tasks", (data) => {
                 if (data["tasks"] && data["tasks"].length > 0) {
-                    callback(data["tasks"][0]);
-                    return;
+                    var i:number = 0;
+                    while (i < data["tasks"].length && data["tasks"][i].isComplete) 
+                        i++;
+                    if (i < data["tasks"].length)
+                        callback(data["tasks"][i]);
+                    else
+                        callback(null);
                 }
-                callback(null);
+                else {
+                    callback(null);
+                }
             });
         }
     }

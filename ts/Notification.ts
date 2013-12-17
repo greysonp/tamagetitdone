@@ -45,11 +45,8 @@ module TGD {
             var topOffset:number = -1 * ($popup.height() + parseInt($popup.css("padding")) * 2);
             $popup.css("top", topOffset + "px");
             $popup.animate({"top": 0}, Notification.TWEEN_TIME, function() {
-                console.log("finished: animate down");
                 setTimeout(function() {
-                    console.log("finished: timeout");
                     $popup.animate({"top": topOffset + "px"}, Notification.TWEEN_TIME, function() {
-                        console.log("finished: animate up");
                         $popup.remove();
                     });
                 }, duration);

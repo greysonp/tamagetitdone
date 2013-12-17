@@ -97,7 +97,6 @@ module TGD {
         }
         
         public eat() {
-            console.log(this.lastAction);
             var action:TGD.EatAction = new TGD.EatAction(this.animation, {
                 "mouseX": this.mouseX,
                 "mouseY": this.mouseY,
