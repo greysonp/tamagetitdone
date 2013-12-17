@@ -14,6 +14,7 @@ module TGD {
         private actionList:TGD.Action[];
         private listenerMap:Object;
         private lastAction:TGD.Action;
+        public static isAsleep:boolean;
 
         // Event Constants
         public static ACTIONS_DONE:string = "actionsdone";
@@ -86,12 +87,16 @@ module TGD {
         // ==========================================
         
         public performAction(actionCode:number) {
+            console.log(actionCode);
             switch(actionCode) {
                 case TGD.Action.IDLE:
                     this.idle();
                     break;
                 case TGD.Action.EAT:
                     this.eat();
+                    break;
+                case TGD.Action.LIGHTS_OUT:
+                    this.lightsOut();
                     break;
             }
         }
@@ -115,6 +120,16 @@ module TGD {
             if (this.actionList.length <= 1)
                 this.nextAction();
         }
+
+        public lightsOut() {
+            var action:TGD.LightsOutAction = new TGD.LightsOutAction(this.animation); 
+            Tommy.isAsleep = true;
+
+            this.actionList.push(action);
+            if (this.actionList.length <= 1)
+                this.nextAction();
+        }
+
 
         // ==========================================
         // ACTION QUEUE

@@ -1,5 +1,5 @@
 module TGD {
-    export class GoToBedAction extends Action {
+    export class LightsOutAction extends Action {
 
         private animation:TGD.Animation;
 
@@ -10,12 +10,12 @@ module TGD {
 
         public run(callback:()=>void, properties?:Object) {
             // Add our cord
-            $("body").append('<img src="' + chrome.extension.getURL("img/cord.png") + '" id="cord" style="position: absolute; top:-200px; left: 65px; z-index: 77777" />');
+            $("body").append('<img src="' + chrome.extension.getURL("img/cord.png") + '" id="cord" style="position: absolute; top:-200px; left: 75px; z-index: 77777" />');
 
             // Cache our jQueries
-            var $body = $('body');
-            var $cord = $('#cord');
-            var $tgd = $('#tgd');
+            var $body = $("body");
+            var $cord = $("#cord");
+            var $tgd = $("#tgd");
 
             // Animate our pet jumping up to grab the cord
             $tgd.animate( { top: 20 }, 750, "swing", function() {
@@ -29,7 +29,7 @@ module TGD {
                         // Wait a little bit for timing purposes
                         setTimeout(function() {
                             // Create our "Go to bed." header
-                            $body.append('<h1 id="bed-header" style="position:fixed; top: 30px; left:140px; font-size:5em; color:white; font-family: sans-serif; opacity:0; z-index:2000">Go to bed.</h1>');
+                            $body.append('<h1 id="bed-header" style="position:fixed; top: 30px; left:140px; font-size:5em; color:white; font-family: sans-serif; opacity:0; z-index:2000">Get some work done, or go to bed.</h1>');
 
                             // Fade it in
                             $("#bed-header").animate({ opacity: 1}, 500);

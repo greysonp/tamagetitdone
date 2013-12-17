@@ -118,7 +118,16 @@ module TGD {
 
             var state:TGD.State = TGD.State.buildFromString(stateKey);
             TGD.Util.log("state: " + state.p + "  " + state.w);
+
+            // Do nothing if asleep
+            if (TGD.Tommy.isAsleep)
+                return TGD.Action.IDLE
+
+            // Give different actions depending on workload
             if (state.w > 0.75 && state.p < 0.5) {
+                if (new Date().getHours() < 4) {
+                    return TGD.Action.LIGHTS_OUT;
+                }
                 return TGD.Action.EAT;
             }
             return TGD.Action.IDLE;
