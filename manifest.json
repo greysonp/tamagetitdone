@@ -3,7 +3,7 @@
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "description": "A productivity-focused digital pet.",
-  "version": "2.0",
+  "version": "1.0",
 
   "icons": {
         "16": "img/icon_small.png",

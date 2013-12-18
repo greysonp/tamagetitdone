@@ -1,3 +1,11 @@
+chrome.storage.local.get("tgdSeenIntro", function(data) {
+    if (!data.tgdSeenIntro) {
+        chrome.tabs.create({ "url": chrome.extension.getURL("intro.html") }, function() {
+            chrome.storage.local.set({ "tgdSeenIntro": true });
+        });
+    }
+})
+
 chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
     // console.log("action: " + request.TGD.action);
     // GET PRODUCTIVITY LEVEL //
