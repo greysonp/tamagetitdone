@@ -1,6 +1,8 @@
 # Tamagetitdone
 Tamagetitdone is a productivity-focused digital pet for your browser. 
-It still in active development and is not yet ready to be released on the Chrome Web Store.
+
+**Now available on the Chrome Webstore!**  
+You can download it [here](https://chrome.google.com/webstore/detail/tamagetitdone/dpmenpfcmobhjhlaiamleljlggmcfmli).
 
 ## Setup
 When getting setup, run ```npm install``` to grab the dependencies (just TypeScript at the moment).
