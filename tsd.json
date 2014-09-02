@@ -1,0 +1,51 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "ts/d/DefinitelyTyped",
+  "bundle": "ts/d/DefinitelyTyped/tsd.d.ts",
+  "installed": {
+    "angularjs/angular.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "chrome/chrome.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "easeljs/easeljs.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "handlebars/handlebars.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "jquery/jquery.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "jqueryui/jqueryui.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "sugar/sugar.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "tweenjs/tweenjs.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "underscore/underscore.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "webrtc/MediaStream.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "createjs/createjs.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "preloadjs/preloadjs.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "soundjs/soundjs.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "createjs-lib/createjs-lib.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    }
+  }
+}

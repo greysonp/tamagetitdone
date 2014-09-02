@@ -1,4 +1,4 @@
-///<reference path="d/DefinitelyTyped/chrome/chrome.d.ts" />
+///<reference path="d/DefinitelyTyped/tsd.d.ts" />
 
 module TGD {
     export class ChromeStorage implements TGD.IStorage {

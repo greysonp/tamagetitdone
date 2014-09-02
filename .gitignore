@@ -8,6 +8,11 @@ css/*.css
 # Node Stuff
 node_modules/
 
+# TypeScript Definitions (Grab using tsd)
+ts/d/
+
 # IDE
 .idea/
 
+# Mac
+.DS_Store

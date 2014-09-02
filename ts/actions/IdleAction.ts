@@ -11,7 +11,7 @@
             if (typeof properties !== "undefined")
                 this.time = properties["time"];
             else
-                this.time = 1000;
+                this.time = 1500;
             this.animation = animation;
             this.$tgd = $("#tgd");
 

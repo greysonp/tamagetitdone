@@ -74,7 +74,7 @@
                 x = item.offset().left + item.width();
                 flipped = true;
             }
-            var y:number = item.offset().top + item.height()/2 - this.$tgd.height()/2 - 30;
+            var y:number = item.offset().top + item.height()/2 - this.$tgd.height()/2 - 17;
 
             // Animate it
             var eatTime:number = 500;

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "typescript": "0.9.1",
-    "stylus": "*"
+    "stylus": "*",
+    "tsd": "*"
   }
 }

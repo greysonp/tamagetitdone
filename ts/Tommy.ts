@@ -1,5 +1,4 @@
-///<reference path="d/DefinitelyTyped/jquery/jquery.d.ts" />
-///<reference path="d/DefinitelyTyped/jqueryui/jqueryui.d.ts" />
+///<reference path="d/DefinitelyTyped/tsd.d.ts" />
 
 module TGD {
     export class Tommy {
@@ -29,8 +28,8 @@ module TGD {
         private vy:number = 0;
         private freefallTimer:number = 0;
 
-        private static WIDTH:number = 150;
-        private static HEIGHT:number = 150;
+        private static WIDTH:number = 100;
+        private static HEIGHT:number = 100;
 
         /**
          * Creates a new Tommy manager.

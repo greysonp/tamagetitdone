@@ -1,8 +1,4 @@
-///<reference path="../d/DefinitelyTyped/jquery/jquery.d.ts" />
-///<reference path="../d/DefinitelyTyped/chrome/chrome.d.ts" />
-///<reference path="../d/DefinitelyTyped/angularjs/angular.d.ts" />
-///<reference path="../d/DefinitelyTyped/underscore/underscore.d.ts" />
-///<reference path="../d/DefinitelyTyped/sugar/sugar.d.ts" />
+///<reference path="../d/DefinitelyTyped/tsd.d.ts" />
 ///<reference path="Task.ts" />
 
 var app = angular.module("newTab", ["ngSanitize"])
@@ -79,7 +75,6 @@ function TaskCtrl($scope) {
         // Create a new task and add it to the list
         var tags = parseTags($text.val());
         var date = parseDate($text.val());
-        TGD.Util.log(date);
         var task:NewTab.Task = new NewTab.Task(getTaggedString($text.val()), tags, date);
         $scope.tasks.unshift(task);
         $scope.tasks.sort(taskSort);
@@ -178,7 +173,6 @@ function TaskCtrl($scope) {
 
         chrome.storage.local.set({"tasks":stored});  
         chrome.storage.local.set({"workLevel": workLevel});
-        TGD.Util.log("workLevel: " + workLevel);
     }
 
     function getTaskValue(task:NewTab.Task):number {
@@ -265,14 +259,14 @@ function TaskCtrl($scope) {
         return text;
     }
 
-    function taskSort(a:NewTab.Task, b:NewTab.Task) {
+    function taskSort(a:NewTab.Task, b:NewTab.Task):number {
         if (!a.date && !b.date)
             return 1;
         if(a.date && !b.date)
             return -1;
         if (b.date && !a.date)
             return 1;
-        return b.date < a.date;
+        return b.date < a.date ? 1 : 0;
     }
 
     function resize():void {

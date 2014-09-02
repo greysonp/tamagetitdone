@@ -1,4 +1,4 @@
-///<reference path="d/DefinitelyTyped/easeljs/easeljs.d.ts" />
+///<reference path="d/DefinitelyTyped/tsd.d.ts" />
 
 module TGD {
     export class Animation {
@@ -8,23 +8,35 @@ module TGD {
 
         constructor(callback:()=>void = null) {
             this.spritesheet = new createjs.SpriteSheet({
-                "animations": {
-                    "idle": {"frames": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]},
-                    "eat": {"frames": [2, 2, 5, 5, 6, 6]},
-                    "run": {"frames": [2, 2, 2, 3, 3, 3, 4, 4, 4]},
-                    "eat_h": {"frames": [7, 7, 8, 8, 9, 9, 9]},
-                    "all": {"frames": [0]}},
-                "images": [chrome.extension.getURL("img/placeholder_anim.png")],
-                "frames": [[0, 0, 256, 256, 0, -3, -19],
-                    [256, 0, 256, 256, 0, -3, -19],
-                    [512, 0, 256, 256, 0, -3, -19],
-                    [768, 0, 256, 256, 0, -3, -19],
-                    [1024, 0, 256, 256, 0, -3, -19],
-                    [1280, 0, 256, 256, 0, -3, -19],
-                    [1536, 0, 256, 256, 0, -3, -19],
-                    [1792, 0, 256, 256, 0, -3, -19],
-                    [0, 256, 256, 256, 0, -3, -19],
-                    [256, 256, 256, 256, 0, -3, -19]]
+                "framerate":24,
+                "images":[chrome.extension.getURL("img/animations.png")],
+                "frames":[
+                    [0, 0, 128, 128, 0, 0, -14],
+                    [128, 0, 128, 128, 0, 0, -14],
+                    [256, 0, 128, 128, 0, 0, -14],
+                    [0, 128, 128, 128, 0, 0, -14],
+                    [128, 128, 128, 128, 0, 0, -14],
+                    [256, 128, 128, 128, 0, 0, -14],
+                    [0, 256, 128, 128, 0, 0, -14],
+                    [128, 256, 128, 128, 0, 0, -14],
+                    [256, 256, 128, 128, 0, 0, -14],
+                    [0, 384, 128, 128, 0, 0, -14],
+                    [128, 384, 128, 128, 0, 0, -14]
+                ],
+                "animations":{
+                    "eating_left": {
+                        "speed": 1, 
+                        "frames": [7, 7, 8, 8, 9, 9, 10, 10]
+                    },
+                    "eating_right": {
+                        "speed": 1, 
+                        "frames": [3, 3, 4, 4, 5, 5, 6, 6]
+                    },
+                    "idle": {
+                        "speed": 1,
+                        "frames": [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1]
+                    }
+                }
             });
             if (!this.spritesheet.complete) {
                 this.spritesheet.addEventListener("complete", () => {
@@ -54,9 +66,9 @@ module TGD {
 
         public eat(flipped:boolean) {
             if (flipped)
-                this.sprite.gotoAndPlay("eat_h");
+                this.sprite.gotoAndPlay("eating_left");
             else
-                this.sprite.gotoAndPlay("eat");
+                this.sprite.gotoAndPlay("eating_right");
         }
 
     }

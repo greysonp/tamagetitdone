@@ -1,5 +1,4 @@
-///<reference path="d/DefinitelyTyped/easeljs/easeljs.d.ts" />
-///<reference path="d/DefinitelyTyped/chrome/chrome.d.ts" />
+///<reference path="d/DefinitelyTyped/tsd.d.ts" />
 ///<reference path="IStorage.ts" />
 ///<reference path="ChromeStorage.ts" />
 ///<reference path="Tommy.ts" />
@@ -25,7 +24,7 @@ module TGD {
 
         constructor() {
             // Add Tommy to the stage
-            $("body").append('<canvas id="tgd" width="150" height="150" style="position: absolute; bottom: 0px; left: 0px; z-index: 55555"></canvas>');
+            $("body").append('<canvas id="tgd" width="100" height="100" style="position: absolute; bottom: 0px; left: 0px; z-index: 55555"></canvas>');
             $("body").append('<div id="bottom-marker" style="position:fixed; bottom:0; background-color:blue"></div>');
 
             // Initialize createjs
