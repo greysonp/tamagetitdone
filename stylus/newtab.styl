@@ -1,7 +1,14 @@
 // =========================================
+// FONT
+// =========================================
+@font-face
+    font-family "DisposableDroidBB"
+    url ("font/DisposableDroidBB.otf") format("opentype")
+
+// =========================================
 // DEFAULTS
 // =========================================
-fontSize = 16px
+fontSize = 18px
 titleHeight = 60px
 listPadding = 10px
 
@@ -9,7 +16,7 @@ listPadding = 10px
 body
     margin 0
     padding 0
-    font-family "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif
+    font-family "DisposableDroidBB", "Helvetica Neue", Helvetica, Arial, sans-serif
     font-size fontSize
     background-color #abedf6
 
@@ -25,6 +32,8 @@ h1
     height titleHeight
     margin 0
     padding-top listPadding
+    font-size 60px
+    font-weight normal
 
 .content-scroll
     overflow-y auto
@@ -88,6 +97,7 @@ centerBkg = #fdfdfd
         padding inputPadding
         margin 0
         font-size fontSize
+        font-family "DisposableDroidBB", "Helvetica Neue", Helvetica, Arial, sans-serif
 
     .text-extender
         overflow hidden
@@ -170,7 +180,7 @@ a.tag
     text-decoration none
 
 .category-list
-    font-size 12px
+    font-size 16px
     color centerAccentColor
     padding-top 3px
 
